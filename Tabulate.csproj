@@ -96,14 +96,9 @@
     <Content Include="App_Plugins\Tabulate\views\mapDialog.html" />
     <Content Include="App_Plugins\Tabulate\views\settings.html" />
     <Content Include="App_Plugins\Tabulate\views\tabulate.html" />
-    <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup>

@@ -43,7 +43,6 @@
                 },
 
                 $scope.model.value = undefined;
-                updateUmbracoModel();
                 init();
             }
         }

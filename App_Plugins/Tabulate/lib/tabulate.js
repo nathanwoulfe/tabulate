@@ -897,7 +897,6 @@ angular.module("ui.bootstrap", ["ui.bootstrap.tpls", "ui.bootstrap.transition", 
                 },
 
                 $scope.model.value = undefined;
-                updateUmbracoModel();
                 init();
             }
         }
