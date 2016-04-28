@@ -1,6 +1,24 @@
 # Overview
 Tabulate exists to manage instances where content authors are maintaining large, generally well-structured data sets in the Umbraco back office.
 
+A Tabulate instance stores data in the structure below:
+
+```js
+    {
+    "data": [ /* an array of objects representing the rows in the back office editor */],
+        "config": {
+            "columns":[], // the columns set for the view, if any
+            "label":"{name}", // the label format string
+            "numPerPage":2, // pagination
+            "sortOrder":"M", // sorting - ascending, descending or manual
+            "labelChanged":true // trigger for regenerating object labels - true when config has changed
+        },
+        "alias":"programLocations", // the editor alias
+        "selection":[], // stores the object selected for editing
+        "columnsToRemove":[] // populated by changes to the config object
+    }
+```
+
 # Editor configuration
 The editor has three configuration options, none of which are mandatory:
 
@@ -40,7 +58,7 @@ Data can be shared between Tabulate instances on the same node - for example, an
 Changes to the mapped instance are automatically updated in the target, however setting an instance as a datasource is a manual task as part of developing a custom dialog view. The example below might be useful:
 
 ```js
-    angular.forEach(editorState.current.tabs[0].propertie, function (p) {
+    angular.forEach(editorState.current.tabs[0].properties, function (p) {
     	if (p.alias === 'mappedTabulateInstanceAlias') {
     		vm.typeaheadSource = p.value.data;
     	}
@@ -62,7 +80,7 @@ The default view is filterable by label.
 
 The clear all button does exactly that - deletes all content and settings from the editor.
 
-# Custom views
+# Custom views - the good stuff
 Tabulate includes the option to set a custom view for use in the add and edit dialogs. This allows more complex or larger data models to be displayed using a more intuitive UI as opposed to simply listing the properties as in the default dialog.
 
 By including a custom view and associated controller, it's possible have data sourced from elsewhere in Umbraco. 
@@ -70,3 +88,6 @@ By including a custom view and associated controller, it's possible have data so
 The dialogData.data object can be manipulated in the custom controller provided it is returned in the $scope.save function and maintains the correct column configuration as dictated by the editor configuration.
 
 While the label formatter specified in the settings is reasonably robust, it can be more effective to build the label programmatically in the custom controller - this allows conditional labelling or inclusion of values that don't exist as part of the model. Storing the label as a model property (ie `customLabel`) allows it to then be referenced in the label setting as `{customLabel}`.
+
+# Accessing the data
+That's up to you. Make it available via a WebAPI endpoint and serve it up to a Javascript front-end, or map it to a model and use directly in your MVC views. The data is a JSON string, so can be readily transformed and manipulated.
