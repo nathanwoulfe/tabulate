@@ -1,0 +1,23 @@
+﻿<div class="tabulate map-row umb-dialog" ng-controller="Tabulate.MapDialogController">
+    <div class="umb-pane ">
+        <header>
+            <h3>
+                <span class="icon-list"></span>
+                Tabulate
+            </h3>
+            <h4>Location</h4>
+        </header>
+        <section>
+            <div id="map"></div>
+
+            <div class="buttons">
+                <button ng-click="save()" ng-if="locationChanged === true" data-hotkey="ctrl+s" class="btn btn-success">
+                    <localize key="buttons_save">Update</localize>
+                </button>
+                <button ng-click="close()" data-hotkey="ctrl+x" class="btn btn-default">
+                    Cancel
+                </button>
+            </div>
+        </section>
+    </div>
+</div>

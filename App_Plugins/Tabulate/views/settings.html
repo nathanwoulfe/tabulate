@@ -1,0 +1,152 @@
+<div class="tabulate settings umb-dialog" ng-controller="Tabulate.SettingsController">
+    <div class="umb-pane">
+        <header>
+            <h3>
+                <span class="icon-list"></span>
+                Tabulate
+            </h3>
+            <h4>Settings</h4>
+        </header>
+        <ul class="nav nav-tabs umb-nav-tabs">
+            <li class="active">
+                <a href="#tabulate-tab-0" data-toggle="tab">Add new column</a>
+            </li>
+            <li>
+                <a href="#tabulate-tab-1" data-toggle="tab">Current columns</a>
+            </li>
+            <li>
+                <a href="#tabulate-tab-2" data-toggle="tab">Data</a>
+            </li>
+            <li ng-show="tabulateEditors.length">
+                <a href="#tabulate-tab-3" data-toggle="tab">Mappings</a>
+            </li>
+        </ul>
+        <section>
+            <div class="tab-content">
+                <div class="umb-tab-pane tab-pane active" id="tabulate-tab-0">
+                    <div class="half-width">
+                        <label for="new-column-name" class="control-label">Column display name</label>
+                        <input type="text" name="new-column-name" ng-model="newColumnName" />
+                    </div>
+                    <div class="half-width">
+                        <label for="new-column-type" class="control-label">Column input type</label>
+                        <select name="new-column-type" ng-model="newColumnType">
+                            <option value="string">Text string</option>
+                            <option value="textarea">Textarea</option>
+                            <option value="rte">RTE</option>
+                        </select>
+                    </div>
+                    <p><strong>Pro tip:</strong> For geocoded data use 'Address' as a column name.</p>
+                </div>
+                <div class="umb-tab-pane tab-pane" id="tabulate-tab-1">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="c in dialogData.config.columns track by $index" ng-class="{'disabled': dialogData.columnsToRemove.indexOf($index) !== -1}">
+                                <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
+                                <td>
+                                    <select name="column-type" ng-model="c.type" ng-change="changedColumn($index)">
+                                        <option value="string">Text string</option>
+                                        <option value="textarea">Textarea</option>
+                                        <option value="rte">RTE</option>
+                                    </select>
+                                </td>
+                                <td><i class="icon icon-delete" ng-click="removeColumn($index)" name="Delete column"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <label for="label">Label</label>
+                    <input name="label" type="text" ng-model="dialogData.config.label" ng-change="dialogData.config.labelChanged = true" />
+                    <label for="sort-order">Order by</label>
+                    <select name="sort-order" ng-model="dialogData.config.sortOrder" ng-change="sort()">
+                        <option value="A">Ascending</option>
+                        <option value="D">Descending</option>
+                        <option value="M">Manual</option>
+                    </select>
+                    <label for="per-page">Per page</label>
+                    <input type="number" name="per-page" ng-model="dialogData.config.numPerPage" />
+                </div>
+                <div class="umb-tab-pane tab-pane" id="tabulate-tab-2">
+                    <p>Export the current dataset by copying the content from the textarea below. To import, paste CSV-formatted text into the textarea below.</p>
+                    <p>Importing will overwrite all existing data and reset the column config (column type will default to string).</p>
+                    <div class="export-type">
+                        Show:
+                        <button ng-click="show('json')" class="btn btn-default" ng-class="{'active' : showing === 'json'}">JSON</button>
+                        <button ng-click="show('csv')" class="btn btn-default" ng-class="{'active' : showing === 'csv'}">CSV</button>
+                    </div>
+                    <textarea ng-model="importExport"></textarea>
+
+                    <!-- download as -->
+                    <div class="dropdown download-wrapper" ng-hide="dialogData.data === undefined">
+                        <button class="btn btn-default" ng-click="download()">Download</button>
+                    </div>
+
+                    <!-- download as -->
+                    <div class="dropdown import-wrapper" ng-hide="importDisabled">
+                        <button class="btn btn-default" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false">
+                            Import <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="iLabel">
+                            <li><button class="btn btn-default" ng-click="importCSV()">CSV</button></li>
+                            <li><button class="btn btn-default" ng-click="importJSON()">JSON</button></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="tabulateEditors.length">
+                    <p>Set references to other properties on this node - typically used as a typeahead source in a custom dialog</p>
+                    <div class="control-group">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Target property</th>
+                                    <th>Target object</th>
+                                    <th>Source property</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="m in dialogData.config.mappings track by $index" ng-init="setTargetEditorColumns(m.targetEditor.alias)">
+                                    <td>
+                                        <select ng-model="m.targetEditor" ng-change="setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in tabulateEditors track by t.alias"></select>
+                                    </td>
+                                    <td>
+                                        <select ng-show="m.targetEditor !== undefined" ng-model="m.targetProperty" ng-options="c.displayName for c in targetEditorColumns track by c.displayName"></select>
+                                    </td>
+                                    <td>
+                                        <select ng-show="m.targetProperty !== undefined" ng-model="m.sourceProperty" ng-options="c.displayName for c in dialogData.config.columns track by c.displayName"></select>
+                                    </td>
+                                    <td>
+                                        <a prevent-default href="" title="Remove mapping" ng-click="removeMapping($index)">
+                                            <i class="icon icon-remove"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a prevent-default href="" title="Add course"
+                       ng-click="addEmptyItem()">
+                        <i class="icon icon-add"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button ng-click="save()" data-hotkey="ctrl+s" class="btn btn-success">
+                    <localize key="buttons_save">Save</localize>
+                </button>
+                <button ng-click="close()" class="btn btn-default">
+                    Cancel
+                </button>
+            </div>
+
+        </section>
+    </div>
+</div>
+

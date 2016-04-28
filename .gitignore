@@ -1,0 +1,9 @@
+﻿obj/
+bin/
+*.config
+*.sln
+*.suo
+*.user
+*.css
+*.scss.map
+*.csproj.user
