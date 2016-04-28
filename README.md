@@ -1,24 +1,16 @@
-*Background
+# Overview
+Tabulate exists to manage instances where content authors are maintaining large, generally well-structured data sets in the Umbraco back office. The Tabulate property editor manages structured data sets and by storing the data with that structure intact, allows for more engaging display on the front end of the site.
 
-Instances exist on the website where content authors are maintaining large, generally well-structured data sets in the back office. This data is typically managed in HTML tables, which leaves little scope for presentation or additional functionality, and also requires content authors to ensure formatting and layout of the tables remains consistent.
-To address that requirement, the Tabulate property editor manages simple structured data sets and by storing the data with that structure intact, allows for more engaging display on the front end of the site.
-
-*Editor configuration
-
+# Editor configuration
 The editor has three configuration options, none of which are mandatory:
-
 - Wide: sets the editor to display full-width within the content node tabs (ie hides the editor label)
 - Admin-only settings: hides the settings button for users not of the admin type (ie authors)
 - Custom view: sets a path to a custom view for use in the edit/add row dialog. If a custom view is used, a controller for the view will also need to be added and referenced in the Javascript dependencies object in the package.manifest file
-
-Most of the configuration for each instance takes place in the editor itself, not as prevalues.
-
+Additional configuration for a Tabulate instance takes place in the editor itself, not as prevalues.
 With the editor added to a document type, admin users will see a blue settings button in the top right corner.
-
 The settings button opens the settings dialog, which includes three tabs (only two of which will be visible when the editor has no value).
 
-**Add new column
-
+## Add new column
 The first tab allows addition of new columns - specify a name and select a display type (textstring, textarea or RTE).
 
 **Current columns
