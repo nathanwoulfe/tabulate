@@ -5,7 +5,7 @@ A Tabulate instance stores data in the structure below:
 
 ```js
     {
-    "data": [ /* an array of objects representing the rows in the back office editor */],
+        "data": [ /* an array of objects representing the rows in the back office editor */],
         "config": {
             "columns":[], // the columns set for the view, if any
             "label":"{name}", // the label format string
@@ -90,4 +90,4 @@ The dialogData.data object can be manipulated in the custom controller provided 
 While the label formatter specified in the settings is reasonably robust, it can be more effective to build the label programmatically in the custom controller - this allows conditional labelling or inclusion of values that don't exist as part of the model. Storing the label as a model property (ie `customLabel`) allows it to then be referenced in the label setting as `{customLabel}`.
 
 # Accessing the data
-That's up to you. Make it available via a WebAPI endpoint and serve it up to a Javascript front-end, or map it to a model and use directly in your MVC views. The data is a JSON string, so can be readily transformed and manipulated.
+That's up to you. Make it available via a WebAPI endpoint and serve it up to a Javascript front-end, or map it to a model and use directly in your MVC views. Hell, you could always just deserialized the data to a dynamic and just go nuts.
