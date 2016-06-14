@@ -96,7 +96,9 @@
     <Content Include="App_Plugins\Tabulate\views\mapDialog.html" />
     <Content Include="App_Plugins\Tabulate\views\settings.html" />
     <Content Include="App_Plugins\Tabulate\views\tabulate.html" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

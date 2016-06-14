@@ -17,7 +17,10 @@
             settings,
             init,
             vm,
-            dialogPath = $scope.model.config.customView || '../App_Plugins/Tabulate/views/dialog.html';
+            dialogPath = $scope.model.config.customView || '../App_Plugins/Tabulate/views/dialog.html',
+            pathArray = dialogPath.split('/'),
+            fileName = pathArray[pathArray.length - 1],
+            className = fileName.substr(0, fileName.indexOf('.')) + '-modal';
 
         // helper function to generate a model based on config values
         function emptyModel() {
@@ -127,6 +130,7 @@
         function addRow() {
             dialogService.open({
                 template: dialogPath,
+                modalClass: 'umb-modal tabulate-modal ' + className,
                 show: true,
                 dialogData: { type: 'add', data: emptyModel(), config: settings },
                 callback: function (resp) {
@@ -148,6 +152,7 @@
         function editRow($index) {
             dialogService.open({
                 template: dialogPath,
+                modalClass: 'umb-modal tabulate-modal ' + className,
                 show: true,
                 dialogData: { type: 'edit', data: data[$index], config: settings },
                 callback: function (resp) {
@@ -199,6 +204,7 @@
 
             dialogService.open({
                 template: '../App_Plugins/Tabulate/views/settings.html',
+                modalClass: 'umb-modal tabulate-modal ' + className,
                 show: true,
                 dialogData: { data: data, config: settings, alias: $scope.model.alias },
                 callback: function (resp) {

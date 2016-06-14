@@ -3,5 +3,3 @@ D:\uStats\_tabulate\Tabulate\bin\Tabulate.dll
 D:\uStats\_tabulate\Tabulate\bin\Tabulate.pdb
 D:\uStats\_tabulate\Tabulate\obj\Debug\Tabulate.dll
 D:\uStats\_tabulate\Tabulate\obj\Debug\Tabulate.pdb
-D:\uStats\_tabulate\Tabulate\bin\System.Web.Optimization.xml
-D:\uStats\_tabulate\Tabulate\obj\Debug\Tabulate.csprojResolveAssemblyReference.cache
