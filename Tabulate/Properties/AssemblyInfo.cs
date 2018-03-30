@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Tabulate")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Nathan Woulfe")]
 [assembly: AssemblyProduct("Tabulate")]
-[assembly: AssemblyCopyright("Copyright ? Microsoft 2016")]
+[assembly: AssemblyCopyright("Copyright ? Nathan Woulfe 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
