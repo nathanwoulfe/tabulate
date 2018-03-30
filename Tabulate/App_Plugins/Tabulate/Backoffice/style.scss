@@ -1,0 +1,53 @@
+﻿.tabulate {
+
+    &.wide {
+        .umb-node-preview {
+            max-width:none;
+
+            &-add {
+                margin-left:auto;
+                margin-right:auto;
+            }
+        }
+    }
+
+    .disabled {
+        .umb-node-preview__content {
+            opacity:0.25;
+        }
+    }
+
+    .controls-wrapper {
+        display:flex;
+        justify-content:flex-end;
+        margin-bottom:10px;
+
+        button {
+            margin-left:5px;
+        }
+    }
+
+    .settings {
+        textarea {
+            width:100%;
+            height:150px;
+            margin:10px 0;
+        }
+    }
+
+    .pagination {
+        display:flex;
+        justify-content:center;
+    }
+
+    table {
+        thead {
+            background: 0 0;
+        }
+
+        select {
+            width:150px;
+        }
+    }
+
+}

@@ -1,0 +1,167 @@
+<div class="tabulate settings" ng-controller="Tabulate.SettingsController">
+    <ul class="nav nav-tabs umb-nav-tabs">
+        <li class="active">
+            <a href="#tabulate-tab-0" data-toggle="tab">Add new column</a>
+        </li>
+        <li>
+            <a href="#tabulate-tab-1" data-toggle="tab">Current columns</a>
+        </li>
+        <li>
+            <a href="#tabulate-tab-2" data-toggle="tab">Data</a>
+        </li>
+        <li ng-show="tabulateEditors.length">
+            <a href="#tabulate-tab-3" data-toggle="tab">Mappings</a>
+        </li>
+    </ul>
+    <div class="tab-content umb-tab-content">
+        <div class="umb-tab-pane tab-pane active" id="tabulate-tab-0">
+            <div class="control-group umb-control-group">
+                <div class="umb-el-wrap">
+                    <label class="control-label">Column display name</label>
+                    <div class="controls">
+                        <input type="text" name="new-column-name" ng-model="model.newColumnName" />
+                    </div>
+                </div>
+            </div>
+            <div class="control-group umb-control-group">
+                <div class="umb-el-wrap">
+                    <label class="control-label">Column input type</label>
+                    <div class="controls">
+                        <select name="new-column-type" ng-model="model.newColumnType">
+                            <option value="string">Text string</option>
+                            <option value="textarea">Textarea</option>
+                            <option value="rte">RTE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <p><strong>Pro tip:</strong> For geocoded data use 'Address' as a column name.</p>
+        </div>
+        <div class="umb-tab-pane tab-pane" id="tabulate-tab-1">
+            <div class="control-group umb-control-group">
+                <div class="umb-el-wrap">
+                    <div class="controls">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
+                                    <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
+                                    <td>
+                                        <select name="column-type" ng-model="c.type" ng-change="changedColumn($index)">
+                                            <option value="string">Text string</option>
+                                            <option value="textarea">Textarea</option>
+                                            <option value="rte">RTE</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="removeColumn($index)"><localize key="general_remove">Remove</localize></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group umb-control-group">
+                <div class="umb-el-wrap">
+                    <label class="control-label">Label</label>
+                    <div class="controls">
+                        <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group umb-control-group">
+                <div class="umb-el-wrap">
+                    <label class="control-label">Order by</label>
+                    <div class="controls">
+                        <select name="sort-order" ng-model="model.config.sortOrder" ng-change="sort()">
+                            <option value="A">Ascending</option>
+                            <option value="D">Descending</option>
+                            <option value="M">Manual</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group umb-control-group">
+                <div class="umb-el-wrap">
+                    <label class="control-label">Per page</label>
+                    <div class="controls">
+                        <input type="number" name="per-page" ng-model="model.config.numPerPage" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="umb-tab-pane tab-pane" id="tabulate-tab-2">
+            <p>Export the current dataset by copying the content from the textarea below. To import, paste CSV-formatted text into the textarea below.</p>
+            <p>Importing will overwrite all existing data and reset the column config (column type will default to string).</p>
+            <div class="export-type">
+                Show:
+                <button ng-click="show('json')" class="btn btn-default" ng-class="{'active' : showing === 'json'}" prevent-default>JSON</button>
+                <button ng-click="show('csv')" class="btn btn-default" ng-class="{'active' : showing === 'csv'}" prevent-default>CSV</button>
+            </div>
+            <textarea ng-model="importExport"></textarea>
+
+            <!-- download as -->
+            <div class="dropdown download-wrapper" ng-hide="model.data === undefined">
+                <button class="btn btn-default" ng-click="download()" prevent-default>Download</button>
+            </div>
+
+            <!-- download as -->
+            <div class="dropdown import-wrapper" ng-hide="importDisabled">
+                <button class="btn btn-default" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false" prevent-default>
+                    Import <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="iLabel">
+                    <li><button class="btn btn-default" ng-click="importCSV()" prevent-default>CSV</button></li>
+                    <li><button class="btn btn-default" ng-click="importJSON()" prevent-default>JSON</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="tabulateEditors.length">
+            <p>Set references to other properties on this node - typically used as a typeahead source in a custom dialog</p>
+            <div class="control-group">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Target property</th>
+                            <th>Target object</th>
+                            <th>Source property</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="m in model.config.mappings track by $index" ng-init="setTargetEditorColumns(m.targetEditor.alias)">
+                            <td>
+                                <select ng-model="m.targetEditor" ng-change="setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in tabulateEditors track by t.alias"></select>
+                            </td>
+                            <td>
+                                <select ng-show="m.targetEditor !== undefined" ng-model="m.targetProperty" ng-options="c.displayName for c in targetEditorColumns track by c.displayName"></select>
+                            </td>
+                            <td>
+                                <select ng-show="m.targetProperty !== undefined" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
+                            </td>
+                            <td>
+                                <a prevent-default href="" title="Remove mapping" ng-click="removeMapping($index)">
+                                    <i class="icon icon-remove"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a prevent-default href="" title="Add"
+               ng-click="addEmptyItem()">
+                <i class="icon icon-add"></i>
+            </a>
+        </div>
+    </div>
+</div>

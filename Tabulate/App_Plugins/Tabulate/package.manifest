@@ -1,0 +1,42 @@
+﻿{   
+    //you can define multiple editors   
+    propertyEditors: [      
+        {
+            alias: "NW.Tabulate",
+            name: "Tabulate",
+            editor: {
+                view: "~/App_Plugins/tabulate/backoffice/views/tabulate.html",
+				valueType: 'JSON'
+            },
+			prevalues: {
+				fields: [
+					{
+						label: "Wide",
+						key: "wide",
+						view: "boolean"
+					},
+					{
+						label: "Admin-only settings",
+						key: "adminOnly",
+						view: "boolean"
+					},
+					{
+						label: "Custom view",
+						key: "customView",
+						description: "Path to a custom view for rendering add/edit dialogs",
+						view: 'textstring'
+					}
+				]
+			}			
+        }
+    ],
+    //array of files we want to inject into the application on app_start
+    javascript: [
+		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.controller.js',
+		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.dialog.controller.js',
+		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.mapdialog.controller.js',		
+		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.settings.controller.js',
+		'~/App_Plugins/tabulate/backoffice/resources/tabulate.resources.js',
+		'~/App_Plugins/tabulate/backoffice/resources/tabulatepaging.service.js'
+    ]
+}
