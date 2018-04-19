@@ -10,7 +10,7 @@
          */
         function countPages(total, perPage) {
             return Math.ceil(parseInt(total, 10) / parseInt(perPage, 10));
-        };
+        }
 
         /**
          * 
@@ -39,7 +39,7 @@
             }
 
             return { items: paged.slice(begin, end), totalPages: totalPages, pageNumber: pageNumber, search: filter };
-        };
+        }
 
         /**
          * 
@@ -77,7 +77,7 @@
                 }
             }
             return paged;
-        };
+        }
 
         /**
          * 
@@ -86,15 +86,15 @@
          */
         function setCurrentPage(i, j) {
             return j === undefined ? (i - 1 > 0 ? i - 1 : i) : (i + 1 <= j ? i + 1 : i);
-        };
+        }
 
         return {
             countPages: countPages,
             updatePaging: updatePaging,
             getFilteredPage: getFilteredPage,
             setCurrentPage: setCurrentPage
-        }
+        };
     }
 
-    angular.module("umbraco.services").factory('tabulatePagingService', tabulatePagingService);
+    angular.module('umbraco.services').factory('tabulatePagingService', tabulatePagingService);
 })();

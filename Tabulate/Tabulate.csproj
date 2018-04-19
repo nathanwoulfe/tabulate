@@ -84,10 +84,13 @@
     <Content Include="package.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Tabulate\package.manifest" />
+    <Folder Include="App_Plugins\Tabulate\Lang\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Plugins\Tabulate\Lang\" />
+    <Content Include="App_Plugins\Tabulate\dist.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Tabulate\package.manifest" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

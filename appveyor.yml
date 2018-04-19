@@ -1,5 +1,5 @@
 # version format
-version: 2.0.0.{build}
+version: 2.0.1.{build}
 
 image: Visual Studio 2017
 
@@ -42,9 +42,9 @@ deploy:
         appveyor_repo_tag: true      
     
   - provider: GitHub
-    tag: v2.0.0
-    release: Release 2.0.0
-    description: 'Update, redo, tidy up for 7.7+. Hadnt been touched for two years, so was a bit smelly.'
+    tag: v2.0.1
+    release: Release 2.0.1
+    description: 'Fix issue where the compiled javascript was empty.'
     force_update: true
     auth_token:
         secure: Otbl8p8qCwciDqJgSWCyN0Arfs5XS1CwiHcK+r0F6uz9Rxt4gzBFvlc3cjPV3NxR

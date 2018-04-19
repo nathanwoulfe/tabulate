@@ -205,3 +205,4 @@ Tabulate.Site/Config/
 Tabulate.Site/umbraco
 Tabulate.Site/umbraco_client
 /Tabulate.Site/Media/
+*.es6

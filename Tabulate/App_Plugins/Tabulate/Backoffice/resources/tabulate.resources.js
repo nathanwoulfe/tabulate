@@ -111,7 +111,7 @@
                     else if (window.google.maps !== undefined) {
                         deffered.resolve(true);
                     }
-                };
+                }
 
                 return deffered.promise;
             },

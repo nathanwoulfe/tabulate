@@ -4,16 +4,16 @@
 
     function tabulateMapDialogController($scope, angularHelper) {
 
-        var mapOptions = {
+        const mapOptions = {
             zoom: 8,
             center: new google.maps.LatLng($scope.dialogData.lat, $scope.dialogData.lng),
             mapTypeId: google.maps.MapTypeId.TERRAIN
-        }
+        };
 
         $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
         $scope.locationChanged = false;
 
-        var marker = new google.maps.Marker({
+        const marker = new google.maps.Marker({
             map: $scope.map,
             position: new google.maps.LatLng($scope.dialogData.lat, $scope.dialogData.lng),
             draggable: true
@@ -23,14 +23,14 @@
             dragend(event);
         });
 
-        var dragend = function (e) {
+        var dragend = function(e) {
             if ($scope.dialogData.lat !== e.latLng.lat() || $scope.dialogData.lng !== e.latLng.lng()) {
                 $scope.dialogData.lat = e.latLng.lat();
                 $scope.dialogData.lng = e.latLng.lng();
                 $scope.locationChanged = true;
                 angularHelper.safeApply($scope);
             }
-        }
+        };
 
         // save and close, sending back updated data model
         $scope.save = function () {

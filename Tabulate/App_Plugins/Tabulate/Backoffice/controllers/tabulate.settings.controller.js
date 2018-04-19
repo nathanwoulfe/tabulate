@@ -6,21 +6,18 @@
     function tabulateSettingsController($scope, $filter, tabulateResource, notificationsService, editorState) {
 
         /* variables for convenience */
-        var importedNew= false, // flag to pass back to editor indicating new csv import
+        var importedNew = false, // flag to pass back to editor indicating new csv import
             geocoder = new google.maps.Geocoder(), // the google geocoder
             l = $scope.model.data !== undefined ? $scope.model.data.length : 0, // model data length
             i, // loop counter
             j, // inner loop counter
             o, // generic object
             address, // address string for geocoding
-            importKeys = [], // array of header text from imported csv
-            setInitial,
-            geocodeAddresses,
-            csvToJson;
+            importKeys = []; // array of header text from imported csv
 
         /* remove an existing column - need to handle data removal */
         $scope.model.columnsToRemove = [];
-        $scope.removeColumn = function ($index) {
+        $scope.removeColumn = $index => {
             if (confirm('Are you sure you want to remove this column?')) {
                 $scope.model.columnsToRemove.push($index);
             }
@@ -28,7 +25,7 @@
 
         /* store a copy of the config object for comparison when the modal is submitted */
         $scope.model.changes = [];
-        setInitial = function () {
+        const setInitial = () => {
             for (i = 0; i < $scope.model.config.columns.length; i += 1) {
 
                 /* set default sort order if none exists */
@@ -49,7 +46,7 @@
         }
 
         /* when a column is updated, store the new name for comparison when the modal is submitted */
-        $scope.changedColumn = function (columnIndex) {
+        $scope.changedColumn = columnIndex => {
             $scope.model.changes[columnIndex].newName = $scope.model.config.columns[columnIndex].displayName;
             $scope.model.changes[columnIndex].newType = $scope.model.config.columns[columnIndex].type;
         };
@@ -62,26 +59,27 @@
 
         /* set values for the mappings - can map to any other tabulate instance on the node */
         $scope.tabulateEditors = [];
-        angular.forEach(editorState.current.tabs, function (v, i) {
-            angular.forEach(v.properties, function (vv, ii) {
+        editorState.current.tabs.forEach(v => {
+            v.properties.forEach(vv => {
                 if ($scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
                     $scope.tabulateEditors.push(vv);
                 }
             });
         });
 
-        $scope.setTargetEditorColumns = function (alias) {
+        $scope.setTargetEditorColumns = alias => {
             if (alias !== undefined) {
-                angular.forEach($scope.tabulateEditors, function (v, i) {
-                    if (v.alias === alias) {
-                        $scope.targetEditorColumns = v.value.settings.columns;
-                    }
-                });
+                angular.forEach($scope.tabulateEditors,
+                    v => {
+                        if (v.alias === alias) {
+                            $scope.targetEditorColumns = v.value.settings.columns;
+                        }
+                    });
             }
-        }
+        };
 
         /* add object to model */
-        $scope.addEmptyItem = function (p) {
+        $scope.addEmptyItem = () => {
             if ($scope.model.config.mappings === undefined) {
                 $scope.model.config.mappings = [];
             }
@@ -90,17 +88,17 @@
         };
 
         /*  remove object from the model */
-        $scope.removeMapping = function (index, p) {
+        $scope.removeMapping = index => {
             $scope.model.config.mappings.splice(index, 1);
         };
 
-        $scope.populateItem = function (i, c) {
-            $scope.model.config.mappings[i] = c;
+        $scope.populateItem = (index, mapping) => {
+            $scope.model.config.mappings[index] = mapping;
         };
 
         /* display csv or json in the export textarea */
         $scope.showing = 'json';
-        $scope.show = function (type) {
+        $scope.show = type => {
             if (type === 'csv') {
                 $scope.importExport = tabulateResource.JSONtoCSV($scope.model.data, $scope.model.config.columns);
             } else {
@@ -111,30 +109,30 @@
         };
 
         /* give two download options - raw json, or parsed csv */
-        $scope.download = function () {
+        $scope.download = () => {
 
-            var filename = 'download.' + $scope.showing,
+            var filename = `download.${$scope.showing}`,
                 d = JSON.parse(JSON.stringify($scope.importExport)); // we need a copy of the data, not a reference
 
             if (!navigator.userAgent.match(/msie|trident/i)) {
-                var saving = document.createElement('a');
-                saving.href = 'data:attachment/' + $scope.showing + ',' + encodeURIComponent(d);
+                const saving = document.createElement('a');
+                saving.href = `data:attachment/${$scope.showing},${encodeURIComponent(d)}`;
                 saving.download = filename;
                 saving.click();
             } else {
-                var blob = new Blob([d]);
+                const blob = new Blob([d]);
                 window.navigator.msSaveOrOpenBlob(blob, filename);
             }
         };
 
         /* if the importexport value changes, through a direct edit or pasting in a new csv display the import button */
-        $scope.$watch('importExport', function (newVal, oldVal) {
+        $scope.$watch('importExport', (newVal, oldVal) => {
             if (newVal !== oldVal && newVal.length === 0) {
                 $scope.importDisabled = false;
             }
         });
 
-        $scope.importJSON = function () {
+        $scope.importJSON = () => {
             if ($scope.importExport.length) {
                 try {
                     $scope.model = JSON.parse($scope.importExport);
@@ -145,13 +143,13 @@
         };
 
         /* imports new data from csv */
-        $scope.importCSV = function () {
+        $scope.importCSV = () => {
 
             /* only proceed if user confirms - import will clear the existing model value */
             if (confirm('Importing will overwrite all existing data. Continue?') && $scope.importExport.length) {
 
                 /* parse the csv and push into the data object, provided it is no longer than 250 records */
-                var csvtojson = JSON.parse(csvToJson($scope.importExport));
+                const csvtojson = JSON.parse(csvToJson($scope.importExport));
                 if (csvtojson.length > 0 && csvtojson.length < 2510) {
 
                     $scope.model.data = csvtojson;
@@ -190,7 +188,7 @@
             }
         };
 
-        $scope.sort = function () {
+        $scope.sort = () => {
             if ($scope.model.data !== null && $scope.model.config.sortOrder !== 'M') {
                 $scope.model.data = $filter('orderBy')($scope.model.data, '_label', $scope.model.config.sortOrder === 'D' ? true : false);
             }
@@ -198,17 +196,17 @@
         };
 
         /* use geocoder to convert address to latlng points */
-        geocodeAddresses = function (index, geoStr, p) {
+        const geocodeAddresses = (index, geoStr, p) => {
 
             address = $scope.model.data[index];
 
-            geocoder.geocode({ 'address': address[p] }, function (results, status) {
+            geocoder.geocode({ 'address': address[p] }, (results, status) => {
                 /* if the geocoding was successful, add the location to the object, otherwise, set location as undefined to ensure key exists */
                 if (status === google.maps.GeocoderStatus.OK) {
                     address[geoStr] = results[0].geometry.location;
                 } else {
                     address[geoStr] = undefined;
-                    notificationsService.error('Error', 'Geocoding failed for address: ' + address[p]);
+                    notificationsService.error('Error', `Geocoding failed for address: ${address[p]}`);
                 }
 
                 /* recurse through the data object */
@@ -222,7 +220,7 @@
 
         /* helper function to convert CSV to JSON
            not part of tabulateResource as it needs to populate the import keys object  */
-        csvToJson = function (csv) {
+        const csvToJson = (csv) => {
 
             try {
                 var array = tabulateResource.CSVtoArray(csv),
@@ -252,40 +250,6 @@
                 noticationsService.error('Import error', e);
                 return '';
             }
-        };
-
-        /* save and close, sending back updated config model */
-        $scope.save = function () {
-
-            /* if the newColumnName flag has been set, add the column object into the config object */
-            //if ($scope.newColumnName !== undefined) {
-            //    $scope.model.config.columns.push({
-            //        displayName: $scope.newColumnName,
-            //        type: $scope.newColumnType
-            //    });
-            //    $scope.model.configChanged = true;
-            //}
-
-            ///* also return changes to existing columns, if any */
-            //if (hasChanges) {
-            //    $scope.model.changes = $scope.changes;
-            //    $scope.model.configChanged = true;
-            //}
-
-            /* not all values are worth keeping - especially the value of the mapped editor
-               keeping the value can also have unwanted side-effects, like deleting the data set */
-            if ($scope.model.config && $scope.model.config.mappings) {
-                $scope.model.config.mappings.forEach(v => {
-                    v.targetEditor = {
-                        alias: v.targetEditor.alias,
-                        label: v.targetEditor.label,
-                        config: v.targetEditor.config
-                    };
-                });
-            }
-
-            /* send it on back to the editor controller */
-            //$scope.submit($scope.model);
         };
     }
 

@@ -59,10 +59,9 @@
             dist: {
                 src: [
                   '<%= basePath %>/backoffice/controllers/**/*.js',
-                  '<%= basePath %>/backoffice/directives/*.js',
                   '<%= basePath %>/backoffice/resources/*.js'
                 ],
-                dest: '<%= dest %>/<%= basePath %>/backoffice/tabulate.es6',
+                dest: '<%= basePath %>/backoffice/tabulate.es6',
                 nonull: true,
                 options: {
                     banner: '/<%= banner %>/\n\n'
