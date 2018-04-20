@@ -2,43 +2,32 @@
 (function () {
     'use strict';
 
-    function tabulateMapDialogController($scope, angularHelper) {
+    function tabulateMapDialogController($scope) {
 
-        const mapOptions = {
-            zoom: 8,
-            center: new google.maps.LatLng($scope.dialogData.lat, $scope.dialogData.lng),
-            mapTypeId: google.maps.MapTypeId.TERRAIN
-        };
-
-        $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        $scope.locationChanged = false;
+        $scope.map = new google.maps.Map(document.getElementById('map'),
+            {
+                zoom: 14,
+                center: new google.maps.LatLng($scope.model.lat, $scope.model.lng)
+            });
 
         const marker = new google.maps.Marker({
             map: $scope.map,
-            position: new google.maps.LatLng($scope.dialogData.lat, $scope.dialogData.lng),
+            position: new google.maps.LatLng($scope.model.lat, $scope.model.lng),
             draggable: true
         });
 
-        google.maps.event.addListener(marker, 'dragend', function (event) {
-            dragend(event);
-        });
-
-        var dragend = function(e) {
-            if ($scope.dialogData.lat !== e.latLng.lat() || $scope.dialogData.lng !== e.latLng.lng()) {
-                $scope.dialogData.lat = e.latLng.lat();
-                $scope.dialogData.lng = e.latLng.lng();
-                $scope.locationChanged = true;
-                angularHelper.safeApply($scope);
+        const dragend = e => {
+            if ($scope.model.lat !== e.latLng.lat() || $scope.model.lng !== e.latLng.lng()) {
+                $scope.model.lat = e.latLng.lat();
+                $scope.model.lng = e.latLng.lng();
             }
         };
 
-        // save and close, sending back updated data model
-        $scope.save = function () {
-            $scope.submit($scope.dialogData);
-        };
-
+        google.maps.event.addListener(marker, 'dragend', event => {
+            dragend(event);
+        });
     }
 
-    angular.module('umbraco').controller('Tabulate.MapDialogController', ['$scope', 'angularHelper', tabulateMapDialogController]);
+    angular.module('umbraco').controller('Tabulate.MapDialogController', ['$scope', tabulateMapDialogController]);
 
 })();

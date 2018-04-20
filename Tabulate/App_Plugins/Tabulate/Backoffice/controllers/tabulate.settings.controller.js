@@ -6,8 +6,7 @@
     function tabulateSettingsController($scope, $filter, tabulateResource, notificationsService, editorState) {
 
         /* variables for convenience */
-        var importedNew = false, // flag to pass back to editor indicating new csv import
-            geocoder = new google.maps.Geocoder(), // the google geocoder
+        var geocoder = new google.maps.Geocoder(), // the google geocoder
             l = $scope.model.data !== undefined ? $scope.model.data.length : 0, // model data length
             i, // loop counter
             j, // inner loop counter
@@ -178,9 +177,6 @@
                     /* disable importing, set a flag for config changes and new data */
                     $scope.importExportDisabled = true;
                     $scope.model.configChanged = true;
-                    importedNew = true;
-
-                    isCreditImport();
                 }
                 else {
                     notificationsService.error('Error', 'Import failed - dataset must be between 1 and 250 records');

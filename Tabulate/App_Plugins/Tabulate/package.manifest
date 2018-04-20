@@ -25,6 +25,12 @@
 						key: "customView",
 						description: "Path to a custom view for rendering add/edit dialogs",
 						view: 'textstring'
+					},
+					{
+						label: "Google Maps API key",
+						key: "mapsApiKey",
+						description: "API key for Google Maps in address dialogs",
+						view: 'textstring'
 					}
 				]
 			}			

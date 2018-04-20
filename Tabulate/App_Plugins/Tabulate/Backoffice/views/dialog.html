@@ -1,4 +1,4 @@
-﻿<div class="tabulate edit-row" ng-controller="Tabulate.DialogController">
+﻿<div class="tabulate edit-row" ng-controller="Tabulate.DialogController as vm">
 
     <div class="control-group umb-control-group" ng-repeat="c in model.config.columns track by $index">
         <div class="umb-el-wrap">
@@ -8,19 +8,25 @@
 
                 <textarea ng-model="model.data[c.displayName]" ng-if="c.type === 'textarea'"></textarea>
 
-                <div ng-if="c.type === 'rte'" ng-init="model.rte[c.displayName] = property(c.displayName)">
+                <div ng-if="c.type === 'rte'" ng-init="model.rte[c.displayName] = vm.getRte(c.displayName)">
                     <umb-property property="model.rte[c.displayName]">
                         <umb-editor model="model.rte[c.displayName]"></umb-editor>
                     </umb-property>
                 </div>
 
-                <div ng-if="c.displayName === 'Address' && _AddressLat !== undefined" class="geocoded-property">
-                    <label><strong>Latitude:</strong> {{_AddressLat}}</label>
-                    <label><strong>Longitude:</strong> {{_AddressLng}}</label>
-                    <span class="icon icon-map" name="View on map" ng-click="viewLocation()"></span>
+                <div ng-if="c.displayName === 'Address' && vm.hasGeocodedAddress" class="geocoded-property">
+                    <label><strong>Latitude:</strong> {{ model.data.lat }}</label>
+                    <label><strong>Longitude:</strong> {{ model.data.lng }}</label>
+                    <button class="btn btn-default" ng-click="vm.viewLocation()" prevent-default><i class="icon icon-map"></i> Update address coordinates</button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <umb-overlay ng-if="vm.overlay.show"
+                 model="vm.overlay"
+                 view="vm.overlay.view"
+                 position="right">
+    </umb-overlay>
 
 </div>

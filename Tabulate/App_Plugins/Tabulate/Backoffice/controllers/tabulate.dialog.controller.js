@@ -1,12 +1,12 @@
 ﻿/*global angular, google, confirm*/
 (function () {
     'use strict';
-    function tabulateDialogController($scope, dialogService) {
+    function tabulateDialogController($scope) {
 
         // view loops through the properties array to build the rte - o will have a value added if the data model contains rte fields
         $scope.model.rte = {};
 
-        $scope.property = n => {
+        this.getRte = n => {
             return {
                 label: 'bodyText',
                 description: '',
@@ -25,37 +25,49 @@
             };
         };
 
+        /**
+         * Close and clear the overlay
+         */
+        const closeOverlay = () => {
+            this.overlay.show = false;
+            this.overlay = null;
+        }
+
         // specific to edit //
         if ($scope.model.type === 'edit') {
 
-            // if the passed data inlcudes a geocoded address (key is _Address)
-            // parse the lat lng values for display
-            if ($scope.model.data.hasOwnProperty('_Address') && $scope.model.data.Address !== undefined &&
-                    $scope.model.data.hasOwnProperty('lat') && $scope.model.data.lat !== undefined &&
-                    $scope.model.data.hasOwnProperty('lng') && $scope.model.data.lng !== undefined) {
+            if ($scope.model.data.hasOwnProperty('_Address') && $scope.model.data._Address !== undefined &&
+                $scope.model.data.hasOwnProperty('lat') && $scope.model.data.lat !== undefined &&
+                $scope.model.data.hasOwnProperty('lng') && $scope.model.data.lng !== undefined) {
 
-                // the keys are google-assigned and may change, so don't want to hard-code the references
-                //Couldn't save the goodle-assigned object as json string therfore just used the lat and lang values 
-                $scope._AddressLat = $scope.model.data.lat;
-                $scope._AddressLng = $scope.model.data.lng;
+                this.hasGeocodedAddress = true;
             }
 
-            $scope.viewLocation = () => {
-                dialogService.open({
-                    template: '../App_Plugins/Tabulate/backoffice/views/mapDialog.html',
-                    show: true,
-                    model: { lat: $scope._AddressLat, lng: $scope._AddressLng },
-                    callback: resp => {
+            this.viewLocation = () => {
 
+                this.overlay = {
+                    view: '../App_Plugins/Tabulate/backoffice/views/mapDialog.html',
+                    show: true,
+                    lat: $scope.model.data.lat,
+                    lng: $scope.model.data.lng,
+                    alias: 'Update address coordinates',
+                    submit: resp => {
+                        closeOverlay();
+                        
                         const keys = Object.keys($scope.model.data._Address);
+
                         if (keys.length === 2) {
-                            $scope.model.data._Address[keys[0]] = resp.lat();
-                            $scope.model.data._Address[keys[1]] = resp.lng();
-                            $scope._AddressLat = resp.lat();
-                            $scope._AddressLng = resp.lng();
+                            $scope.model.data._Address[keys[0]] = resp.lat;
+                            $scope.model.data._Address[keys[1]] = resp.lng;
+
+                            $scope.model.data.lat = resp.lat;
+                            $scope.model.data.lng = resp.lng;
                         }
+                    },
+                    close: () => {
+                        closeOverlay();
                     }
-                });
+                };
             };
 
             // if the passed data includes an address, and the value changes
@@ -68,6 +80,6 @@
         }
     }
 
-    angular.module('umbraco').controller('Tabulate.DialogController', ['$scope', 'dialogService', tabulateDialogController]);
+    angular.module('umbraco').controller('Tabulate.DialogController', ['$scope', tabulateDialogController]);
 
 })();

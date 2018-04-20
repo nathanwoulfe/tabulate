@@ -50,4 +50,26 @@
         }
     }
 
+    #map {
+        padding-top:100%;
+        margin-bottom:15px;
+    }
+
+    .geocoded-property {
+        margin-top:15px;
+
+        label {
+            width:50%;
+            margin-right:10px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;            
+            cursor:default;
+        }
+
+        button {
+            clear:both;
+        }
+    }
+
 }

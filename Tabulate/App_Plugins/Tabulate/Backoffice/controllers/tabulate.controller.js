@@ -2,9 +2,6 @@
 (function () {
     'use strict';
 
-    //var umbraco = angular.module('umbraco');
-    //umbraco.requires.push('ui.bootstrap');  
-
     function tabulateController($scope, $filter, authResource, assetsService, dialogService, notificationsService, tabulateResource, tabulatePagingService) {
 
         const basePath = '../app_plugins/tabulate/backoffice/';
@@ -347,16 +344,16 @@
         }
 
         // get the google map api
-        tabulateResource.loadGoogleMaps()
+        tabulateResource.loadGoogleMaps($scope.model.config.mapsApiKey)
             .then(resp => {
                 vm.mapsLoaded = resp;
             });
-
+         
         // should the author see the settings button?
         authResource.getCurrentUser()
             .then(resp => {
                 vm.hideSettings = resp.userType === 'author' && !vm.config.adminOnly;
-            });
+            }); 
 
         // EXPORT IT
         // needs the vm assignment as properties need to be accessed in other functions, where this = window

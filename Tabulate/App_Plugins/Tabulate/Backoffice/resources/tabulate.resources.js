@@ -89,8 +89,8 @@
                 return (arrData);
             },
 
-            loadGoogleMaps: () => {
-                var deffered = $q.defer();
+            loadGoogleMaps: apiKey => {
+                var deferred = $q.defer();
                 if (window.google === undefined) {
                     assetsService.loadJs('//www.google.com/jsapi')
                         .then(() => {
@@ -103,17 +103,18 @@
                 function loadMapsApi() {
                     if (window.google.maps === undefined) {
                         window.google.load('maps', '3', {
+                            other_params: `key=${apiKey}`,
                             callback: () => {
-                                deffered.resolve(true);
+                                deferred.resolve(true);
                             }
                         });
                     }
                     else if (window.google.maps !== undefined) {
-                        deffered.resolve(true);
+                        deferred.resolve(true);
                     }
                 }
 
-                return deffered.promise;
+                return deferred.promise;
             },
 
             // geocodes a single address string
@@ -213,7 +214,7 @@
                         mappingElement.value.data.forEach(mapping => {
                             if (resp !== undefined && resp.remap === mapping[mappingKey]) {
                                 mapping[mappingKey] = resp.data[key];
-                                mapping = setLabels(mapping, true, mappingElement.value.settings.label);
+                                setLabels(mapping, true, mappingElement.value.settings.label);
                                 i++;
                             } else if (v !== undefined && v[key] === mapping[mappingKey]) {
                                 mapping.disabled = v.disabled;
