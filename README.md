@@ -1,30 +1,13 @@
 # Overview
-Tabulate exists to manage instances where content authors are maintaining large, generally well-structured data sets in the Umbraco back office.
-
-A Tabulate instance stores data in the structure below:
-
-```js
-    {
-        "data": [ /* an array of objects representing the rows in the back office editor */],
-        "config": {
-            "columns":[], // the columns set for the view, if any
-            "label":"{name}", // the label format string
-            "numPerPage":2, // pagination
-            "sortOrder":"M", // sorting - ascending, descending or manual
-            "labelChanged":true // trigger for regenerating object labels - true when config has changed
-        },
-        "alias":"programLocations", // the editor alias
-        "selection":[], // stores the object selected for editing
-        "columnsToRemove":[] // populated by changes to the config object
-    }
-```
+Tabulate manages instances where content authors are maintaining large, well-structured data sets in the Umbraco backoffice.
 
 # Editor configuration
-The editor has three configuration options, none of which are mandatory:
+The editor has four configuration options, none of which are mandatory:
 
 - Wide: sets the editor to display full-width within the content node tabs (ie hides the editor label)
 - Admin-only settings: hides the settings button for users not of the admin type (ie authors)
 - Custom view: sets a path to a custom view for use in the edit/add row dialog. If a custom view is used, a controller for the view will also need to be added and referenced in the Javascript dependencies object in the package.manifest file.
+- Maps API key: to display Google maps in the map dialog, you'll need to add an API key. The map dialog allows fine tuning of lat/lng pairs for addresses
 
 Additional configuration for a Tabulate instance takes place in the editor itself, not as prevalues.
 
@@ -32,7 +15,7 @@ With the editor added to a document type, admin users will see a blue settings b
 The settings button opens the settings dialog, which includes three tabs:
 
 ## Add new column
-The first tab allows addition of new columns - specify a name and select a display type (textstring, textarea or RTE).
+The first tab allows addition of new columns - specify a name and select a display type (textstring, textarea, RTE, number, email, date, url).
 
 ## Current columns
 
@@ -74,7 +57,7 @@ If the object contains a property with the key 'Address', the latitude and longi
 
 On the map view, the pin can be repositioned with the resulting change to the latitude and longitude updated in the model.
 
-Adding a new row to the model using the '+' button opens an empty dialog with inputs for each column defined in the settings.
+Adding a new row to the model opens an empty dialog with inputs for each column defined in the settings.
 
 The default view is filterable by label.
 
@@ -89,5 +72,53 @@ The dialogData.data object can be manipulated in the custom controller provided 
 
 While the label formatter specified in the settings is reasonably robust, it can be more effective to build the label programmatically in the custom controller - this allows conditional labelling or inclusion of values that don't exist as part of the model. Storing the label as a model property (ie `customLabel`) allows it to then be referenced in the label setting as `{customLabel}`.
 
-# Accessing the data
-That's up to you. Make it available via a WebAPI endpoint and serve it up to a Javascript front-end, or map it to a model and use directly in your MVC views. Hell, you could always just deserialized the data to a dynamic and just go nuts.
+# Accessing the data - now with PropertyValueConverter
+A Tabulate instance stores data in the structure below:
+
+```js
+    {
+        "data": [ /* an array of objects representing the rows in the back office editor */],
+        "config": {
+            "columns":[], // the columns set for the view, if any
+            "label":"{name}", // the label format string
+            "numPerPage":2, // pagination
+            "sortOrder":"M", // sorting - ascending, descending or manual
+            "labelChanged":true // trigger for regenerating object labels - true when config has changed
+        },
+        "alias":"programLocations", // the editor alias
+    }
+```
+
+Fields will added/removed from that model to facilitate data updates, but that's the guts of it. Your data will be available in the data property. Creative, hey!
+
+If you want JSON, simply add an ApiController to your project and fetch it yourself. Or ask nicely and I'll add one.
+
+The latest version includes a PropertyValueConverter to return the stored data in a strongly typed model. Access it like so:
+
+```csharp
+    TabulateModel model = Model.Content.GetPropertyValue<TabulateModel>("propertyAlias");
+```
+
+Familiar? Should be, it's just a standard Umbraco property converter. You'll need to add a reference to Tabulate.Models in your using statements. Easy as.
+
+The model itself is pretty simple:
+
+```
+    Settings {SettingsModel} - not sure why you'd want these, but you can have em anyway
+        LabelFormat {string}
+        ItemsPerPage {int}
+    Headers {List<HeaderModel>} - each column is represented by a HeaderModel object, each with a name and type value
+        Name {string}
+        Type {string}
+    Rows {List<RowModel>} - one for each row added in the backoffice
+        Cells {List<object>}
+        Id {int} - derp
+        Label {string} - the generated label string, based on the LabelFormat
+        Disabled {bool} - is the row disabled in the backoffice?
+        Lat {float} - if the row has an Address property, this is the corresponding latitude
+        Lng {float} - if the row has an Address property, this is the correpsonding longitude
+```
+
+See how I didn't explain the Cells above? They deserve extra attention.
+
+Based on the cell type (number, email, url, textarea, string, date etc), the value for each cell will be converted to the corresponding .Net type - your dates will be DateTimes, numbers will be ints. Magic!
