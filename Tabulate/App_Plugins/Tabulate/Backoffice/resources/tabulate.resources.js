@@ -13,8 +13,7 @@
                     { label: 'Number', value: 'number' },
                     { label: 'Email', value: 'email' },
                     { label: 'Telephone', value: 'tel' },
-                    { label: 'Date (with timezeone)', value: 'date' },
-                    { label: 'Date (no timezone)', value: 'datetime-local' },
+                    { label: 'Date', value: 'date' },
                     { label: 'Url', value: 'url' },
                     { label: 'Color', value: 'color' },
                 ];
