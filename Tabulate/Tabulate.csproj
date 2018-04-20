@@ -302,7 +302,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)App_Plugins\*.*" "$(ProjectDir)..\Tabulate.Site\App_Plugins" /A /K /Y /E</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)" "$(ProjectDir)..\Workflow.Site\bin" /Y /I /D
+xcopy "$(ProjectDir)App_Plugins\*.*" "$(ProjectDir)..\Tabulate.Site\App_Plugins" /A /K /Y /E</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
