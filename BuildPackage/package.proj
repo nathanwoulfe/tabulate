@@ -112,7 +112,7 @@
 	</Target>
 
 	<!-- PREPARE FILES -->
-	<Target Name="PrepareFiles" DependsOnTargets="Clean">
+	<Target Name="PrepareFiles" DependsOnTargets="Compile">
 		<ItemGroup>
 			<BinFiles Include="$(CoreProjectDir)\Bin\$(BuildConfig)\Tabulate.dll" />
 			<PdbFiles Include="$(CoreProjectDir)\Bin\$(BuildConfig)\Tabulate.pdb" />
