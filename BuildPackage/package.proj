@@ -100,31 +100,31 @@
   </Target>
 
     <!-- UPDATE PROJECT ASSEMBLEY VERSION -->
-  <!--<Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
+  <Target Name="UpdateAssemblyInfo" DependsOnTargets="Clean">
     <FileUpdate Encoding="ASCII" Files="$(CoreProjectDir)\Properties\AssemblyInfo.cs" Regex="AssemblyVersion\(&quot;.*&quot;\)\]" ReplacementText="AssemblyVersion(&quot;$(FileVersion)&quot;)]" />
     <FileUpdate Encoding="ASCII" Files="$(CoreProjectDir)\Properties\AssemblyInfo.cs" Regex="AssemblyFileVersion\(&quot;.*&quot;\)\]" ReplacementText="AssemblyFileVersion(&quot;$(FileVersion)&quot;)]" />
     <FileUpdate Encoding="ASCII" Files="$(CoreProjectDir)\Properties\AssemblyInfo.cs" Regex="AssemblyInformationalVersion\(&quot;.*&quot;\)\]" ReplacementText="AssemblyInformationalVersion(&quot;$(ProductVersion)&quot;)]" />
-  </Target>-->
+  </Target>
 
 	<!-- COMPILE -->
-	<!--<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
+	<Target Name="Compile" DependsOnTargets="UpdateAssemblyInfo">
 		<MSBuild Projects="$(CoreProjectDir)\Tabulate.csproj" Properties="Configuration=$(BuildConfig)"/>
-	</Target>-->
+	</Target>
 
 	<!-- PREPARE FILES -->
 	<Target Name="PrepareFiles" DependsOnTargets="Clean">
 		<ItemGroup>
-			<!--<BinFiles Include="$(CoreProjectDir)\Bin\$(BuildConfig)\Tabulate.dll" />
+			<BinFiles Include="$(CoreProjectDir)\Bin\$(BuildConfig)\Tabulate.dll" />
 			<PdbFiles Include="$(CoreProjectDir)\Bin\$(BuildConfig)\Tabulate.pdb" />
-			<SrcFiles Include="$(CoreProjectDir)\**\*.cs" Exclude="$(CoreProjectDir)\obj\**"/>-->
+			<SrcFiles Include="$(CoreProjectDir)\**\*.cs" Exclude="$(CoreProjectDir)\obj\**"/>
 			<PackageFile Include="$(MSBuildProjectDirectory)\package.xml" />
 			<NuSpecFile Include="$(MSBuildProjectDirectory)\package.nuspec" />
 			<GruntProjectFiles Include="$(GruntProjectDir)\**\*" />
 		</ItemGroup>
-		<!--<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />-->
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildUmbDir)\bin" />
 		<Copy SourceFiles="@(PackageFile)" DestinationFolder="$(BuildUmbDir)" />
-		<!--<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
-		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />-->
+		<Copy SourceFiles="@(BinFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
+		<Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(BuildNuGetDir)\lib\net45" />
 		<Copy SourceFiles="@(NuSpecFile)" DestinationFolder="$(BuildNuGetDir)" />
 		<Copy SourceFiles="@(GruntProjectFiles)" DestinationFiles="@(GruntProjectFiles->'$(BuildUmbDir)\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(GruntProjectFiles)" DestinationFiles="@(GruntProjectFiles->'$(BuildNuGetDir)\Content\%(RecursiveDir)%(Filename)%(Extension)')" />    
