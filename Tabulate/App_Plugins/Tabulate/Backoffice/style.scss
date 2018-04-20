@@ -72,4 +72,7 @@
         }
     }
 
+    input[type].ng-invalid {
+        border-color:red;
+    }
 }

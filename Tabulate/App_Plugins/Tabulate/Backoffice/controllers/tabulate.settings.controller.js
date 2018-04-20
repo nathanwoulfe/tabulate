@@ -22,6 +22,8 @@
             }
         };
 
+        $scope.types = tabulateResource.fieldTypes();
+
         /* store a copy of the config object for comparison when the modal is submitted */
         $scope.model.changes = [];
         const setInitial = () => {

@@ -25,6 +25,10 @@
             };
         };
 
+        this.inputType = type => {
+            return type === 'string' ? 'text' : type;
+        };
+
         /**
          * Close and clear the overlay
          */
@@ -50,10 +54,10 @@
                     show: true,
                     lat: $scope.model.data.lat,
                     lng: $scope.model.data.lng,
-                    alias: 'Update address coordinates',
+                    title: 'Update address coordinates',
                     submit: resp => {
                         closeOverlay();
-                        
+
                         const keys = Object.keys($scope.model.data._Address);
 
                         if (keys.length === 2) {
@@ -77,6 +81,14 @@
                     $scope.model.recode = true;
                 }
             });
+
+            $scope.$watch('overlayForm.$invalid',
+                newVal => {
+                    if (newVal) {
+                        $scope.model.hideSubmitButton = true;
+                    }
+                });
+
         }
     }
 

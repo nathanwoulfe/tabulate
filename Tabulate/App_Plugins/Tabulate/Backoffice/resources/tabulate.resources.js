@@ -5,6 +5,21 @@
 
         return {
 
+            fieldTypes: () => {
+                return [
+                    { label: 'Text string', value: 'string' },
+                    { label: 'Textarea', value: 'textarea' },
+                    { label: 'Rich text', value: 'rte' },
+                    { label: 'Number', value: 'number' },
+                    { label: 'Email', value: 'email' },
+                    { label: 'Telephone', value: 'tel' },
+                    { label: 'Date (with timezeone)', value: 'date' },
+                    { label: 'Date (no timezone)', value: 'datetime-local' },
+                    { label: 'Url', value: 'url' },
+                    { label: 'Color', value: 'color' },
+                ];
+            },
+
             // another helper - goes the opposite way, converting JSON back to CSV for exporting
             JSONtoCSV: (json, header) => {
 
@@ -79,7 +94,7 @@
                     }
                     if (arrMatches[2]) {
                         strMatchedValue = arrMatches[2].replace(
-                        new RegExp('""', 'g'), '"');
+                            new RegExp('""', 'g'), '"');
                     } else {
                         strMatchedValue = arrMatches[3];
                     }
@@ -184,7 +199,7 @@
 
                                 const labelKeys = m[1].split('|');
                                 const replacementText = labelKeys.length === 1 ? o[labelKeys[0]] : o[labelKeys[0]][labelKeys[1]];
-                                
+
                                 label = label.length ? label.replace(m[0], replacementText) : format.replace(m[0], replacementText);
                             }
                         } while (m);
@@ -253,4 +268,5 @@
     }
 
     angular.module('umbraco.resources').factory('tabulateResource', ['notificationsService', 'assetsService', '$q', 'authResource', 'editorState', tabulateResource]);
+
 })();

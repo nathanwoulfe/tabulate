@@ -27,11 +27,7 @@
                 <div class="umb-el-wrap">
                     <label class="control-label">Column input type</label>
                     <div class="controls">
-                        <select name="new-column-type" ng-model="model.newColumnType">
-                            <option value="string">Text string</option>
-                            <option value="textarea">Textarea</option>
-                            <option value="rte">RTE</option>
-                        </select>
+                        <select name="new-column-type" ng-model="model.newColumnType"  ng-options="t.value as t.label for t in types"></select>
                     </div>
                 </div>
             </div>
@@ -53,11 +49,7 @@
                                 <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
                                     <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
                                     <td>
-                                        <select name="column-type" ng-model="c.type" ng-change="changedColumn($index)">
-                                            <option value="string">Text string</option>
-                                            <option value="textarea">Textarea</option>
-                                            <option value="rte">RTE</option>
-                                        </select>
+                                        <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in types" ng-change="changedColumn($index)"></select>
                                     </td>
                                     <td>
                                         <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="removeColumn($index)"><localize key="general_remove">Remove</localize></a>
@@ -70,7 +62,9 @@
             </div>
             <div class="control-group umb-control-group">
                 <div class="umb-el-wrap">
-                    <label class="control-label">Label</label>
+                    <label class="control-label">Label
+                        <small>Label is case-sensitive. Reference column names using {} notation - {{ '{' + model.config.columns[0].displayName + '}' }}</small>
+                    </label>
                     <div class="controls">
                         <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
                     </div>
