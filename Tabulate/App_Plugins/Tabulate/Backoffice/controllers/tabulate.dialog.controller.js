@@ -35,7 +35,7 @@
         const closeOverlay = () => {
             this.overlay.show = false;
             this.overlay = null;
-        }
+        };
 
         // specific to edit //
         if ($scope.model.type === 'edit') {

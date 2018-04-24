@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
     "babelify": "^8.0.0",
+    "babel-preset-env": "*",
     "grunt-browserify": "^5.2.0",
     "grunt": "*",
     "load-grunt-tasks": "*",

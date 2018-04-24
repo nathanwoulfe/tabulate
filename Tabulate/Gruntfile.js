@@ -46,7 +46,7 @@
                     '<%= dest %>/<%= basePath %>/backoffice/js/tabulate.js': '<%= basePath %>/backoffice/tabulate.es6'
                 },
                 options: {
-                    transform: [['babelify', { presets: 'es2015' }]],
+                    transform: [['babelify', { presets: 'env' }]],
                     browserifyOptions: {
                         debug: false
                     }
