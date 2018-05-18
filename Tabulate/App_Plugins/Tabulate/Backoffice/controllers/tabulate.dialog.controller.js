@@ -6,24 +6,20 @@
         // view loops through the properties array to build the rte - o will have a value added if the data model contains rte fields
         $scope.model.rte = {};
 
-        this.getRte = n => {
-            return {
-                label: 'bodyText',
-                description: '',
-                view: 'rte',
-                config: {
-                    editor: {
-                        toolbar: ['styleselect', 'code', 'bold', 'italic', 'bullist', 'numlist', 'link', 'umbmediapicker'],
-                        stylesheets: ['TinyMCE'],
-                        dimensions: { height: 300, width: '100%' }
-                    },
-                    hideLabel: true
-                },
-                hideLabel: true,
-                value: $scope.model.data[n],
-                modelLabel: n
-            };
-        };
+        this.getRte = n => ({
+
+            label: 'bodyText',
+            description: '',
+            view: 'rte',
+            config: {
+                editor: $scope.model.rteConfig,
+                hideLabel: true
+            },
+            hideLabel: true,
+            value: $scope.model.data[n],
+            modelLabel: n
+
+        });
 
         this.inputType = type => {
             return type === 'string' ? 'text' : type;

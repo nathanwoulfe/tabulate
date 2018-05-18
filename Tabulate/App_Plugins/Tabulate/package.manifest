@@ -31,6 +31,11 @@
 						key: "mapsApiKey",
 						description: "API key for Google Maps in address dialogs",
 						view: 'textstring'
+					},					{
+						label: "Rich text editor",
+						key: "rte",
+						description: "Rich text editor configuration",
+						view: 'views/propertyeditors/rte/rte.prevalues.html'
 					}
 				]
 			}			

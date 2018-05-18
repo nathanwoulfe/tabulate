@@ -11,6 +11,7 @@
 
         // hide the umbraco label if the view is set to wide
         $scope.model.hideLabel = $scope.model.config.wide !== undefined && $scope.model.config.wide;
+        const rteConfig = $scope.model.config.rte;
 
         // these don't need to be scoped
         var data,
@@ -140,7 +141,7 @@
          * Open the overlay to add a new row
          */
         function addRow() {
-
+            
             vm.overlay = {
                 view: dialogPath,
                 modalClass: `tabulate-modal ${className}`,
@@ -150,6 +151,7 @@
                 type: 'add',
                 data: emptyModel(),
                 config: settings,
+                rteConfig: rteConfig,
                 submit: resp => {
                     closeOverlay();
 
@@ -194,6 +196,7 @@
                 type: 'edit',
                 data: data[$index],
                 config: settings,
+                rteConfig: rteConfig,
                 submit: resp => {
                     closeOverlay();
 
