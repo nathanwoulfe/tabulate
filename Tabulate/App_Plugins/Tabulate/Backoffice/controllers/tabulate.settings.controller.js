@@ -1,18 +1,16 @@
-﻿/*global angular, google, confirm*/
-/*jslint nomen: true*/
-(function () {
-    'use strict';
+﻿(() => {
 
     function tabulateSettingsController($scope, $filter, tabulateResource, notificationsService, editorState) {
 
+        const l = $scope.model.data !== undefined ? $scope.model.data.length : 0; // model data length
+        const importKeys = []; // array of header text from imported csv
+
         /* variables for convenience */
-        var geocoder = new google.maps.Geocoder(), // the google geocoder
-            l = $scope.model.data !== undefined ? $scope.model.data.length : 0, // model data length
+        let geocoder = new google.maps.Geocoder(), // the google geocoder
             i, // loop counter
             j, // inner loop counter
             o, // generic object
-            address, // address string for geocoding
-            importKeys = []; // array of header text from imported csv
+            address; // address string for geocoding
 
         /* remove an existing column - need to handle data removal */
         $scope.model.columnsToRemove = [];
@@ -112,7 +110,7 @@
         /* give two download options - raw json, or parsed csv */
         $scope.download = () => {
 
-            var filename = `download.${$scope.showing}`,
+            const filename = `download.${$scope.showing}`,
                 d = JSON.parse(JSON.stringify($scope.importExport)); // we need a copy of the data, not a reference
 
             if (!navigator.userAgent.match(/msie|trident/i)) {
@@ -221,11 +219,9 @@
         const csvToJson = (csv) => {
 
             try {
-                var array = tabulateResource.CSVtoArray(csv),
-                    objArray = [],
-                    json,
-                    str,
-                    key;
+                const array = tabulateResource.CSVtoArray(csv),
+                    objArray = [];
+                let key;
 
                 for (i = 1; i < array.length; i += 1) {
                     objArray[i - 1] = {};
@@ -239,10 +235,8 @@
                     }
                 }
 
-                json = JSON.stringify(objArray);
-                str = json.replace(/\},/g, "},\r\n");
-
-                return str;
+                const json = JSON.stringify(objArray);
+                return json.replace(/\},/g, '},\r\n');
             }
             catch (e) {
                 noticationsService.error('Import error', e);

@@ -1,12 +1,10 @@
-/*global angular, google, confirm */
 (function () {
-    'use strict';
     function tabulateResource(notificationsService, assetsService, $q, authResource, editorState) {
 
         return {
 
-            fieldTypes: () => {
-                return [
+            fieldTypes: () => 
+               [
                     { label: 'Text string', value: 'string' },
                     { label: 'Textarea', value: 'textarea' },
                     { label: 'Rich text', value: 'rte' },
@@ -15,9 +13,8 @@
                     { label: 'Telephone', value: 'tel' },
                     { label: 'Date', value: 'date' },
                     { label: 'Url', value: 'url' },
-                    { label: 'Color', value: 'color' },
-                ];
-            },
+                    { label: 'Color', value: 'color' }
+                ],
 
             // another helper - goes the opposite way, converting JSON back to CSV for exporting
             JSONtoCSV: (json, header) => {
@@ -25,7 +22,7 @@
                 const arr = typeof json !== 'object' ? JSON.parse(json) : json;
                 const headerKeys = [];
 
-                var csv = '',
+                let csv = '',
                     row,
                     i,
                     j,
@@ -80,7 +77,7 @@
                 const objPattern = new RegExp((`(\\${strDelimiter}|\\r?\\n|\\r|^)(?:"([^"]*(?:""[^"]*)*)"|([^"\\${strDelimiter}\\r\\n]*))`), 'gi');
                 const arrData = [[]];
 
-                var arrMatches,
+                let arrMatches,
                     strMatchedDelimiter,
                     strMatchedValue;
 
@@ -104,7 +101,20 @@
             },
 
             loadGoogleMaps: apiKey => {
-                var deferred = $q.defer();
+                const deferred = $q.defer();
+                const loadMapsApi = () => {
+                    if (window.google.maps === undefined) {
+                        window.google.load('maps', '3', {
+                                other_params: `key=${apiKey}`,
+                                callback: () => {
+                                    deferred.resolve(true);
+                                }
+                            });
+                    } else if (window.google.maps !== undefined) {
+                        deferred.resolve(true);
+                    }
+                };
+
                 if (window.google === undefined) {
                     assetsService.loadJs('//www.google.com/jsapi')
                         .then(() => {
@@ -112,20 +122,6 @@
                         });
                 } else {
                     loadMapsApi();
-                }
-
-                function loadMapsApi() {
-                    if (window.google.maps === undefined) {
-                        window.google.load('maps', '3', {
-                            other_params: `key=${apiKey}`,
-                            callback: () => {
-                                deferred.resolve(true);
-                            }
-                        });
-                    }
-                    else if (window.google.maps !== undefined) {
-                        deferred.resolve(true);
-                    }
                 }
 
                 return deferred.promise;

@@ -1,5 +1,4 @@
-﻿(function () {
-    'use strict';
+﻿(() => {
 
     function tabulatePagingService() {
 
@@ -8,10 +7,8 @@
          * @param {any} total
          * @param {any} perPage
          */
-        function countPages(total, perPage) {
-            return Math.ceil(parseInt(total, 10) / parseInt(perPage, 10));
-        }
-
+        const countPages = (total, perPage) => Math.ceil(parseInt(total, 10) / parseInt(perPage, 10));
+        
         /**
          * 
          * @param {any} items
@@ -19,9 +16,9 @@
          * @param {any} pageNumber
          * @param {any} numPerPage
          */
-        function updatePaging(items, filter, pageNumber, numPerPage) {
+        const updatePaging = (items, filter, pageNumber, numPerPage) => {
 
-            var begin = (pageNumber - 1) * numPerPage,
+            let begin = (pageNumber - 1) * numPerPage,
                 end = begin + numPerPage,
                 paged = items;
 
@@ -46,12 +43,12 @@
          * @param {any} items
          * @param {any} term
          */
-        function getFilteredPage(items, term) {
+        const getFilteredPage = (items, term) => {
 
             const paged = [];
             const l = items.length;
 
-            var i, // loop index
+            let i, // loop index
                 j, // inner loop index
                 o, // the object plucked from items array
                 keys,
@@ -84,10 +81,8 @@
          * @param {any} i
          * @param {any} j
          */
-        function setCurrentPage(i, j) {
-            return j === undefined ? (i - 1 > 0 ? i - 1 : i) : (i + 1 <= j ? i + 1 : i);
-        }
-
+        const setCurrentPage = (i, j) => j === undefined ? (i - 1 > 0 ? i - 1 : i) : (i + 1 <= j ? i + 1 : i);
+        
         return {
             countPages: countPages,
             updatePaging: updatePaging,

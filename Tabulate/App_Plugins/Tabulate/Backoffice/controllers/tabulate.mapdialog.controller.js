@@ -1,6 +1,4 @@
-﻿/*global angular, google, confirm*/
-(function () {
-    'use strict';
+﻿(() => {
 
     function tabulateMapDialogController($scope) {
 

@@ -1,10 +1,9 @@
-﻿/*global angular, confirm*/
-(function () {
-    'use strict';
+﻿(() => {
 
-    function tabulateController($scope, $filter, authResource, assetsService, dialogService, notificationsService, tabulateResource, tabulatePagingService) {
+    function tabulateController($scope, $q, $filter, authResource, assetsService, dialogService, notificationsService, tabulateResource, tabulatePagingService) {
 
         const basePath = '../app_plugins/tabulate/backoffice/';
+        const dialogPath = $scope.model.config.customView || `${basePath}views/dialog.html`;
 
         // let's add a stylesheet to pretty it up     
         assetsService.loadCss(`${basePath}style.min.css`);
@@ -14,32 +13,30 @@
         const rteConfig = $scope.model.config.rte;
 
         // these don't need to be scoped
-        var data,
-            settings,
-            vm = this,
-            dialogPath = $scope.model.config.customView || `${basePath}views/dialog.html`;
+        let data,
+            settings;
 
         const pathArray = dialogPath.split('/');
         const fileName = pathArray[pathArray.length - 1];
-        var className = fileName.substr(0, fileName.indexOf('.')) + '-modal';
+        const className = fileName.substr(0, fileName.indexOf('.')) + '-modal';
 
         // helper function to generate a model based on config values
-        function emptyModel() {
-            var empModel = {};
+        const emptyModel = () => {
+            var newModel = {};
             settings.columns.forEach(c => {
-                empModel[c.displayName] = '';
+                newModel[c.displayName] = '';
             });
-            empModel._id = data.length;
+            newModel._id = data.length;
 
-            return empModel;
-        }
+            return newModel;
+        };
 
         // clear model
-        function clearModel() {
+        const clearModel = () => {
             if (confirm('Do you really want to delete all data?')) {
                 data = [];
                 settings = [];
-                vm.pagination = {
+                this.pagination = {
                     items: [],
                     currentPage: 1,
                     search: '',
@@ -53,29 +50,29 @@
         }
 
         // iterate the model data, assign each object an id
-        function setIds() {
+        const setIds = () => {
             data.forEach((o, i) => {
                 o._id = i;
             });
-        }
+        };
 
         // get/set the sort order for the model, apply sort filter if necessary
         // if sorting is manual, the order is unchanged
-        function setSorting() {
+        const setSorting = () => {
             if (settings.sortOrder === undefined) {
                 settings.sortOrder = 'A';
             } else if (settings.sortOrder === 'M') {
                 settings.numPerPage = data.length;
-                vm.manualSort = true;
+                this.manualSort = true;
             } else {
                 data = $filter('orderBy')(data, '_label', settings.sortOrder === 'D' ? true : false);
             }
 
             updateUmbracoModel();
-        }
+        };
 
         // remove a column from settings
-        function removeColumn(col) {
+        const removeColumn = col => {
             // if this is the last column, get confirmation first, then remove the column and model data
             // otherwise, remove the column if multiple remain
             if (settings.columns.length === 1 && confirm('Removing all columns will also delete all stored data. Continue?')) {
@@ -86,9 +83,8 @@
                 };
                 data = [];
                 setPaging();
-                vm.noConfig = true;
-            }
-            else if (settings.columns.length > 1) {
+                this.noConfig = true;
+            } else if (settings.columns.length > 1) {
 
                 var dataLabel = settings.columns[col].displayName;
                 data.forEach(item => {
@@ -100,16 +96,16 @@
                 settings.columns.splice(col, 1);
             }
             updateUmbracoModel();
-        }
+        };
 
         // update column names/types
-        function updateColumns(changes) {
+        const updateColumns = changes => {
             // each change has a new and old value - only continue if new exists ie has been changed
             // i = counter for the outer loop
             // c = changes object for the loop iteration
             // j = counter for the inner loop
             // d = the data object for the inner loop iteration
-            var i, c, j, d;
+            let i, c, j, d;
             for (i = 0; i < changes.length; i += 1) {
                 c = changes[i];
                 if (c.newName !== undefined) {
@@ -127,22 +123,22 @@
                     }
                 }
             }
-        }
+        };
 
         /**
          * Close and clear the overlay
          */
-        function closeOverlay() {
-            vm.overlay.show = false;
-            vm.overlay = null;
+        const closeOverlay = () => {
+            this.overlay.show = false;
+            this.overlay = null;
         }
 
         /**
          * Open the overlay to add a new row
          */
-        function addRow() {
-            
-            vm.overlay = {
+        const addRow = () => {
+
+            this.overlay = {
                 view: dialogPath,
                 modalClass: `tabulate-modal ${className}`,
                 show: true,
@@ -156,16 +152,16 @@
                     closeOverlay();
 
                     // get the value from rte fields, if any exist
-                    var rteKeys = Object.keys(resp.rte), i;
+                    const rteKeys = Object.keys(resp.rte);
 
                     if (rteKeys.length) {
-                        for (i = 0; i < rteKeys.length; i += 1) {
+                        for (let i = 0; i < rteKeys.length; i += 1) {
                             resp.data[rteKeys[i]] = resp.rte[rteKeys[i]].value;
                         }
                     }
 
                     // geocode the response and add it to the model
-                    var newItem = vm.mapsLoaded ? tabulateResource.geocode(resp.data) : resp.data;
+                    let newItem = this.mapsLoaded ? tabulateResource.geocode(resp.data) : resp.data;
                     newItem = tabulateResource.setLabels(newItem, true, settings.label);
 
                     data.push(newItem);
@@ -180,14 +176,14 @@
                     closeOverlay();
                 }
             };
-        }
+        };
 
         /**
          * Open the overlay to edit an existing row
          * @param {any} $index
          */
-        function editRow($index) {
-            vm.overlay = {
+        const editRow = $index => {
+            this.overlay = {
                 view: dialogPath,
                 modalClass: `tabulate-modal ${className}`,
                 show: true,
@@ -201,10 +197,10 @@
                     closeOverlay();
 
                     // get the value from rte fields, if any exist
-                    var rteKeys = Object.keys(resp.rte), i;
+                    const rteKeys = Object.keys(resp.rte);
 
                     if (rteKeys.length) {
-                        for (i = 0; i < rteKeys.length; i += 1) {
+                        for (let i = 0; i < rteKeys.length; i += 1) {
                             resp.data[rteKeys[i]] = resp.rte[rteKeys[i]].value;
                         }
                     }
@@ -212,9 +208,12 @@
                     // if the response has a new address, geocode it
                     // then store the response in the model
                     resp.data = tabulateResource.setLabels(resp.data, true, settings.label);
-                    data[$index] = resp.recode === true && vm.mapsLoaded ? tabulateResource.geocode(resp.data) : resp.data;
+                    data[$index] = resp.recode === true && this.mapsLoaded ? tabulateResource.geocode(resp.data) : resp.data;
 
-                    if (resp.remap !== undefined && resp.remap.length > 0 && settings.mappings && settings.mappings.length) {
+                    if (resp.remap !== undefined &&
+                        resp.remap.length > 0 &&
+                        settings.mappings &&
+                        settings.mappings.length) {
                         tabulateResource.updateMappedEditor(resp, undefined, settings.mappings);
                     }
 
@@ -228,13 +227,13 @@
                     closeOverlay();
                 }
             };
-        }
+        };
 
         /**
          * Remove an existing row from the collection
          * @param {any} $index
          */
-        function removeRow($index) {
+        const removeRow = $index => {
             if (data.length && confirm('Are you sure you want to remove this?')) {
                 data.splice($index, 1);
 
@@ -242,13 +241,13 @@
                 setIds();
                 setPaging();
             }
-        }
+        };
 
         /**
          * Set the disabled state for the selected row
          * @param {any} $index
          */
-        function disableRow($index) {
+        const disableRow = $index => {
             const v = data[$index];
             v.disabled = v.disabled === undefined || v.disabled === false ? true : false;
 
@@ -261,11 +260,11 @@
         /**
          * Open  the settings overlay
          */
-        function openSettings() {
+        const openSettings = () => {
 
-            vm.search = '';
+            this.search = '';
 
-            vm.overlay = {
+            this.overlay = {
                 view: `${basePath}/views/settings.html`,
                 modalClass: `umb-modal tabulate-modal ${className}`,
                 show: true,
@@ -292,7 +291,7 @@
 
                     // if the columnsToRemove array exists, remove each config row
                     if (resp.columnsToRemove.length > 0) {
-                        angular.forEach(resp.columnsToRemove, function (col) {
+                        angular.forEach(resp.columnsToRemove, col => {
                             removeColumn(col);
                         });
                     }
@@ -311,7 +310,7 @@
                     data = tabulateResource.setLabels(data, true, settings.label);
 
                     // finally, if there's nothing left in the config, set the noConfig state
-                    vm.noConfig = settings === undefined ? true : false;
+                    this.noConfig = settings === undefined ? true : false;
 
                     // need to do this explicitly as it may be imported content
                     updateUmbracoModel();
@@ -324,7 +323,7 @@
 
         // this is simply for convienence - update data/settings rather than $scope.model.value.data
         // need to remember though to call it whenever the data or settings objects are modified
-        function updateUmbracoModel() {
+        const updateUmbracoModel = () => {
             $scope.model.value.data = data;
             $scope.model.value.settings = settings;
         }
@@ -333,9 +332,9 @@
          * 
          * @param {any} pageNumber
          */
-        function goToPage(pageNumber) {
-            vm.pagination.pageIndex = pageNumber - 1;
-            vm.pagination.pageNumber = pageNumber;
+        const goToPage = pageNumber => {
+            this.pagination.pageIndex = pageNumber - 1;
+            this.pagination.pageNumber = pageNumber;
 
             setPaging();
         }
@@ -343,28 +342,15 @@
         /**
          * get the page from the paging service
          */
-        function setPaging() {
-            vm.pagination = tabulatePagingService.updatePaging(data, vm.pagination.search, vm.pagination.pageNumber, settings.numPerPage);
-            vm.noResults = (vm.pagination.items.length === 0 && data.length) ? true : false;
+        const setPaging = () => {
+            this.pagination = tabulatePagingService.updatePaging(data, this.pagination.search, this.pagination.pageNumber, settings.numPerPage);
+            this.noResults = (this.pagination.items.length === 0 && data.length) ? true : false;
         }
 
-        // get the google map api
-        tabulateResource.loadGoogleMaps($scope.model.config.mapsApiKey)
-            .then(resp => {
-                vm.mapsLoaded = resp;
-            });
-         
-        // should the author see the settings button?
-        authResource.getCurrentUser()
-            .then(resp => {
-                vm.hideSettings = resp.userType === 'author' && !vm.config.adminOnly;
-            }); 
-
-        // EXPORT IT
-        // needs the vm assignment as properties need to be accessed in other functions, where this = window
-        angular.extend(vm, {
+        angular.extend(this, {
             // props
             manualSort: false,
+            hideSettings: true,
             pagination: {
                 items: [],
                 totalPages: 1,
@@ -378,7 +364,7 @@
                 cursor: 'move',
                 handle: '.sort-btn',
                 stop: () => {
-                    $scope.model.value.data = data = vm.paging.items;
+                    $scope.model.value.data = data = this.paging.items;
                     setIds();
                 }
             },
@@ -398,7 +384,7 @@
         /////////////////////////////////
         // kick the whole thing off... //
         /////////////////////////////////
-        var init = (function doInit() {
+        const init = () => {
             if ($scope.model.value === undefined || $scope.model.value.length === 0) {
                 $scope.model.value = {
                     settings: {
@@ -415,7 +401,7 @@
                 data = $scope.model.value.data;
                 settings = $scope.model.value.settings;
 
-                vm.noConfig = false;
+                this.noConfig = false;
 
                 if (data) {
                     setSorting();
@@ -423,10 +409,21 @@
                     setPaging();
                 }
             }
-            return doInit;
-        })();
+        };
+
+        const promises = [
+            tabulateResource.loadGoogleMaps($scope.model.config.mapsApiKey), authResource.getCurrentUser()
+        ];
+
+        $q.all(promises)
+            .then(resp => {
+                this.mapsLoaded = resp[0];
+                this.hideSettings = resp[1].userGroups.indexOf('admin') === -1 && this.config.adminOnly;
+
+                init();
+            });
     }
 
-    angular.module('umbraco').controller('Tabulate.Controller', ['$scope', '$filter', 'authResource', 'assetsService', 'dialogService', 'notificationsService', 'tabulateResource', 'tabulatePagingService', tabulateController]);
+    angular.module('umbraco').controller('Tabulate.Controller', ['$scope', '$q', '$filter', 'authResource', 'assetsService', 'dialogService', 'notificationsService', 'tabulateResource', 'tabulatePagingService', tabulateController]);
 
 })();

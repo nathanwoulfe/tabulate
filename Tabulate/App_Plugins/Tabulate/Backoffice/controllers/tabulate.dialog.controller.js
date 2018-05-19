@@ -1,6 +1,5 @@
-﻿/*global angular, google, confirm*/
-(function () {
-    'use strict';
+﻿(() => {
+
     function tabulateDialogController($scope) {
 
         // view loops through the properties array to build the rte - o will have a value added if the data model contains rte fields
@@ -21,9 +20,7 @@
 
         });
 
-        this.inputType = type => {
-            return type === 'string' ? 'text' : type;
-        };
+        this.inputType = type => type === 'string' ? 'text' : type;
 
         /**
          * Close and clear the overlay
