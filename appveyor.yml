@@ -1,5 +1,5 @@
 # version format
-version: 2.2.1.{build}
+version: 2.2.2.{build}
 
 image: Visual Studio 2017
 
@@ -41,8 +41,8 @@ deploy:
         appveyor_repo_tag: true      
     
   - provider: GitHub
-    tag: v2.2.1
-    release: Release 2.2.1
+    tag: v2.2.2
+    release: Release 2.2.2
     description: 'Configure your own RTE - moves prevalue config out of controllers and into the backoffice UI.'
     force_update: true
     auth_token:
