@@ -418,7 +418,7 @@
         $q.all(promises)
             .then(resp => {
                 this.mapsLoaded = resp[0];
-                this.hideSettings = resp[1].userGroups.indexOf('admin') === -1 && this.config.adminOnly;
+                this.hideSettings = resp[1].userGroups.indexOf('admin') === -1 && $scope.model.config.adminOnly;
 
                 init();
             });
