@@ -1,10 +1,25 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.ContentPage>
+@using Tabulate.Models;
 @using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
     Layout = "Master.cshtml";
 }
 
 @Html.Partial("~/Views/Partials/SectionHeader.cshtml")
+
+@{
+    TabulateModel model = Model.Content.GetPropertyValue<TabulateModel>("tabulate");
+
+    foreach (var row in model.Rows)
+    {
+        foreach (var cell in row.Cells)
+        {
+            @Html.Raw(cell)
+        }
+    }
+
+}
+
 
 <section class="section">
 

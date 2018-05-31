@@ -1,5 +1,5 @@
 # version format
-version: 2.2.2.{build}
+version: 2.2.3.{build}
 
 image: Visual Studio 2017
 
@@ -41,9 +41,9 @@ deploy:
         appveyor_repo_tag: true      
     
   - provider: GitHub
-    tag: v2.2.2
-    release: Release 2.2.2
-    description: 'Configure your own RTE - moves prevalue config out of controllers and into the backoffice UI.'
+    tag: v2.2.3
+    release: Release 2.2.3
+    description: 'Ensure property converter parses internal links'
     force_update: true
     auth_token:
         secure: Otbl8p8qCwciDqJgSWCyN0Arfs5XS1CwiHcK+r0F6uz9Rxt4gzBFvlc3cjPV3NxR

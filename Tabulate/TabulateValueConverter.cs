@@ -5,11 +5,28 @@ using Tabulate.Models;
 using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
+using Umbraco.Web;
+using Umbraco.Web.Templates;
 
 namespace Tabulate
 {
     public class TabulateValueConverter : IPropertyValueConverterMeta
     {
+        /// <summary>
+        /// Parse links in rich text field
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private static string RichText(string value)
+        {
+            if (UmbracoContext.Current == null || UmbracoContext.Current.RoutingContext == null)
+            {
+                return value;
+            }
+
+            return TemplateUtilities.ParseInternalLinks(value, UmbracoContext.Current.UrlProvider);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -71,6 +88,9 @@ namespace Tabulate
                             break;
                         case "number":
                             row.Cells.Add(value[header.Name]?.ToObject<int>());
+                            break;
+                        case "rte":
+                            row.Cells.Add(RichText(value[header.Name]?.ToObject<string>()));
                             break;
                         default:
                             row.Cells.Add(value[header.Name]?.ToObject<string>());

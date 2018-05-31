@@ -16,6 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tabulate.Site", "Tabulate.Site\Tabulate.Site.csproj", "{9C1AFF14-9564-47AC-9519-04A9C00390E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2A536002-2877-4991-80AE-94642E520DF2} = {2A536002-2877-4991-80AE-94642E520DF2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
