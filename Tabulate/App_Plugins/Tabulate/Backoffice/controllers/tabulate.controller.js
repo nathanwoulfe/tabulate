@@ -59,6 +59,8 @@
         // get/set the sort order for the model, apply sort filter if necessary
         // if sorting is manual, the order is unchanged
         const setSorting = () => {
+            this.manualSort = false;
+
             if (settings.sortOrder === undefined) {
                 settings.sortOrder = 'A';
             } else if (settings.sortOrder === 'M') {
@@ -356,15 +358,15 @@
                 totalPages: 1,
                 search: '',
                 pageNumber: 1,
-                pageIndex: 0
+                pageIndex: 0 
             },
             noConfig: true,
             sortOptions: {
                 axis: 'y',
                 cursor: 'move',
-                handle: '.sort-btn',
+                handle: '.sort-handle',
                 stop: () => {
-                    $scope.model.value.data = data = this.paging.items;
+                    $scope.model.value.data = data = this.pagination.items;
                     setIds();
                 }
             },
@@ -380,6 +382,7 @@
             goToPage: goToPage
         });
 
+        console.log(this);
 
         /////////////////////////////////
         // kick the whole thing off... //

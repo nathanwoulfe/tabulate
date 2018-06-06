@@ -11,6 +11,10 @@
         }
     }
 
+    .sort-handle {
+        cursor:ns-resize;
+    }
+
     .disabled {
         .umb-node-preview__content {
             opacity:0.25;

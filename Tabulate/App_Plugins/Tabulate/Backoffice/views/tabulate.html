@@ -11,12 +11,13 @@
     <span class="no-result" ng-if="vm.noResults">No results found for search term '{{vm.pagination.search}}'</span>
 
     <div ui-sortable="vm.sortOptions" ng-model="vm.pagination.items" ng-hide="vm.noConfig">
-        <div class="umb-node-preview umb-node-preview--sortable ui-sortable-handle" ng-class="{'disabled' : o.disabled}" ng-repeat="o in vm.pagination.items track by $index">
+        <div class="umb-node-preview" ng-class="{'disabled' : o.disabled}" ng-repeat="o in vm.pagination.items track by $index">
             <div class="umb-node-preview__content">
                 <div class="umb-node-preview__name" ng-bind="o._label" ng-model="o._label"></div>
             </div>
             <div class="umb-node-preview__actions">
                 <a class="umb-node-preview__action" title="Edit" href="" ng-click="vm.editRow(o._id)"><localize key="general_edit">Edit</localize></a>
+                <a class="umb-node-preview__action sort-handle" ng-show="vm.manualSort" title="Sort" href=""><localize key="general_sort">Sort</localize></a>
                 <a class="umb-node-preview__action" title="Disable" href="" ng-click="vm.disableRow(o._id)">{{ o.disabled ? 'Enable' : 'Disable' }}</a>
                 <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeRow(o._id)"><localize key="general_remove">Remove</localize></a>
             </div>

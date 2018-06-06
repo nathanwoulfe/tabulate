@@ -1,5 +1,5 @@
 # version format
-version: 2.2.3.{build}
+version: 2.2.4.{build}
 
 image: Visual Studio 2017
 
@@ -41,9 +41,9 @@ deploy:
         appveyor_repo_tag: true      
     
   - provider: GitHub
-    tag: v2.2.3
-    release: Release 2.2.3
-    description: 'Ensure property converter parses internal links'
+    tag: v2.2.4
+    release: Release 2.2.4
+    description: 'Enable sorting of rows when sorting set to manual'
     force_update: true
     auth_token:
         secure: Otbl8p8qCwciDqJgSWCyN0Arfs5XS1CwiHcK+r0F6uz9Rxt4gzBFvlc3cjPV3NxR
