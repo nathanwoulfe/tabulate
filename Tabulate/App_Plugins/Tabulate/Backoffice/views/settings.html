@@ -1,4 +1,4 @@
-<div class="tabulate settings" ng-controller="Tabulate.SettingsController">
+<div class="tabulate settings" ng-controller="Tabulate.SettingsController as vm">
     <ul class="nav nav-tabs umb-nav-tabs">
         <li class="active">
             <a href="#tabulate-tab-0" data-toggle="tab">Add new column</a>
@@ -9,89 +9,67 @@
         <li>
             <a href="#tabulate-tab-2" data-toggle="tab">Data</a>
         </li>
-        <li ng-show="tabulateEditors.length">
+        <li ng-show="vm.tabulateEditors.length">
             <a href="#tabulate-tab-3" data-toggle="tab">Mappings</a>
         </li>
     </ul>
     <div class="tab-content umb-tab-content">
         <div class="umb-tab-pane tab-pane active" id="tabulate-tab-0">
-            <div class="control-group umb-control-group">
-                <div class="umb-el-wrap">
-                    <label class="control-label">Column display name</label>
-                    <div class="controls">
-                        <input type="text" name="new-column-name" ng-model="model.newColumnName" />
-                    </div>
-                </div>
-            </div>
-            <div class="control-group umb-control-group">
-                <div class="umb-el-wrap">
-                    <label class="control-label">Column input type</label>
-                    <div class="controls">
-                        <select name="new-column-type" ng-model="model.newColumnType"  ng-options="t.value as t.label for t in types"></select>
-                    </div>
-                </div>
-            </div>
+            
+            <umb-control-group label="Column display name">
+                <input type="text" name="new-column-name" ng-model="model.newColumnName"/>
+            </umb-control-group>
+       
+            <umb-control-group label="Column input type">
+                <select name="new-column-type" ng-model="model.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
+            </umb-control-group>
+
             <p><strong>Pro tip:</strong> For geocoded data use 'Address' as a column name.</p>
         </div>
         <div class="umb-tab-pane tab-pane" id="tabulate-tab-1">
-            <div class="control-group umb-control-group">
-                <div class="umb-el-wrap">
-                    <div class="controls">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
-                                    <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
-                                    <td>
-                                        <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in types" ng-change="changedColumn($index)"></select>
-                                    </td>
-                                    <td>
-                                        <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="removeColumn($index)"><localize key="general_remove">Remove</localize></a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="control-group umb-control-group">
-                <div class="umb-el-wrap">
-                    <label class="control-label">Label
-                        <small>Label is case-sensitive. Reference column names using {} notation - {{ '{' + model.config.columns[0].displayName + '}' }}</small>
-                    </label>
-                    <div class="controls">
-                        <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
-                    </div>
-                </div>
-            </div>
+            
+            <umb-control-group>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
+                        <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)"/></td>
+                        <td>
+                            <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in vm.types" ng-change="vm.changedColumn($index)"></select>
+                        </td>
+                        <td>
+                            <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeColumn($index)"><localize key="general_remove">Remove</localize></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </umb-control-group>
 
-            <div class="control-group umb-control-group">
-                <div class="umb-el-wrap">
-                    <label class="control-label">Order by</label>
-                    <div class="controls">
-                        <select name="sort-order" ng-model="model.config.sortOrder" ng-change="sort()">
-                            <option value="A">Ascending</option>
-                            <option value="D">Descending</option>
-                            <option value="M">Manual</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+            <umb-control-group label="Label" description="Label is case-sensitive. Reference column names using {} notation. Will default to {{ '{' + model.config.columns[0].displayName + '}' }}">
+                <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true"/>
+            </umb-control-group>
 
-            <div class="control-group umb-control-group">
-                <div class="umb-el-wrap">
-                    <label class="control-label">Per page</label>
-                    <div class="controls">
-                        <input type="number" name="per-page" ng-model="model.config.numPerPage" />
-                    </div>
-                </div>
-            </div>
+            <!--<umb-control-group label="List view" description="Display data as a list view. This overrides any label value defined above.">
+                <input name="label" type="checkbox" ng-model="model.config.isListView"/>
+            </umb-control-group>-->
+
+            <umb-control-group label="Order by">
+                <select name="sort-order" ng-model="model.config.sortOrder" ng-change="vm.sort()">
+                    <option value="A">Ascending</option>
+                    <option value="D">Descending</option>
+                    <option value="M">Manual</option>
+                </select>
+            </umb-control-group>
+
+            <umb-control-group label="Per page">
+                <input type="number" name="per-page" ng-model="model.config.numPerPage"/>
+            </umb-control-group>
 
         </div>
         <div class="umb-tab-pane tab-pane" id="tabulate-tab-2">
@@ -99,28 +77,28 @@
             <p>Importing will overwrite all existing data and reset the column config (column type will default to string).</p>
             <div class="export-type">
                 Show:
-                <button ng-click="show('json')" class="btn btn-default" ng-class="{'active' : showing === 'json'}" prevent-default>JSON</button>
-                <button ng-click="show('csv')" class="btn btn-default" ng-class="{'active' : showing === 'csv'}" prevent-default>CSV</button>
+                <button ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}" prevent-default>JSON</button>
+                <button ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}" prevent-default>CSV</button>
             </div>
-            <textarea ng-model="importExport"></textarea>
+            <textarea ng-model="vm.importExport"></textarea>
 
             <!-- download as -->
-            <div class="dropdown download-wrapper" ng-hide="model.data === undefined">
-                <button class="btn btn-default" ng-click="download()" prevent-default>Download</button>
+            <div class="dropdown download-wrapper" ng-hide="!model.data">
+                <button class="btn btn-default" ng-click="vm.download()" prevent-default>Download</button>
             </div>
 
             <!-- download as -->
-            <div class="dropdown import-wrapper" ng-hide="importDisabled">
+            <div class="dropdown import-wrapper" ng-hide="vm.importDisabled">
                 <button class="btn btn-default" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false" prevent-default>
                     Import <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="iLabel">
-                    <li><button class="btn btn-default" ng-click="importCSV()" prevent-default>CSV</button></li>
-                    <li><button class="btn btn-default" ng-click="importJSON()" prevent-default>JSON</button></li>
+                    <li><button class="btn btn-default" ng-click="vm.importCSV()" prevent-default>CSV</button></li>
+                    <li><button class="btn btn-default" ng-click="vm.importJSON()" prevent-default>JSON</button></li>
                 </ul>
             </div>
         </div>
-        <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="tabulateEditors.length">
+        <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="vm.tabulateEditors.length">
             <p>Set references to other properties on this node - typically used as a typeahead source in a custom dialog</p>
             <div class="control-group">
                 <table>
@@ -133,18 +111,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="m in model.config.mappings track by $index" ng-init="setTargetEditorColumns(m.targetEditor.alias)">
+                        <tr ng-repeat="m in model.config.mappings track by $index" ng-init="vm.setTargetEditorColumns(m.targetEditor.alias)">
                             <td>
-                                <select ng-model="m.targetEditor" ng-change="setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in tabulateEditors track by t.alias"></select>
+                                <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
                             </td>
                             <td>
-                                <select ng-show="m.targetEditor !== undefined" ng-model="m.targetProperty" ng-options="c.displayName for c in targetEditorColumns track by c.displayName"></select>
+                                <select ng-show="m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
                             </td>
                             <td>
-                                <select ng-show="m.targetProperty !== undefined" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
+                                <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
                             </td>
                             <td>
-                                <a prevent-default href="" title="Remove mapping" ng-click="removeMapping($index)">
+                                <a prevent-default href="" title="Remove mapping" ng-click="vm.removeMapping($index)">
                                     <i class="icon icon-remove"></i>
                                 </a>
                             </td>
@@ -153,7 +131,7 @@
                 </table>
             </div>
             <a prevent-default href="" title="Add"
-               ng-click="addEmptyItem()">
+               ng-click="vm.addEmptyItem()">
                 <i class="icon icon-add"></i>
             </a>
         </div>

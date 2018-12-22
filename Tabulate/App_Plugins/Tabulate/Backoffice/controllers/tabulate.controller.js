@@ -20,6 +20,13 @@
         const fileName = pathArray[pathArray.length - 1];
         const className = fileName.substr(0, fileName.indexOf('.')) + '-modal';
 
+        // this is simply for convienence - update data/settings rather than $scope.model.value.data
+        // need to remember though to call it whenever the data or settings objects are modified
+        const updateUmbracoModel = () => {
+            $scope.model.value.data = data;
+            $scope.model.value.settings = settings;
+        };
+
         // helper function to generate a model based on config values
         const emptyModel = () => {
             var newModel = {};
@@ -47,7 +54,7 @@
                 $scope.model.value = undefined;
                 init();
             }
-        }
+        };
 
         // iterate the model data, assign each object an id
         const setIds = () => {
@@ -81,12 +88,14 @@
                 settings = {
                     columns: [],
                     label: '',
+                    isListView: false,
                     numPerPage: 10
                 };
                 data = [];
                 setPaging();
                 this.noConfig = true;
-            } else if (settings.columns.length > 1) {
+            }
+            else if (settings.columns.length > 1) {
 
                 var dataLabel = settings.columns[col].displayName;
                 data.forEach(item => {
@@ -133,7 +142,7 @@
         const closeOverlay = () => {
             this.overlay.show = false;
             this.overlay = null;
-        }
+        };
 
         /**
          * Open the overlay to add a new row
@@ -267,7 +276,7 @@
             this.search = '';
 
             this.overlay = {
-                view: `${basePath}/views/settings.html`,
+                view: `${basePath}views/settings.html`,
                 modalClass: `umb-modal tabulate-modal ${className}`,
                 show: true,
                 title: 'Settings',
@@ -293,9 +302,10 @@
 
                     // if the columnsToRemove array exists, remove each config row
                     if (resp.columnsToRemove.length > 0) {
-                        angular.forEach(resp.columnsToRemove, col => {
-                            removeColumn(col);
-                        });
+                        angular.forEach(resp.columnsToRemove,
+                            col => {
+                                removeColumn(col);
+                            });
                     }
 
                     // changes object will exist if changes were made to column names
@@ -321,14 +331,7 @@
                     closeOverlay();
                 }
             };
-        }
-
-        // this is simply for convienence - update data/settings rather than $scope.model.value.data
-        // need to remember though to call it whenever the data or settings objects are modified
-        const updateUmbracoModel = () => {
-            $scope.model.value.data = data;
-            $scope.model.value.settings = settings;
-        }
+        };
 
         /**
          * 
@@ -339,15 +342,18 @@
             this.pagination.pageNumber = pageNumber;
 
             setPaging();
-        }
+        };
         
         /**
          * get the page from the paging service
          */
         const setPaging = () => {
-            this.pagination = tabulatePagingService.updatePaging(data, this.pagination.search, this.pagination.pageNumber, settings.numPerPage);
-            this.noResults = (this.pagination.items.length === 0 && data.length) ? true : false;
-        }
+            this.pagination = tabulatePagingService.updatePaging(data,
+                this.pagination.search,
+                this.pagination.pageNumber,
+                settings.numPerPage);
+            this.noResults = this.pagination.items.length === 0 && data.length ? true : false;
+        };
 
         angular.extend(this, {
             // props
@@ -382,8 +388,6 @@
             goToPage: goToPage
         });
 
-        console.log(this);
-
         /////////////////////////////////
         // kick the whole thing off... //
         /////////////////////////////////
@@ -393,6 +397,7 @@
                     settings: {
                         columns: [],
                         label: '',
+                        islistView: false,
                         numPerPage: 10
                     },
                     data: []

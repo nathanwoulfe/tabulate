@@ -10,7 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		BuildPackage\Build.bat = BuildPackage\Build.bat
-		gulpfile.js = gulpfile.js
 		BuildPackage\package.proj = BuildPackage\package.proj
 		README.md = README.md
 	EndProjectSection

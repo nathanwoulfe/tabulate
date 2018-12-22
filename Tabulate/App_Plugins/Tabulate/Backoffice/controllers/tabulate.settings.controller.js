@@ -14,13 +14,14 @@
 
         /* remove an existing column - need to handle data removal */
         $scope.model.columnsToRemove = [];
-        $scope.removeColumn = $index => {
+
+        this.removeColumn = $index => {
             if (confirm('Are you sure you want to remove this column?')) {
                 $scope.model.columnsToRemove.push($index);
             }
         };
 
-        $scope.types = tabulateResource.fieldTypes();
+        this.types = tabulateResource.fieldTypes();
 
         /* store a copy of the config object for comparison when the modal is submitted */
         $scope.model.changes = [];
@@ -42,43 +43,47 @@
         };
         if ($scope.model.config.columns !== undefined && $scope.model.config.columns.length) {
             setInitial();
-        }
+
+            // set a default label to the displayname of the first column
+            if ($scope.model.config.label === '') {
+                $scope.model.config.label = `{${$scope.model.config.columns[0].displayName}}`;
+            }
+         }
 
         /* when a column is updated, store the new name for comparison when the modal is submitted */
-        $scope.changedColumn = columnIndex => {
+        this.changedColumn = columnIndex => {
             $scope.model.changes[columnIndex].newName = $scope.model.config.columns[columnIndex].displayName;
             $scope.model.changes[columnIndex].newType = $scope.model.config.columns[columnIndex].type;
         };
 
         /* by default, disable the import button, if there is data, display in the view */
-        $scope.importDisabled = true;
+        this.importDisabled = true;
         if ($scope.model.data) {
-            $scope.importExport = JSON.stringify($scope.model);
+            this.importExport = JSON.stringify($scope.model);
         }
 
         /* set values for the mappings - can map to any other tabulate instance on the node */
-        $scope.tabulateEditors = [];
+        this.tabulateEditors = [];
         editorState.current.tabs.forEach(v => {
             v.properties.forEach(vv => {
                 if ($scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
-                    $scope.tabulateEditors.push(vv);
+                    this.tabulateEditors.push(vv);
                 }
             });
         });
 
-        $scope.setTargetEditorColumns = alias => {
+        this.setTargetEditorColumns = alias => {
             if (alias !== undefined) {
-                angular.forEach($scope.tabulateEditors,
-                    v => {
-                        if (v.alias === alias) {
-                            $scope.targetEditorColumns = v.value.settings.columns;
-                        }
-                    });
+                this.tabulateEditors.forEach(v => {
+                    if (v.alias === alias) {
+                        this.targetEditorColumns = v.value.settings.columns;
+                    }
+                });
             }
         };
 
         /* add object to model */
-        $scope.addEmptyItem = () => {
+        this.addEmptyItem = () => {
             if ($scope.model.config.mappings === undefined) {
                 $scope.model.config.mappings = [];
             }
@@ -87,35 +92,35 @@
         };
 
         /*  remove object from the model */
-        $scope.removeMapping = index => {
+        this.removeMapping = index => {
             $scope.model.config.mappings.splice(index, 1);
         };
 
-        $scope.populateItem = (index, mapping) => {
+        this.populateItem = (index, mapping) => {
             $scope.model.config.mappings[index] = mapping;
         };
 
         /* display csv or json in the export textarea */
-        $scope.showing = 'json';
-        $scope.show = type => {
+        this.showing = 'json';
+        this.show = type => {
             if (type === 'csv') {
-                $scope.importExport = tabulateResource.JSONtoCSV($scope.model.data, $scope.model.config.columns);
+                this.importExport = tabulateResource.JSONtoCSV($scope.model.data, $scope.model.config.columns);
             } else {
-                $scope.importExport = JSON.stringify($scope.model);
+                this.importExport = JSON.stringify($scope.model);
             }
-            $scope.importDisabled = true;
-            $scope.showing = type;
+            this.importDisabled = true;
+            this.showing = type;
         };
 
         /* give two download options - raw json, or parsed csv */
-        $scope.download = () => {
+        this.download = () => {
 
-            const filename = `download.${$scope.showing}`,
-                d = JSON.parse(JSON.stringify($scope.importExport)); // we need a copy of the data, not a reference
+            const filename = `download.${this.showing}`,
+                d = JSON.parse(JSON.stringify(this.importExport)); // we need a copy of the data, not a reference
 
             if (!navigator.userAgent.match(/msie|trident/i)) {
                 const saving = document.createElement('a');
-                saving.href = `data:attachment/${$scope.showing},${encodeURIComponent(d)}`;
+                saving.href = `data:attachment/${this.showing},${encodeURIComponent(d)}`;
                 saving.download = filename;
                 saving.click();
             } else {
@@ -127,14 +132,14 @@
         /* if the importexport value changes, through a direct edit or pasting in a new csv display the import button */
         $scope.$watch('importExport', (newVal, oldVal) => {
             if (newVal !== oldVal && newVal.length === 0) {
-                $scope.importDisabled = false;
+                this.importDisabled = false;
             }
         });
 
-        $scope.importJSON = () => {
-            if ($scope.importExport.length) {
+        this.importJSON = () => {
+            if (this.importExport.length) {
                 try {
-                    $scope.model = JSON.parse($scope.importExport);
+                    $scope.model = JSON.parse(this.importExport);
                 } catch (e) {
                     alert('Invalid JSON input');
                 }
@@ -142,13 +147,13 @@
         };
 
         /* imports new data from csv */
-        $scope.importCSV = () => {
+        this.importCSV = () => {
 
             /* only proceed if user confirms - import will clear the existing model value */
-            if (confirm('Importing will overwrite all existing data. Continue?') && $scope.importExport.length) {
+            if (confirm('Importing will overwrite all existing data. Continue?') && this.importExport.length) {
 
                 /* parse the csv and push into the data object, provided it is no longer than 250 records */
-                const csvtojson = JSON.parse(csvToJson($scope.importExport));
+                const csvtojson = JSON.parse(csvToJson(this.importExport));
                 if (csvtojson.length > 0 && csvtojson.length < 2510) {
 
                     $scope.model.data = csvtojson;
@@ -175,7 +180,7 @@
                     }
 
                     /* disable importing, set a flag for config changes and new data */
-                    $scope.importExportDisabled = true;
+                    this.importExportDisabled = true;
                     $scope.model.configChanged = true;
                 }
                 else {
@@ -184,7 +189,7 @@
             }
         };
 
-        $scope.sort = () => {
+        this.sort = () => {
             if ($scope.model.data !== null && $scope.model.config.sortOrder !== 'M') {
                 $scope.model.data = $filter('orderBy')($scope.model.data, '_label', $scope.model.config.sortOrder === 'D' ? true : false);
             }

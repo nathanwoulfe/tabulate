@@ -1,5 +1,5 @@
 (function () {
-    function tabulateResource(notificationsService, assetsService, $q, authResource, editorState) {
+    function tabulateResource(notificationsService, assetsService, $q, editorState) {
 
         return {
 
@@ -262,6 +262,6 @@
         };
     }
 
-    angular.module('umbraco.resources').factory('tabulateResource', ['notificationsService', 'assetsService', '$q', 'authResource', 'editorState', tabulateResource]);
+    angular.module('umbraco.resources').factory('tabulateResource', ['notificationsService', 'assetsService', '$q', 'editorState', tabulateResource]);
 
 })();
