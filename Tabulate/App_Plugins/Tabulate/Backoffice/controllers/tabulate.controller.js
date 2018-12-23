@@ -127,9 +127,15 @@
                         // has a renamed column, needs updating
                         if (d.hasOwnProperty(c.old)) {
                             // add a new property using the old value, then delete the old property
-                            d[c.newName] = d[c.old];
-                            d.type = c.newType;
-                            delete d[c.old];
+                            // only if the name has changed
+                            if (c.newName !== c.old) {
+                                d[c.newName] = d[c.old];
+                                delete d[c.old];
+                            }
+                            // update the type, only if it has changed
+                            if (d.type !== c.newType) {
+                                d.type = c.newType;
+                            }
                         }
                     }
                 }

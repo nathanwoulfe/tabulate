@@ -2,46 +2,68 @@
 
     &.wide {
         .umb-node-preview {
-            max-width:none;
+            max-width: none;
 
             &-add {
-                margin-left:auto;
-                margin-right:auto;
+                margin-left: auto;
+                margin-right: auto;
             }
         }
     }
 
+    .umb-table-cell {
+        &:first-child, &.f-1 {
+            flex: 1;
+            min-width: 200px;
+            max-width: none;
+        }
+
+        &.row-actions {
+            flex: 0 1 auto;
+        }
+
+        &__actions {
+            justify-content: flex-end;
+        }
+    }
+
+    .add-row {
+        margin: 20px;
+    }
+
+    .umb-table-row {
+        &.disabled {
+            background: #f3f3f5;
+
+            a {
+                color: #999;
+            }
+        }
+
+        &:first-child {
+            border-top: 0;
+        }
+    }
+
     .sort-handle {
-        cursor:ns-resize;
+        cursor: ns-resize;
     }
 
-    .disabled {
-        .umb-node-preview__content {
-            opacity:0.25;
-        }
-    }
-
-    .controls-wrapper {
-        display:flex;
-        justify-content:flex-end;
-        margin-bottom:10px;
-
-        button {
-            margin-left:5px;
-        }
+    .settings-btn {
+        margin-right: 10px;
     }
 
     .settings {
         textarea {
-            width:100%;
-            height:150px;
-            margin:10px 0;
+            width: 100%;
+            height: 150px;
+            margin: 10px 0;
         }
     }
 
     .pagination {
-        display:flex;
-        justify-content:center;
+        display: flex;
+        justify-content: center;
     }
 
     table {
@@ -50,33 +72,43 @@
         }
 
         select {
-            width:150px;
+            width: 150px;
         }
+    }
+
+    .list-view .umb-table-cell__actions {
+        min-width:50px;
+        max-width: 50px;
+    }
+
+    .manual-sort .umb-table-cell__actions {
+        min-width:70px;
+        max-width:70px;
     }
 
     #map {
-        padding-top:100%;
-        margin-bottom:15px;
+        padding-top: 100%;
+        margin-bottom: 15px;
     }
 
     .geocoded-property {
-        margin-top:15px;
+        margin-top: 15px;
 
         label {
-            width:50%;
-            margin-right:10px;
-            overflow:hidden;
-            text-overflow:ellipsis;
-            white-space:nowrap;            
-            cursor:default;
+            width: 50%;
+            margin-right: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: default;
         }
 
         button {
-            clear:both;
+            clear: both;
         }
     }
 
     input[type].ng-invalid {
-        border-color:red;
+        border-color: red;
     }
 }

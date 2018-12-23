@@ -130,7 +130,7 @@
         };
 
         /* if the importexport value changes, through a direct edit or pasting in a new csv display the import button */
-        $scope.$watch('importExport', (newVal, oldVal) => {
+        $scope.$watch(() => this.importExport, (newVal, oldVal) => {
             if (newVal !== oldVal && newVal.length === 0) {
                 this.importDisabled = false;
             }
