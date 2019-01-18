@@ -111,4 +111,16 @@
     input[type].ng-invalid {
         border-color: red;
     }
+
+    .dropdown-wrapper {
+        position:relative;
+    }
+
+    .d-flex {
+        display:flex;
+
+        > * {
+            margin-right:10px;
+        }
+    }
 }
