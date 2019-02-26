@@ -1,25 +1,15 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage<ContentModels.ContentPage>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.ContentPage>
+@using ContentModels = Umbraco.Web.PublishedModels;
 @using Tabulate.Models;
-@using ContentModels = Umbraco.Web.PublishedContentModels;
 @{
-    Layout = "Master.cshtml";
+    Layout = "master.cshtml";
 }
 
 @Html.Partial("~/Views/Partials/SectionHeader.cshtml")
 
 @{
-    TabulateModel model = Model.Content.GetPropertyValue<TabulateModel>("tabulate");
-
-    foreach (var row in model.Rows)
-    {
-        foreach (var cell in row.Cells)
-        {
-            @Html.Raw(cell)
-        }
-    }
-
+    var tabulate = Model.Tabulate;
 }
-
 
 <section class="section">
 
@@ -33,7 +23,7 @@
 
         <div class="col-md-9">
             <article>
-                @Html.GetGridHtml(Model.Content, "bodyText", "bootstrap3-fluid")
+                @Html.GetGridHtml(Model, "bodyText", "bootstrap3-fluid")
             </article>
         </div>
     </div>

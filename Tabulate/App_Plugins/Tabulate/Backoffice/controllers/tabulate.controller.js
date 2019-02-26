@@ -1,6 +1,6 @@
 ﻿(() => {
 
-    function tabulateController($scope, $q, $filter, authResource, assetsService, dialogService, notificationsService, tabulateResource, tabulatePagingService) {
+    function tabulateController($scope, $q, $filter, authResource, assetsService, notificationsService, editorService, tabulateResource, tabulatePagingService) {
 
         const basePath = '../app_plugins/tabulate/backoffice/';
         const dialogPath = $scope.model.config.customView || `${basePath}views/dialog.html`;
@@ -9,7 +9,7 @@
         assetsService.loadCss(`${basePath}style.min.css`);
 
         // hide the umbraco label if the view is set to wide
-        $scope.model.hideLabel = $scope.model.config.wide !== undefined && $scope.model.config.wide;
+        $scope.model.hideLabel = $scope.model.config.wide;
         const rteConfig = $scope.model.config.rte;
 
         // these don't need to be scoped
@@ -20,7 +20,7 @@
         const fileName = pathArray[pathArray.length - 1];
         const className = fileName.substr(0, fileName.indexOf('.')) + '-modal';
 
-        // this is simply for convienence - update data/settings rather than $scope.model.value.data
+        // this is simply for convenience - update data/settings rather than $scope.model.value.data
         // need to remember though to call it whenever the data or settings objects are modified
         const updateUmbracoModel = () => {
             $scope.model.value.data = data;
@@ -142,43 +142,35 @@
             }
         };
 
-        /**
-         * Close and clear the overlay
-         */
-        const closeOverlay = () => {
-            this.overlay.show = false;
-            this.overlay = null;
-        };
 
         /**
          * Open the overlay to add a new row
          */
         const addRow = () => {
 
-            this.overlay = {
+            const addOverlay = {
                 view: dialogPath,
-                modalClass: `tabulate-modal ${className}`,
-                show: true,
                 title: 'Add row',
-                hideSubmitButton: false,
                 type: 'add',
+                size: 'small',
                 data: emptyModel(),
                 config: settings,
                 rteConfig: rteConfig,
-                submit: resp => {
-                    closeOverlay();
+                submit: model => {
+
+                    editorService.close();
 
                     // get the value from rte fields, if any exist
-                    const rteKeys = Object.keys(resp.rte);
+                    const rteKeys = Object.keys(model.rte);
 
                     if (rteKeys.length) {
                         for (let i = 0; i < rteKeys.length; i += 1) {
-                            resp.data[rteKeys[i]] = resp.rte[rteKeys[i]].value;
+                            model.data[rteKeys[i]] = model.rte[rteKeys[i]].value;
                         }
                     }
 
-                    // geocode the response and add it to the model
-                    let newItem = this.mapsLoaded ? tabulateResource.geocode(resp.data) : resp.data;
+                    // geocode the model and add it to the model
+                    let newItem = this.mapsLoaded ? tabulateResource.geocode(model.data) : model.data;
                     newItem = tabulateResource.setLabels(newItem, true, settings.label);
 
                     data.push(newItem);
@@ -190,9 +182,11 @@
                     setPaging();
                 },
                 close: () => {
-                    closeOverlay();
+                    editorService.close();
                 }
             };
+
+            editorService.open(addOverlay);
         };
 
         /**
@@ -200,38 +194,36 @@
          * @param {any} $index
          */
         const editRow = $index => {
-            this.overlay = {
+            const editOverlay = {
                 view: dialogPath,
-                modalClass: `tabulate-modal ${className}`,
-                show: true,
-                hideSubmitButton: false,
                 title: 'Edit row',
                 type: 'edit',
+                size: 'small',
                 data: data[$index],
                 config: settings,
                 rteConfig: rteConfig,
-                submit: resp => {
-                    closeOverlay();
+                submit: model => {
+                    editorService.close();
 
                     // get the value from rte fields, if any exist
-                    const rteKeys = Object.keys(resp.rte);
+                    const rteKeys = Object.keys(model.rteConfig);
 
                     if (rteKeys.length) {
-                        for (let i = 0; i < rteKeys.length; i += 1) {
-                            resp.data[rteKeys[i]] = resp.rte[rteKeys[i]].value;
+                        for (let key of rteKeys) {
+                            model.data[key] = model.rteConfig[key].value;
                         }
                     }
 
-                    // if the response has a new address, geocode it
-                    // then store the response in the model
-                    resp.data = tabulateResource.setLabels(resp.data, true, settings.label);
-                    data[$index] = resp.recode === true && this.mapsLoaded ? tabulateResource.geocode(resp.data) : resp.data;
+                    // if the model has a new address, geocode it
+                    // then store the model in the model
+                    model.data = tabulateResource.setLabels(model.data, true, settings.label);
+                    data[$index] = model.recode === true && this.mapsLoaded ? tabulateResource.geocode(model.data) : model.data;
 
-                    if (resp.remap !== undefined &&
-                        resp.remap.length > 0 &&
+                    if (model.remap !== undefined &&
+                        model.remap.length > 0 &&
                         settings.mappings &&
                         settings.mappings.length) {
-                        tabulateResource.updateMappedEditor(resp, undefined, settings.mappings);
+                        tabulateResource.updateMappedEditor(model, undefined, settings.mappings);
                     }
 
                     updateUmbracoModel();
@@ -241,9 +233,11 @@
                     setPaging();
                 },
                 close: () => {
-                    closeOverlay();
+                    editorService.close();
                 }
             };
+
+            editorService.open(editOverlay);
         };
 
         /**
@@ -272,7 +266,7 @@
                 tabulateResource.updateMappedEditor(undefined, v, settings.mappings);
             }
             updateUmbracoModel();
-        }
+        };
 
         /**
          * Open  the settings overlay
@@ -281,46 +275,44 @@
 
             this.search = '';
 
-            this.overlay = {
+            const settingsOverlay = {
                 view: `${basePath}views/settings.html`,
-                modalClass: `umb-modal tabulate-modal ${className}`,
-                show: true,
                 title: 'Settings',
+                size: 'small',
                 data: data,
                 config: settings,
-                alias: $scope.model.alias,
-                submit: resp => {
-                    closeOverlay();
+                submit: model => {
+                    editorService.close();
 
-                    data = resp.data;
+                    data = model.data;
 
                     setSorting();
                     setIds();
                     setPaging();
 
                     // was a column added? add to the collection if so
-                    if (resp.newColumnName && resp.newColumnType) {
+                    if (model.newColumnName && model.newColumnType) {
                         settings.columns.push({
-                            displayName: resp.newColumnName,
-                            type: resp.newColumnType
+                            displayName: model.newColumnName,
+                            type: model.newColumnType
                         });
                     }
 
                     // if the columnsToRemove array exists, remove each config row
-                    if (resp.columnsToRemove.length > 0) {
-                        angular.forEach(resp.columnsToRemove,
+                    if (model.columnsToRemove.length > 0) {
+                        angular.forEach(model.columnsToRemove,
                             col => {
                                 removeColumn(col);
                             });
                     }
 
                     // changes object will exist if changes were made to column names
-                    if (resp.changes && resp.changes.length) {
-                        updateColumns(resp.changes);
+                    if (model.changes && model.changes.length) {
+                        updateColumns(model.changes);
                     }
 
                     // if the config has been altered
-                    if (resp.changes && resp.changes.length || resp.newColumnName || resp.configChanged) {
+                    if (model.changes && model.changes.length || model.newColumnName || model.configChanged) {
                         notificationsService.success('Settings updated', 'Don\'t forget to save your changes');
                     }
 
@@ -334,9 +326,11 @@
                     updateUmbracoModel();
                 },
                 close: () => {
-                    closeOverlay();
+                    editorService.close();
                 }
             };
+
+            editorService.open(settingsOverlay);
         };
 
         /**
@@ -429,7 +423,7 @@
             tabulateResource.loadGoogleMaps($scope.model.config.mapsApiKey), authResource.getCurrentUser()
         ];
 
-        $q.all(promises)
+        $q.all(promises) 
             .then(resp => {
                 this.mapsLoaded = resp[0];
                 this.hideSettings = resp[1].userGroups.indexOf('admin') === -1 && $scope.model.config.adminOnly;
@@ -438,6 +432,6 @@
             });
     }
 
-    angular.module('umbraco').controller('Tabulate.Controller', ['$scope', '$q', '$filter', 'authResource', 'assetsService', 'dialogService', 'notificationsService', 'tabulateResource', 'tabulatePagingService', tabulateController]);
+    angular.module('tabulate').controller('Tabulate.Controller', ['$scope', '$q', '$filter', 'authResource', 'assetsService', 'notificationsService', 'editorService', 'tabulateResource', 'tabulatePagingService', tabulateController]);
 
 })();

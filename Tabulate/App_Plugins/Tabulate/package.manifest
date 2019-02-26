@@ -44,6 +44,7 @@
     ],
     //array of files we want to inject into the application on app_start
     javascript: [
+		'~/App_Plugins/tabulate/backoffice/app.js',
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.controller.js',
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.dialog.controller.js',
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.mapdialog.controller.js',		

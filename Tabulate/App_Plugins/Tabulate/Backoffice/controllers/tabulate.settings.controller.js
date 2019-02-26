@@ -44,7 +44,7 @@
         if ($scope.model.config.columns !== undefined && $scope.model.config.columns.length) {
             setInitial();
 
-            // set a default label to the displayname of the first column
+            // set a default label to the display name of the first column
             if ($scope.model.config.label === '') {
                 $scope.model.config.label = `{${$scope.model.config.columns[0].displayName}}`;
             }
@@ -63,25 +63,26 @@
         }
 
         /* set values for the mappings - can map to any other tabulate instance on the node */
-        this.tabulateEditors = [];
-        editorState.current.tabs.forEach(v => {
-            v.properties.forEach(vv => {
-                if ($scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
-                    this.tabulateEditors.push(vv);
-                }
-            });
-        });
+        // todo => how would this be managed with variants?
+        //this.tabulateEditors = [];
+        //editorState.current.tabs.forEach(v => {
+        //    v.properties.forEach(vv => {
+        //        if ($scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
+        //            this.tabulateEditors.push(vv);
+        //        }
+        //    });
+        //});
 
-        this.setTargetEditorColumns = alias => {
-            if (alias !== undefined) {
-                this.tabulateEditors.forEach(v => {
-                    if (v.alias === alias) {
-                        this.targetEditorColumns = v.value.settings.columns;
-                    }
-                });
-            }
-        };
-
+        //this.setTargetEditorColumns = alias => {
+        //    if (alias !== undefined) {
+        //        this.tabulateEditors.forEach(v => {
+        //            if (v.alias === alias) {
+        //                this.targetEditorColumns = v.value.settings.columns;
+        //            }
+        //        });
+        //    }
+        //};
+        
         /* add object to model */
         this.addEmptyItem = () => {
             if ($scope.model.config.mappings === undefined) {
@@ -250,7 +251,7 @@
         };
     }
 
-    angular.module('umbraco').controller('Tabulate.SettingsController', ['$scope', '$filter', 'tabulateResource', 'notificationsService', 'editorState', tabulateSettingsController]);
+    angular.module('tabulate').controller('Tabulate.SettingsController', ['$scope', '$filter', 'tabulateResource', 'notificationsService', 'editorState', tabulateSettingsController]);
 })();
 
 

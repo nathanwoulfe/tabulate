@@ -91,5 +91,5 @@
         };
     }
 
-    angular.module('umbraco.services').factory('tabulatePagingService', tabulatePagingService);
+    angular.module('tabulate.services').factory('tabulatePagingService', tabulatePagingService);
 })();

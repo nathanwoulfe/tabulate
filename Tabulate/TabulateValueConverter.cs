@@ -1,66 +1,82 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 using Tabulate.Models;
 using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
-using Umbraco.Web;
+using Umbraco.Web.Composing;
 using Umbraco.Web.Templates;
 
 namespace Tabulate
 {
-    public class TabulateValueConverter : IPropertyValueConverterMeta
+    public class TabulateValueConverter : IPropertyValueConverter
     {
-        /// <summary>
-        /// Parse links in rich text field
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private static string RichText(string value)
-        {
-            if (UmbracoContext.Current == null || UmbracoContext.Current.RoutingContext == null)
-            {
-                return value;
-            }
-
-            return TemplateUtilities.ParseInternalLinks(value, UmbracoContext.Current.UrlProvider);
-        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public bool IsConverter(PublishedPropertyType propertyType)
-        {
-            return propertyType.PropertyEditorAlias.Equals("NW.Tabulate");
-        }
+        public bool IsConverter(PublishedPropertyType propertyType) => propertyType.EditorAlias.Equals("NW.Tabulate");
+        
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="propertyType"></param>
+        /// <returns></returns>
+        public Type GetPropertyValueType(PublishedPropertyType propertyType) => typeof(TabulateModel);
+
+
+        /// <summary>
+        /// What is this and what does it do? Copied from https://github.com/umbraco/Umbraco-CMS/blob/91c52cffc8b7c70dc956f6c6610460be2d1adc51/src/Umbraco.Core/PropertyEditors/PropertyValueConverterBase.cs#L14
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="level"></param>
+        /// <returns></returns>
+        public bool? IsValue(object value, PropertyValueLevel level)
+        {
+            switch (level)
+            {
+                case PropertyValueLevel.Source:
+                    return value != null && (!(value is string) || string.IsNullOrWhiteSpace((string)value) == false);
+                default:
+                    throw new NotSupportedException($"Invalid level: {level}.");
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="owner"></param>
         /// <param name="propertyType"></param>
         /// <param name="source"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public object ConvertDataToSource(PublishedPropertyType propertyType, object source, bool preview)
+        public object ConvertSourceToIntermediate(IPublishedElement owner, PublishedPropertyType propertyType, object source, bool preview)
         {
             Attempt<object> attemptConvert = source.TryConvertTo<object>();
-
             return attemptConvert.Success ? attemptConvert.Result : null;
         }
 
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="owner"></param>
         /// <param name="propertyType"></param>
-        /// <param name="source"></param>
+        /// <param name="referenceCacheLevel"></param>
+        /// <param name="inter"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public object ConvertSourceToObject(PublishedPropertyType propertyType, object source, bool preview)
+        public object ConvertIntermediateToObject(IPublishedElement owner, PublishedPropertyType propertyType,
+            PropertyCacheLevel referenceCacheLevel, object inter, bool preview)
         {
-            JObject data = JObject.Parse(source.ToString());
+            JObject data = JObject.Parse(inter.ToString());
 
             var model = new TabulateModel
             {
@@ -78,24 +94,30 @@ namespace Tabulate
             {
                 foreach (HeaderModel header in model.Headers)
                 {
-                    JToken value = rowData[index];
-                    if (value == null) continue;
+                    JToken cellValue = rowData[index]?[header.Name];
+
+                    if (cellValue == null)
+                        continue;
+
+                    var cellModel = new CellModel(header.Type);
 
                     switch (header.Type)
                     {
                         case "date":
-                            row.Cells.Add(value[header.Name]?.ToObject<DateTime>());
+                            cellModel.Value = cellValue.ToObject<DateTime>();
                             break;
                         case "number":
-                            row.Cells.Add(value[header.Name]?.ToObject<int>());
+                            cellModel.Value = cellValue.ToObject<int>();
                             break;
                         case "rte":
-                            row.Cells.Add(RichText(value[header.Name]?.ToObject<string>()));
+                            cellModel.Value = RichText(cellValue.ToObject<string>());
                             break;
                         default:
-                            row.Cells.Add(value[header.Name]?.ToObject<string>());
+                            cellModel.Value = cellValue.ToObject<string>();
                             break;
                     }
+
+                    row.Cells.Add(cellModel);
                 }
 
                 // need this to lookup the raw jtoken value
@@ -105,54 +127,36 @@ namespace Tabulate
             return model;
         }
 
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="owner"></param>
         /// <param name="propertyType"></param>
+        /// <param name="referenceCacheLevel"></param>
         /// <param name="source"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public object ConvertSourceToXPath(PublishedPropertyType propertyType, object source, bool preview)
-        {
-            return source.ToString();
-        }
+        public object ConvertIntermediateToXPath(IPublishedElement owner, PublishedPropertyType propertyType,
+            PropertyCacheLevel referenceCacheLevel, object source, bool preview) => source?.ToString() ?? string.Empty;
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public Type GetPropertyValueType(PublishedPropertyType propertyType)
-        {
-            return typeof(TabulateModel);
-        }
+        public PropertyCacheLevel GetPropertyCacheLevel(PublishedPropertyType propertyType) => PropertyCacheLevel.None;
 
         /// <summary>
-        /// 
+        /// Parse links in rich text field
         /// </summary>
-        /// <param name="propertyType"></param>
-        /// <param name="cacheValue"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        public PropertyCacheLevel GetPropertyCacheLevel(PublishedPropertyType propertyType, PropertyCacheValue cacheValue)
-        {
-            PropertyCacheLevel returnLevel;
-            switch (cacheValue)
-            {
-                case PropertyCacheValue.Object:
-                    returnLevel = PropertyCacheLevel.ContentCache;
-                    break;
-                case PropertyCacheValue.Source:
-                    returnLevel = PropertyCacheLevel.Content;
-                    break;
-                case PropertyCacheValue.XPath:
-                    returnLevel = PropertyCacheLevel.Content;
-                    break;
-                default:
-                    returnLevel = PropertyCacheLevel.None;
-                    break;
-            }
-
-            return returnLevel;
-        }
+        private static IHtmlString RichText(string value) => 
+            Current.UmbracoContext == null || Current.UmbracoContext.UrlProvider == null ? 
+            default(IHtmlString) :
+            new MvcHtmlString(TemplateUtilities.ParseInternalLinks(value, Current.UmbracoContext.UrlProvider));
+        
     }
 }
