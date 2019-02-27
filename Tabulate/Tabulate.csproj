@@ -102,13 +102,13 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc">
-      <HintPath>Bin\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Core, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.8.0.0\lib\net472\Umbraco.Core.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Web">
-      <HintPath>..\packages\UmbracoCms.Web.8.0.0-alpha.2503\lib\net472\Umbraco.Web.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Web.8.0.0\lib\net472\Umbraco.Web.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup>
