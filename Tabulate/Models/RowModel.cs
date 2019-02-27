@@ -9,7 +9,7 @@ namespace Tabulate.Models
     /// </summary>
     public class RowModel
     {
-        public List<CellModel> Cells { get; set; }
+        public List<object> Cells { get; set; }
 
         public string Label { get; }
 
@@ -26,7 +26,7 @@ namespace Tabulate.Models
         /// <param name="row"></param>
         public RowModel(JObject row)
         {
-            Cells = new List<CellModel>();
+            Cells = new List<object>();
 
             Label = row["_label"]?.ToObject<string>();
 

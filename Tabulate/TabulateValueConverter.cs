@@ -99,25 +99,21 @@ namespace Tabulate
                     if (cellValue == null)
                         continue;
 
-                    var cellModel = new CellModel(header.Type);
-
                     switch (header.Type)
                     {
                         case "date":
-                            cellModel.Value = cellValue.ToObject<DateTime>();
+                            row.Cells.Add(cellValue.ToObject<DateTime>());
                             break;
                         case "number":
-                            cellModel.Value = cellValue.ToObject<int>();
+                            row.Cells.Add(cellValue.ToObject<int>());
                             break;
                         case "rte":
-                            cellModel.Value = RichText(cellValue.ToObject<string>());
+                            row.Cells.Add(RichText(cellValue.ToObject<string>()));
                             break;
                         default:
-                            cellModel.Value = cellValue.ToObject<string>();
+                            row.Cells.Add(cellValue.ToObject<string>());
                             break;
                     }
-
-                    row.Cells.Add(cellModel);
                 }
 
                 // need this to lookup the raw jtoken value

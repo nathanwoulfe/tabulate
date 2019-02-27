@@ -60,7 +60,6 @@
     <Content Include="Gruntfile.js" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\CellModel.cs" />
     <Compile Include="Models\HeaderModel.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\RowModel.cs" />
