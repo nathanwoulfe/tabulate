@@ -11,14 +11,20 @@
 
             <umb-box>
                 <umb-box-header title="Add column" description="For geocoded data use 'Address' as a column name"></umb-box-header>
-                <umb-box-content class="form-horizontal">
+                <umb-box-content class="form-horizontal umb-grid">
                     <umb-control-group label="Column display name">
-                        <input type="text" name="new-column-name" ng-model="model.newColumnName" />
+                        <input type="text" name="new-column-name" ng-model="vm.newColumnName" />
                     </umb-control-group>
 
                     <umb-control-group label="Column input type">
-                        <select name="new-column-type" ng-model="model.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
+                        <select name="new-column-type" ng-model="vm.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
                     </umb-control-group>
+                    
+                    <div class="umb-add-row">
+                        <a href="" class="iconBox ng-scope" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
+                            <i class=" icon icon-add" title="Add" localize="title"></i>
+                        </a>
+                    </div>
                 </umb-box-content>
             </umb-box>
 
@@ -74,28 +80,18 @@
             <umb-box>
                 <umb-box-header title="Data" description="Importing will overwrite all existing data and reset the column config (column type will default to string)"></umb-box-header>
                 <umb-box-content class="form-horizontal">
-                    <div class="export-type">
+                    <div class="export-type m-b-10">
                         Show:
                         <button ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}" prevent-default>JSON</button>
                         <button ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}" prevent-default>CSV</button>
                     </div>
 
-                    <umb-control-group label="Current data">
-                        <textarea ng-model="vm.importExport" style="width:100%" rows="10"></textarea>
-                    </umb-control-group>
+                    <textarea ng-model="vm.importExport" class="m-b-10" style="width:100%" rows="10"></textarea>
 
                     <!-- download as -->
                     <div class="download-wrapper d-flex">
                         <button class="btn btn-default" ng-hide="!model.data" ng-click="vm.download()" prevent-default>Download</button>
-                        <div class="dropdown-wrapper">
-                            <button class="btn btn-default" ng-disabled="vm.importDisabled" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false" prevent-default>
-                                Import <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="iLabel">
-                                <li><a href="" role="button" ng-click="vm.importCSV()" prevent-default>CSV</a></li>
-                                <li><a href="" role="button" ng-click="vm.importJSON()" prevent-default>JSON</a></li>
-                            </ul>
-                        </div>
+                        <button class="btn btn-default" ng-disabled="vm.importDisabled" ng-click="vm.import()" type="button" prevent-default>Import</button>
                     </div>
                 </umb-box-content>
             </umb-box>

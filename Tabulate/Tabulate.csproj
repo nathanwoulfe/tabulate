@@ -48,6 +48,7 @@
     <Content Include="App_Plugins\Tabulate\Backoffice\controllers\tabulate.dialog.controller.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\controllers\tabulate.mapdialog.controller.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\controllers\tabulate.settings.controller.js" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\filters\bindhtml.filter.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\resources\tabulate.resources.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\resources\tabulatepaging.service.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\views\dialog.html" />
@@ -96,13 +97,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc">
       <HintPath>Bin\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Core, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UmbracoCms.Core.8.0.0-alpha.2503\lib\net472\Umbraco.Core.dll</HintPath>
+      <HintPath>..\packages\UmbracoCms.Core.8.0.0\lib\net472\Umbraco.Core.dll</HintPath>
     </Reference>
     <Reference Include="Umbraco.Web">
       <HintPath>..\packages\UmbracoCms.Web.8.0.0-alpha.2503\lib\net472\Umbraco.Web.dll</HintPath>

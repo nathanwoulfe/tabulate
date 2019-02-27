@@ -50,6 +50,7 @@
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.mapdialog.controller.js',		
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.settings.controller.js',
 		'~/App_Plugins/tabulate/backoffice/resources/tabulate.resources.js',
-		'~/App_Plugins/tabulate/backoffice/resources/tabulatepaging.service.js'
+		'~/App_Plugins/tabulate/backoffice/resources/tabulatepaging.service.js',
+		'~/App_Plugins/tabulate/backoffice/filters/bindhtml.filter.js'
     ]
 }

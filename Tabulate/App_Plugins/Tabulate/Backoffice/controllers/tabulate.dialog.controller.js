@@ -38,7 +38,6 @@
             }
         }
 
-        console.log($scope.model.rteConfig);
 
         // specific to edit //
         if ($scope.model.type === 'edit') {

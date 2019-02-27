@@ -11,6 +11,10 @@
         }
     }
 
+    .m-b-10 {
+        margin-bottom:10px;
+    }
+
     .umb-table-cell {
         &:first-child, &.f-1 {
             flex: 1;
@@ -43,6 +47,10 @@
         &:first-child {
             border-top: 0;
         }
+
+        p:last-child {
+            margin:0;
+        }
     }
 
     .sort-handle {
@@ -67,10 +75,6 @@
     }
 
     table {
-        thead {
-            background: 0 0;
-        }
-
         select {
             width: 150px;
         }

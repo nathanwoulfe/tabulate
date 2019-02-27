@@ -15,11 +15,7 @@
         // these don't need to be scoped
         let data,
             settings;
-
-        const pathArray = dialogPath.split('/');
-        const fileName = pathArray[pathArray.length - 1];
-        const className = fileName.substr(0, fileName.indexOf('.')) + '-modal';
-
+        
         // this is simply for convenience - update data/settings rather than $scope.model.value.data
         // need to remember though to call it whenever the data or settings objects are modified
         const updateUmbracoModel = () => {
@@ -290,20 +286,11 @@
                     setIds();
                     setPaging();
 
-                    // was a column added? add to the collection if so
-                    if (model.newColumnName && model.newColumnType) {
-                        settings.columns.push({
-                            displayName: model.newColumnName,
-                            type: model.newColumnType
-                        });
-                    }
-
                     // if the columnsToRemove array exists, remove each config row
                     if (model.columnsToRemove.length > 0) {
-                        angular.forEach(model.columnsToRemove,
-                            col => {
-                                removeColumn(col);
-                            });
+                        for (let column of model.columnsToRemove) {
+                            removeColumn(col);
+                        }
                     }
 
                     // changes object will exist if changes were made to column names

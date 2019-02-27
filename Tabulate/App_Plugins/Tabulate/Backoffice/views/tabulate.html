@@ -28,7 +28,7 @@
     <div class="umb-table" ng-class="{'manual-sort': vm.manualSort, 'list-view' : model.value.settings.isListView}">
         <div class="umb-table-head" ng-if="model.value.settings.isListView">
             <div class="umb-table-row">
-                <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns" ng-bind="::displayName"></div>
+                <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns" ng-bind="::c.displayName"></div>
                 <div class="umb-table-cell umb-table-cell__actions">Actions</div>
             </div>
         </div>
@@ -36,7 +36,7 @@
             <div class="umb-table-row" ng-class="{'disabled' : o.disabled}" ng-repeat="o in vm.pagination.items track by $index">
                 <div class="umb-table-cell" ng-class="{'umb-table__name' : $first}" ng-repeat="c in model.value.settings.columns" ng-show="model.value.settings.isListView">
                     <a ng-if="$first" class="umb-table-body__link" title="Edit" href="" ng-click="vm.editRow(o._id)" ng-bind="o._label" ng-model="o._label"></a>
-                    <span ng-if="!$first" ng-bind="o[c.displayName]"></span>
+                    <span ng-if="!$first" ng-bind-html="o[c.displayName] | bindHtml | umbWordLimit"></span>
                 </div>
 
                 <div class="umb-table-cell umb-table__name f-1" ng-show="!model.value.settings.isListView">
