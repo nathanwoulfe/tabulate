@@ -1,6 +1,22 @@
 ﻿<div class="tabulate" ng-controller="Tabulate.Controller as vm" ng-class="{'no-settings': vm.noConfig, 'wide' : model.config.wide}">
     
     <umb-editor-sub-header>
+        <umb-editor-sub-header-content-left>
+            <umb-editor-sub-header-section>
+                <div class="form-search" ng-show="model.value.data.length > model.value.settings.numPerPage">
+                    <div class="inner-addon left-addon">
+                        <i class="icon icon-search" ng-click="vm.setPaging()"></i>
+                        <input type="text" 
+                               class="form-control search-input"
+                               ng-model="vm.pagination.search" 
+                               ng-disabled="vm.noConfig" 
+                               ng-change="vm.setPaging()" 
+                               placeholder="Type to search..." 
+                               no-dirty-check />
+                    </div>
+                </div>
+            </umb-editor-sub-header-section>
+        </umb-editor-sub-header-content-left>
         <umb-editor-sub-header-content-right>
             <umb-editor-sub-header-section>
                 <button class="settings-btn btn btn-default" ng-click="vm.openSettings()" ng-hide="vm.mapsLoaded === 'show' || vm.hideSettings" prevent-default>
@@ -10,27 +26,12 @@
                     <span class="icon icon-trash"></span>
                 </button>
             </umb-editor-sub-header-section>
-            <umb-editor-sub-header-section>
-                <div class="form-search">
-                    <div class="inner-addon left-addon">
-                        <i class="icon icon-search" ng-click="vm.setPaging()"></i>
-                        <input type="text" 
-                               class="form-control search-input"
-                               ng-model="vm.pagination.search" 
-                               ng-show="model.value.data.length > model.value.settings.numPerPage" 
-                               ng-disabled="vm.noConfig" 
-                               ng-change="vm.setPaging()" 
-                               placeholder="Type to search..." 
-                               no-dirty-check />
-                    </div>
-                </div>
-            </umb-editor-sub-header-section>
         </umb-editor-sub-header-content-right>
     </umb-editor-sub-header>
 
     <span class="no-result" ng-if="vm.noResults">No results found for search term '{{vm.pagination.search}}'</span>
 
-    <div class="umb-table" ng-class="{'manual-sort': vm.manualSort, 'list-view' : model.value.settings.isListView}">
+    <div class="umb-table" ng-if="vm.pagination.items" ng-class="{'manual-sort': vm.manualSort, 'list-view' : model.value.settings.isListView}">
         <div class="umb-table-head" ng-if="model.value.settings.isListView">
             <div class="umb-table-row">
                 <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns">

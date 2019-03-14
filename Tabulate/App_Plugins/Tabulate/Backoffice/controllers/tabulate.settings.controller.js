@@ -6,7 +6,7 @@
         const importKeys = []; // array of header text from imported csv
 
         /* variables for convenience */
-        let geocoder = new google.maps.Geocoder(), // the google geocoder
+        let geocoder, // will be initialized later if required
             i, // loop counter
             j, // inner loop counter
             o, // generic object

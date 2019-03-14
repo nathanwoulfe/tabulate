@@ -7,7 +7,7 @@
 
         this.getRte = n => ({
 
-            label: 'bodyText',
+            label: 'bodyText', 
             description: '',
             view: 'rte',
             config: {

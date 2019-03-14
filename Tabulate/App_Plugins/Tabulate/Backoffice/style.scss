@@ -1,14 +1,16 @@
 ﻿.tabulate {
 
-    &.wide {
-        .umb-node-preview {
-            max-width: none;
+    .umb-node-preview {
+        max-width: none;
 
-            &-add {
-                margin-left: auto;
-                margin-right: auto;
-            }
+        &-add {
+            margin-left: auto;
+            margin-right: auto;
         }
+    }    
+
+    .umb-editor-sub-header {
+        margin-top:0;
     }
 
     .umb-table-cell {

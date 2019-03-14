@@ -101,7 +101,13 @@
             },
 
             loadGoogleMaps: apiKey => {
+
                 const deferred = $q.defer();
+
+                if (!apiKey) {
+                    return deferred.resolve(false);
+                }
+
                 const loadMapsApi = () => {
                     if (window.google.maps === undefined) {
                         window.google.load('maps', '3', {
