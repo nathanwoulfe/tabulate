@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tabulate", "Tabulate\Tabulate.csproj", "{2A536002-2877-4991-80AE-94642E520DF2}"
 EndProject
@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tabulate.Site", "Tabulate.Site\Tabulate.Site.csproj", "{8A84193A-C6CC-4C5C-950D-077DC2E54BAF}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Tabulate.Site", "Tabulate.Site\Tabulate.Site.vbproj", "{470B257E-82D9-4C47-A89B-05DFEC6019AE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2A536002-2877-4991-80AE-94642E520DF2} = {2A536002-2877-4991-80AE-94642E520DF2}
 	EndProjectSection
@@ -29,10 +29,10 @@ Global
 		{2A536002-2877-4991-80AE-94642E520DF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A536002-2877-4991-80AE-94642E520DF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A536002-2877-4991-80AE-94642E520DF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A84193A-C6CC-4C5C-950D-077DC2E54BAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A84193A-C6CC-4C5C-950D-077DC2E54BAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A84193A-C6CC-4C5C-950D-077DC2E54BAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A84193A-C6CC-4C5C-950D-077DC2E54BAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{470B257E-82D9-4C47-A89B-05DFEC6019AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{470B257E-82D9-4C47-A89B-05DFEC6019AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{470B257E-82D9-4C47-A89B-05DFEC6019AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{470B257E-82D9-4C47-A89B-05DFEC6019AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

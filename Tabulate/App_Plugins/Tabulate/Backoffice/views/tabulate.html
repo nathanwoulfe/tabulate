@@ -1,6 +1,6 @@
 ﻿<div class="tabulate" ng-controller="Tabulate.Controller as vm" ng-class="{'no-settings': vm.noConfig, 'wide' : model.config.wide}">
     
-    <umb-editor-sub-header style="background:#fff">
+    <umb-editor-sub-header appearance="white">
         <umb-editor-sub-header-content-left ng-show="model.value.data.length > model.value.settings.numPerPage">
             <div class="form-search">
                 <div class="inner-addon left-addon">
@@ -54,7 +54,7 @@
                             <span ng-if="!model.value.settings.isListView" ng-bind="o.disabled ? 'Enable' : 'Disable'"></span>
                         </a>
                         <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeRow(o._id)">
-                            <i class="icon icon-delete" ng-if="model.value.settings.isListView"></i>
+                            <i class="icon icon-trash" ng-if="model.value.settings.isListView"></i>
                             <localize key="general_remove" ng-if="!model.value.settings.isListView">Remove</localize>
                         </a>
                     </div>

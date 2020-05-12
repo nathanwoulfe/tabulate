@@ -7,8 +7,8 @@
     angular.module('tabulate.filters', []);
 
     angular.module('tabulate', [
-        'tabulate.directives',
-        'tabulate.services',
+        'tabulate.directives', 
+        'tabulate.services', 
         'tabulate.components',
         'tabulate.resources',
         'tabulate.filters'

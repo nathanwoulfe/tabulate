@@ -8,6 +8,8 @@
                 view: "~/App_Plugins/tabulate/backoffice/views/tabulate.html",
 				valueType: 'JSON'
             },
+			icon: "icon-list",
+			group: "Lists",
 			prevalues: {
 				fields: [
 					{

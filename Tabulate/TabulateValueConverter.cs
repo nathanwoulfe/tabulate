@@ -2,13 +2,10 @@
 using System;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 using Tabulate.Models;
 using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
-using Umbraco.Web.Composing;
-using Umbraco.Web.Templates;
 
 namespace Tabulate
 {
@@ -20,7 +17,7 @@ namespace Tabulate
         /// </summary>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public bool IsConverter(PublishedPropertyType propertyType) => propertyType.EditorAlias.Equals("NW.Tabulate");
+        public bool IsConverter(IPublishedPropertyType propertyType) => propertyType.EditorAlias.Equals("NW.Tabulate");
         
 
         /// <summary>
@@ -28,7 +25,7 @@ namespace Tabulate
         /// </summary>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public Type GetPropertyValueType(PublishedPropertyType propertyType) => typeof(TabulateModel);
+        public Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(TabulateModel);
 
 
         /// <summary>
@@ -57,7 +54,7 @@ namespace Tabulate
         /// <param name="source"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public object ConvertSourceToIntermediate(IPublishedElement owner, PublishedPropertyType propertyType, object source, bool preview)
+        public object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source, bool preview)
         {
             Attempt<object> attemptConvert = source.TryConvertTo<object>();
             return attemptConvert.Success ? attemptConvert.Result : null;
@@ -73,7 +70,7 @@ namespace Tabulate
         /// <param name="inter"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public object ConvertIntermediateToObject(IPublishedElement owner, PublishedPropertyType propertyType,
+        public object ConvertIntermediateToObject(IPublishedElement owner, IPublishedPropertyType propertyType,
             PropertyCacheLevel referenceCacheLevel, object inter, bool preview)
         {
             JObject data = JObject.Parse(inter.ToString());
@@ -108,7 +105,8 @@ namespace Tabulate
                             row.Cells.Add(cellValue.ToObject<int>());
                             break;
                         case "rte":
-                            row.Cells.Add(RichText(cellValue.ToObject<string>()));
+                            //row.Cells.Add(RichText(cellValue.ToObject<string>()));
+                            row.Cells.Add(new HtmlString(cellValue.ToObject<string>()));
                             break;
                         default:
                             row.Cells.Add(cellValue.ToObject<string>());
@@ -133,7 +131,7 @@ namespace Tabulate
         /// <param name="source"></param>
         /// <param name="preview"></param>
         /// <returns></returns>
-        public object ConvertIntermediateToXPath(IPublishedElement owner, PublishedPropertyType propertyType,
+        public object ConvertIntermediateToXPath(IPublishedElement owner, IPublishedPropertyType propertyType,
             PropertyCacheLevel referenceCacheLevel, object source, bool preview) => source?.ToString() ?? string.Empty;
 
 
@@ -142,17 +140,7 @@ namespace Tabulate
         /// </summary>
         /// <param name="propertyType"></param>
         /// <returns></returns>
-        public PropertyCacheLevel GetPropertyCacheLevel(PublishedPropertyType propertyType) => PropertyCacheLevel.None;
+        public PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Elements;
 
-        /// <summary>
-        /// Parse links in rich text field
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private static IHtmlString RichText(string value) => 
-            Current.UmbracoContext == null || Current.UmbracoContext.UrlProvider == null ? 
-            default(IHtmlString) :
-            new MvcHtmlString(TemplateUtilities.ParseInternalLinks(value, Current.UmbracoContext.UrlProvider));
-        
     }
 }

@@ -156,14 +156,7 @@
 
                     editorService.close();
 
-                    // get the value from rte fields, if any exist
-                    const rteKeys = Object.keys(model.rte);
-
-                    if (rteKeys.length) {
-                        for (let i = 0; i < rteKeys.length; i += 1) {
-                            model.data[rteKeys[i]] = model.rte[rteKeys[i]].value;
-                        }
-                    }
+                    setRteFields(model);
 
                     // geocode the model and add it to the model
                     let newItem = this.mapsLoaded ? tabulateResource.geocode(model.data) : model.data;
@@ -201,14 +194,7 @@
                 submit: model => {
                     editorService.close();
 
-                    // get the value from rte fields, if any exist
-                    const rteKeys = Object.keys(model.rteConfig);
-
-                    if (rteKeys.length) {
-                        for (let key of rteKeys) {
-                            model.data[key] = model.rteConfig[key].value;
-                        }
-                    }
+                    setRteFields(model);
 
                     // if the model has a new address, geocode it
                     // then store the model in the model
@@ -228,9 +214,7 @@
                     setIds();
                     setPaging();
                 },
-                close: () => {
-                    editorService.close();
-                }
+                close: () => editorService.close()                
             };
 
             editorService.open(editOverlay);
@@ -262,6 +246,22 @@
                 tabulateResource.updateMappedEditor(undefined, v, settings.mappings);
             }
             updateUmbracoModel();
+        };
+
+        /**
+         * 
+         * 
+         * @param {any} model
+         */
+        const setRteFields = model => {
+            // get the value from rte fields, if any exist
+            const rteKeys = Object.keys(model.rteConfig);
+
+            if (rteKeys.length) {
+                for (let key of rteKeys) {
+                    model.data[key] = model.rteConfig[key].value;
+                }
+            }
         };
 
         /**

@@ -12,7 +12,7 @@
     }
 
     .m-b-10 {
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
 
     .umb-table-cell {
@@ -49,7 +49,7 @@
         }
 
         p:last-child {
-            margin:0;
+            margin: 0;
         }
     }
 
@@ -58,14 +58,14 @@
     }
 
     .settings-btn {
-        margin-right: 10px;
+        margin-right: 8px;
     }
 
     .settings {
         textarea {
             width: 100%;
             height: 150px;
-            margin: 10px 0;
+            margin: 8px 0;
         }
     }
 
@@ -81,13 +81,13 @@
     }
 
     .list-view .umb-table-cell__actions {
-        min-width:50px;
+        min-width: 50px;
         max-width: 50px;
     }
 
     .manual-sort .umb-table-cell__actions {
-        min-width:70px;
-        max-width:70px;
+        min-width: 70px;
+        max-width: 70px;
     }
 
     #map {
@@ -100,7 +100,7 @@
 
         label {
             width: 66%;
-            margin-right: 10px;
+            margin-right: 8px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -117,14 +117,26 @@
     }
 
     .dropdown-wrapper {
-        position:relative;
+        position: relative;
     }
 
     .d-flex {
-        display:flex;
+        display: flex;
 
         > * {
-            margin-right:10px;
+            margin-right: 10px;
+        }
+    }
+    // size icons to match nested content
+    .list-view .umb-node-preview__action {
+        display:inline-block;
+        padding:4px;
+        margin:2px;
+        color:#1b264f;
+
+        .icon {
+            font-size:16px!important;
+            display:block;
         }
     }
 }

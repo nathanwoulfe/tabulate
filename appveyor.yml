@@ -1,5 +1,5 @@
 # version format
-version: 3.0.1.{build}
+version: 3.0.2.{build}
 
 image: Visual Studio 2017
 
@@ -13,7 +13,7 @@ install:
   - set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe;C:\Ruby22\bin;%PATH%
   - cmd: gem install sass
   - cmd: npm install -g grunt-cli
-  - cmd: set UMBRACO_PACKAGE_MIN_VERSION=8.0
+  - cmd: set UMBRACO_PACKAGE_MIN_VERSION=8.3
   - cmd: cd BuildPackage
   - cmd: Build.bat
   
@@ -21,7 +21,6 @@ install:
 branches:
   only: 
   - master
-  - umbraco-8
 
 test: off
 build: off
@@ -42,9 +41,9 @@ deploy:
         appveyor_repo_tag: true      
 
   - provider: GitHub
-    tag: v3.0.1
-    release: Release 3.0.1
-    description: 'Revert change to cells in converted model - no need to pass the type, since the values are typed'
+    tag: v3.0.2
+    release: Release 3.0.2
+    description: 'Fix RTE parser'
     force_update: true
     auth_token:
         secure: Otbl8p8qCwciDqJgSWCyN0Arfs5XS1CwiHcK+r0F6uz9Rxt4gzBFvlc3cjPV3NxR
