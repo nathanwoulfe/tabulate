@@ -72,7 +72,7 @@ The dialogData.data object can be manipulated in the custom controller provided 
 
 While the label formatter specified in the settings is reasonably robust, it can be more effective to build the label programmatically in the custom controller - this allows conditional labelling or inclusion of values that don't exist as part of the model. Storing the label as a model property (ie `customLabel`) allows it to then be referenced in the label setting as `{customLabel}`.
 
-# Accessing the data - now with PropertyValueConverter
+# Accessing the data
 A Tabulate instance stores data in the structure below:
 
 ```js
@@ -89,19 +89,21 @@ A Tabulate instance stores data in the structure below:
     }
 ```
 
-Fields will added/removed from that model to facilitate data updates, but that's the guts of it. Your data will be available in the data property. Creative, hey!
+Fields will be added/removed from that model to facilitate data updates, but that's the guts of it. Your data will be available in the data property. Creative, hey!
 
 If you want JSON, simply add an ApiController to your project and fetch it yourself. Or ask nicely and I'll add one.
 
-The latest version includes a PropertyValueConverter to return the stored data in a strongly typed model. Access it like so:
+Looking for typed data in your view? Access it like so:
 
 ```csharp
     TabulateModel model = Model.Content.GetPropertyValue<TabulateModel>("propertyAlias");
 ```
 
-Familiar? Should be, it's just a standard Umbraco property converter. You'll need to add a reference to Tabulate.Models in your using statements. Easy as.
+Familiar? Should be, it's just a standard Umbraco property converter. You'll need to add a reference to Tabulate.Models in your using statements.
 
-The model itself is pretty simple:
+Even better, if ModelsBuilder is enabled in your project, you'll get the strongly typed model out of the box. Nice!
+
+The typed model looks like this:
 
 ```
     Settings {SettingsModel} - not sure why you'd want these, but you can have em anyway
@@ -118,7 +120,5 @@ The model itself is pretty simple:
         Lat {float} - if the row has an Address property, this is the corresponding latitude
         Lng {float} - if the row has an Address property, this is the correpsonding longitude
 ```
-
-See how I didn't explain the Cells above? They deserve extra attention.
 
 Based on the cell type (number, email, url, textarea, string, date etc), the value for each cell will be converted to the corresponding .Net type - your dates will be DateTimes, numbers will be ints. Magic!

@@ -1,35 +1,45 @@
-﻿<div class="tabulate edit-row" ng-controller="Tabulate.DialogController as vm">
-
-    <div class="control-group umb-control-group" ng-repeat="c in model.config.columns track by $index">
-        <div class="umb-el-wrap">
-            <label class="control-label" ng-bind="c.displayName"></label>
-            <div class="controls">
-                
-                <div ng-if="c.type === 'textarea' || c.type === 'rte'">
+﻿<umb-editor-view>
+    <umb-editor-header name="model.title"
+                       name-locked="true"
+                       hide-alias="true"
+                       hide-icon="true"
+                       hide-description="true">
+    </umb-editor-header>
+    <umb-editor-container>
+        <umb-box>
+            <form novalidate val-form-manager class="umb-box-content tabulate edit-row form-horizontal" ng-controller="Tabulate.DialogController as vm">
+                <umb-control-group label="{{ c.displayName }}" ng-repeat="c in model.config.columns track by $index" ng-class="{ 'block-form' : c.type === 'rte' }">
                     <textarea ng-model="model.data[c.displayName]" ng-if="c.type === 'textarea'"></textarea>
 
-                    <div ng-if="c.type === 'rte'" ng-init="model.rte[c.displayName] = vm.getRte(c.displayName)">
-                        <umb-property property="model.rte[c.displayName]">
-                            <umb-editor model="model.rte[c.displayName]"></umb-editor>
-                        </umb-property>
+                    <div ng-if="c.type === 'rte'" ng-controller="Umbraco.PropertyEditors.RTEController" class="umb-property-editor umb-rte" ng-init="model = model.rteConfig[c.displayName]">
+                        <div class="-loading" ng-if="isLoading"><localize key="general_loading">Loading</localize>...</div>
+                        <div ng-style="{ visibility :  isLoading ? 'hidden' : 'visible'}" id="{{textAreaHtmlId}}" class="umb-rte-editor"></div>
                     </div>
-                </div>
 
-                <input type="{{ vm.inputType(c.type) }}" ng-model="model.data[c.displayName]" ng-if="c.type !== 'textarea' && c.type !== 'rte'" ng-model-options="{ debounce: 400 }"/>
+                    <input class="umb-property-editor" type="{{ vm.inputType(c.type) }}" ng-model="model.data[c.displayName]" ng-if="c.type !== 'textarea' && c.type !== 'rte'" ng-model-options="{ debounce: 400 }" />
 
-                <div ng-if="c.displayName === 'Address' && vm.hasGeocodedAddress" class="geocoded-property">
-                    <label><strong>Latitude:</strong> {{ model.data.lat }}</label>
-                    <label><strong>Longitude:</strong> {{ model.data.lng }}</label>
-                    <button class="btn btn-default" ng-click="vm.viewLocation()" prevent-default><i class="icon icon-map"></i> Update address coordinates</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <umb-overlay ng-if="vm.overlay.show"
-                 model="vm.overlay"
-                 view="vm.overlay.view"
-                 position="right">
-    </umb-overlay>
+                    <div ng-if="c.displayName === 'Address' && vm.hasGeocodedAddress" class="geocoded-property">
+                        <label><strong>Latitude:</strong> {{ model.data.lat }}</label>
+                        <label><strong>Longitude:</strong> {{ model.data.lng }}</label>
+                        <button class="btn btn-default" ng-click="vm.viewLocation()" prevent-default><i class="icon icon-map"></i> Update address coordinates</button>
+                    </div>
+                </umb-control-group>
+            </form>
+        </umb-box>
+    </umb-editor-container>
+    <umb-editor-footer>
+        <umb-editor-footer-content-right>
+            <umb-button type="button"
+                        button-style="link"
+                        label-key="general_close"
+                        action="model.close()">
+            </umb-button>
 
-</div>
+            <umb-button type="button"
+                        button-style="success"
+                        label-key="general_submit"
+                        action="model.submit(model)">
+            </umb-button>
+        </umb-editor-footer-content-right>
+    </umb-editor-footer>
+</umb-editor-view>

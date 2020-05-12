@@ -36,7 +36,7 @@
             }
 
             return { items: paged.slice(begin, end), totalPages: totalPages, pageNumber: pageNumber, search: filter };
-        }
+        };
 
         /**
          * 
@@ -61,27 +61,31 @@
                 if (typeof o === 'object') {
                     keys = Object.keys(o);
                     for (j = 0; j < keys.length; j++) {
-                        if (!pushed && o[keys[j]] !== undefined && o[keys[j]] !== null && o[keys[j]].toString().toLowerCase().indexOf(term.toString().toLowerCase()) !== -1) {
+                        if (!pushed &&
+                            o[keys[j]] !== undefined &&
+                            o[keys[j]] !== null &&
+                            o[keys[j]].toString().toLowerCase().indexOf(term.toString().toLowerCase()) !== -1) {
                             paged.push(o);
                             pushed = true;
                         }
                     }
-                }
-                else {
+                } else {
                     if (o && o.toLowerCase().indexOf(term.toLowerCase()) !== -1) {
                         paged.push(o);
                     }
                 }
             }
             return paged;
-        }
+        };
 
         /**
          * 
          * @param {any} i
          * @param {any} j
          */
-        const setCurrentPage = (i, j) => j === undefined ? (i - 1 > 0 ? i - 1 : i) : (i + 1 <= j ? i + 1 : i);
+        const setCurrentPage = (i, j) => j === undefined ?
+            (i - 1 > 0 ? i - 1 : i) :
+            (i + 1 <= j ? i + 1 : i);
         
         return {
             countPages: countPages,
@@ -91,5 +95,5 @@
         };
     }
 
-    angular.module('umbraco.services').factory('tabulatePagingService', tabulatePagingService);
+    angular.module('tabulate.services').factory('tabulatePagingService', tabulatePagingService);
 })();

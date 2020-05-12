@@ -4,5 +4,12 @@
     "~/App_Plugins/Starterkit/starterkithelp.controller.js",
     "~/App_Plugins/Starterkit/tours/views/medialibrary/uploadimages.controller.js",
     "~/App_Plugins/Starterkit/tours/views/validatetext.controller.js"
+  ],
+  "dashboards":[
+    {
+      "alias": "lessons",
+      "view": "/App_Plugins/StarterKit/starterkithelp.html",
+      "sections": ["user-help"]
+    }
   ]
 }

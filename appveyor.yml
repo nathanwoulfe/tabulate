@@ -1,11 +1,11 @@
 # version format
-version: 2.3.2.{build}
+version: 3.0.2.{build}
 
 image: Visual Studio 2017
 
 cache:
   - packages -> **\packages.config
-  - c:\projects\tabulate\Workflow\node_modules -> **\packages.json
+  - c:\projects\tabulate\tabulate\node_modules -> **\packages.json
   
 # UMBRACO_PACKAGE_PRERELEASE_SUFFIX will only be used for Release builds
 # example UMBRACO_PACKAGE_PRERELEASE_SUFFIX=beta
@@ -13,10 +13,11 @@ install:
   - set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe;C:\Ruby22\bin;%PATH%
   - cmd: gem install sass
   - cmd: npm install -g grunt-cli
-  - cmd: set UMBRACO_PACKAGE_MIN_VERSION=7.7.0
+  - cmd: set UMBRACO_PACKAGE_MIN_VERSION=8.3
   - cmd: cd BuildPackage
   - cmd: Build.bat
   
+# build when committing to master or umbraco-8, but only deploy from the specified branch
 branches:
   only: 
   - master
@@ -32,22 +33,20 @@ deploy:
   - provider: NuGet
     server:
     api_key:
-      secure: 3rS8SSsTr0VHNAkG7ayAvic+yEedX8IIKq9QwaNrtLYDzgpyZJjY1mLuBYDZF0Qj
+      secure: ORGl5eR/eDby41oG+g9voQ+lmTDIK9SbEzPawNN9yKTvvdKn/XC97dfnOcX7vIOA
     skip_symbols: false      
     symbol_server:    
     artifact: /.*\.nupkg/
     on:
-        branch: master
         appveyor_repo_tag: true      
-    
+
   - provider: GitHub
-    tag: v2.3.2
-    release: Release 2.3.2
-    description: 'CSS, no more error if Google Maps API key is undefined'
+    tag: v3.0.2
+    release: Release 3.0.2
+    description: 'Fix RTE parser'
     force_update: true
     auth_token:
         secure: Otbl8p8qCwciDqJgSWCyN0Arfs5XS1CwiHcK+r0F6uz9Rxt4gzBFvlc3cjPV3NxR
     artifact: /.*\.zip/     
     on:
-        branch: master
         appveyor_repo_tag: true     

@@ -2,14 +2,14 @@
 
     function tabulateMapDialogController($scope) {
 
-        $scope.map = new google.maps.Map(document.getElementById('map'),
+        const map = new google.maps.Map(document.getElementById('map'),
             {
                 zoom: 14,
                 center: new google.maps.LatLng($scope.model.lat, $scope.model.lng)
             });
 
         const marker = new google.maps.Marker({
-            map: $scope.map,
+            map: map,
             position: new google.maps.LatLng($scope.model.lat, $scope.model.lng),
             draggable: true
         });
@@ -25,7 +25,7 @@
             dragend(event);
         });
     }
-
-    angular.module('umbraco').controller('Tabulate.MapDialogController', ['$scope', tabulateMapDialogController]);
+     
+    angular.module('tabulate').controller('Tabulate.MapDialogController', ['$scope', tabulateMapDialogController]);
 
 })();

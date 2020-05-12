@@ -1,137 +1,154 @@
-<div class="tabulate settings" ng-controller="Tabulate.SettingsController as vm">
-    <ul class="nav nav-tabs umb-nav-tabs">
-        <li class="active">
-            <a href="#tabulate-tab-0" data-toggle="tab">Add new column</a>
-        </li>
-        <li>
-            <a href="#tabulate-tab-1" data-toggle="tab">Current columns</a>
-        </li>
-        <li>
-            <a href="#tabulate-tab-2" data-toggle="tab">Data</a>
-        </li>
-        <li ng-show="vm.tabulateEditors.length">
-            <a href="#tabulate-tab-3" data-toggle="tab">Mappings</a>
-        </li>
-    </ul>
-    <div class="tab-content umb-tab-content">
-        <div class="umb-tab-pane tab-pane active" id="tabulate-tab-0">
+<umb-editor-view>
+    <umb-editor-header name="model.title"
+                       name-locked="true"
+                       hide-alias="true"
+                       hide-icon="true"
+                       hide-description="true">
+    </umb-editor-header>
 
-            <umb-control-group label="Column display name">
-                <input type="text" name="new-column-name" ng-model="model.newColumnName" />
-            </umb-control-group>
+    <umb-editor-container>
+        <div class="tabulate settings" ng-controller="Tabulate.SettingsController as vm">
 
-            <umb-control-group label="Column input type">
-                <select name="new-column-type" ng-model="model.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
-            </umb-control-group>
+            <umb-box>
+                <umb-box-header title="Add column" description="For geocoded data use 'Address' as a column name"></umb-box-header>
+                <umb-box-content class="form-horizontal umb-grid">
+                    <umb-control-group label="Column display name">
+                        <input type="text" name="new-column-name" ng-model="vm.newColumnName" />
+                    </umb-control-group>
 
-            <p><strong>Pro tip:</strong> For geocoded data use 'Address' as a column name. Requires a valid Google Maps API be provided in the Tabulate config.</p>
-        </div>
-        <div class="umb-tab-pane tab-pane" id="tabulate-tab-1">
+                    <umb-control-group label="Column input type">
+                        <select name="new-column-type" ng-model="vm.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
+                    </umb-control-group>
+                    
+                    <div class="umb-add-row">
+                        <a href="" class="iconBox ng-scope" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
+                            <i class=" icon icon-add" title="Add" localize="title"></i>
+                        </a>
+                    </div>
+                </umb-box-content>
+            </umb-box>
 
-            <umb-control-group>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
-                            <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
-                            <td>
-                                <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in vm.types" ng-change="vm.changedColumn($index)"></select>
-                            </td>
-                            <td>
-                                <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeColumn($index)"><localize key="general_remove">Remove</localize></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </umb-control-group>
+            <umb-box>
+                <umb-box-header title="Current columns"></umb-box-header>
+                <umb-box-content class="form-horizontal">
+                    <umb-control-group hide-label="true">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
+                                    <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
+                                    <td>
+                                        <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in vm.types" ng-change="vm.changedColumn($index)"></select>
+                                    </td>
+                                    <td>
+                                        <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeColumn($index)"><localize key="general_remove">Remove</localize></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </umb-control-group>
 
-            <umb-control-group label="Label" description="Label is case-sensitive. Reference column names using {} notation. Will default to {{ '{' + model.config.columns[0].displayName + '}' }}">
-                <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
-            </umb-control-group>
+                    <umb-control-group label="Label" description="Label is case-sensitive. Reference column names using {} notation. Will default to {{ '{' + model.config.columns[0].displayName + '}' }}">
+                        <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
+                    </umb-control-group>
 
-            <umb-control-group label="List view" description="Display data as a list view. This overrides any label value defined above.">
-                <input name="label" type="checkbox" ng-model="model.config.isListView" />
-            </umb-control-group>
+                    <umb-control-group label="List view" description="Display data as a list view. This overrides any label value defined above.">
+                        <umb-toggle checked="model.config.isListView"
+                                    on-click="model.config.isListView = !model.config.isListView"
+                                    show-labels="{{'false'}}"></umb-toggle>
+                    </umb-control-group>
 
-            <umb-control-group label="Order by">
-                <select name="sort-order" ng-model="model.config.sortOrder" ng-change="vm.sort()">
-                    <option value="A">Ascending</option>
-                    <option value="D">Descending</option>
-                    <option value="M">Manual</option>
-                </select>
-            </umb-control-group>
+                    <umb-control-group label="Order by">
+                        <select name="sort-order" ng-model="model.config.sortOrder" ng-change="vm.sort()">
+                            <option value="A">Ascending</option>
+                            <option value="D">Descending</option>
+                            <option value="M">Manual</option>
+                        </select>
+                    </umb-control-group>
 
-            <umb-control-group label="Per page">
-                <input type="number" name="per-page" ng-model="model.config.numPerPage" />
-            </umb-control-group>
+                    <umb-control-group label="Per page">
+                        <input type="number" name="per-page" ng-model="model.config.numPerPage" />
+                    </umb-control-group>
+                </umb-box-content>
+            </umb-box>
+            <umb-box>
+                <umb-box-header title="Data" description="Importing will overwrite all existing data and reset the column config (column type will default to string)"></umb-box-header>
+                <umb-box-content class="form-horizontal">
+                    <div class="export-type m-b-10">
+                        Show:
+                        <button ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}" prevent-default>JSON</button>
+                        <button ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}" prevent-default>CSV</button>
+                    </div>
 
-        </div>
-        <div class="umb-tab-pane tab-pane" id="tabulate-tab-2">
-            <p>Export the current dataset by copying the content from the textarea below. To import, paste CSV-formatted text into the textarea below.</p>
-            <p>Importing will overwrite all existing data and reset the column config (column type will default to string).</p>
-            <div class="export-type">
-                Show:
-                <button ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}" prevent-default>JSON</button>
-                <button ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}" prevent-default>CSV</button>
-            </div>
-            <textarea ng-model="vm.importExport"></textarea>
+                    <textarea ng-model="vm.importExport" class="m-b-10" style="width:100%" rows="10"></textarea>
 
-            <!-- download as -->
-            <div class="download-wrapper d-flex">
-                <button class="btn btn-default" ng-hide="!model.data" ng-click="vm.download()" prevent-default>Download</button>
-                <div class="dropdown-wrapper">
-                    <button class="btn btn-default" ng-disabled="vm.importDisabled" data-toggle="dropdown" type="button" aria-haspopup="true" aria-expanded="false" prevent-default>
-                        Import <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="iLabel">
-                        <li><a href="" role="button" ng-click="vm.importCSV()" prevent-default>CSV</a></li>
-                        <li><a href="" role="button" ng-click="vm.importJSON()" prevent-default>JSON</a></li>
-                    </ul>
+                    <!-- download as -->
+                    <div class="download-wrapper d-flex">
+                        <button class="btn btn-default" ng-hide="!model.data" ng-click="vm.download()" prevent-default>Download</button>
+                        <button class="btn btn-default" ng-disabled="vm.importDisabled" ng-click="vm.import()" type="button" prevent-default>Import</button>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+
+            <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="vm.tabulateEditors.length">
+                <p>Set references to other properties on this node - typically used as a typeahead source in a custom dialog</p>
+                <div class="control-group">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Target property</th>
+                                <th>Target object</th>
+                                <th>Source property</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="m in model.config.mappings track by $index" ng-init="vm.setTargetEditorColumns(m.targetEditor.alias)">
+                                <td>
+                                    <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
+                                </td>
+                                <td>
+                                    <select ng-show="m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
+                                </td>
+                                <td>
+                                    <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
+                                </td>
+                                <td>
+                                    <a prevent-default href="" title="Remove mapping" ng-click="vm.removeMapping($index)">
+                                        <i class="icon icon-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <a prevent-default href="" title="Add"
+                   ng-click="vm.addEmptyItem()">
+                    <i class="icon icon-add"></i>
+                </a>
             </div>
         </div>
-        <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="vm.tabulateEditors.length">
-            <p>Set references to other properties on this node - typically used as a typeahead source in a custom dialog</p>
-            <div class="control-group">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Target property</th>
-                            <th>Target object</th>
-                            <th>Source property</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="m in model.config.mappings track by $index" ng-init="vm.setTargetEditorColumns(m.targetEditor.alias)">
-                            <td>
-                                <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
-                            </td>
-                            <td>
-                                <select ng-show="m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
-                            </td>
-                            <td>
-                                <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
-                            </td>
-                            <td>
-                                <a prevent-default href="" title="Remove mapping" ng-click="vm.removeMapping($index)">
-                                    <i class="icon icon-remove"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <a prevent-default href="" title="Add"
-               ng-click="vm.addEmptyItem()">
-                <i class="icon icon-add"></i>
-            </a>
-        </div>
-    </div>
-</div>
+
+    </umb-editor-container>
+    <umb-editor-footer>
+        <umb-editor-footer-content-right>
+            <umb-button type="button"
+                        button-style="link"
+                        label-key="general_close"
+                        action="model.close()">
+            </umb-button>
+            <umb-button type="button"
+                        button-style="success"
+                        label-key="general_submit"
+                        action="model.submit(model)">
+            </umb-button>
+        </umb-editor-footer-content-right>
+    </umb-editor-footer>
+
+</umb-editor-view>

@@ -1,9 +1,38 @@
-﻿<div class="tabulate map-row" ng-controller="Tabulate.MapDialogController">
+﻿<umb-editor-view>
+    <umb-editor-header name="model.title"
+                       name-locked="true"
+                       hide-alias="true"
+                       hide-icon="true"
+                       hide-description="true">
+    </umb-editor-header>
 
-    <div id="map"></div>
-    <p>Repositioning the marker will update the stored lat/lng pair, but will not modify the address text.</p>
-    <div class="geocoded-property">
-        <label><strong>Latitude:</strong> {{ model.lat }}</label>
-        <label><strong>Longitude:</strong> {{ model.lng }}</label>
-    </div>
-</div>
+    <umb-editor-container>
+        <umb-box>
+            <div class="tabulate umb-box-content" ng-controller="Tabulate.MapDialogController">
+                <div id="map"></div>
+                <p>Repositioning the marker will update the stored lat/lng pair, but will not modify the address text.</p>
+                <div class="geocoded-property">
+                    <label><strong>Latitude:</strong> {{ model.lat }}</label>
+                    <label><strong>Longitude:</strong> {{ model.lng }}</label>
+                </div>
+            </div>
+        </umb-box>
+    </umb-editor-container>
+
+    <umb-editor-footer>
+        <umb-editor-footer-content-right>
+            <umb-button type="button"
+                        button-style="link"
+                        label-key="general_close"
+                        action="model.close()">
+            </umb-button>
+
+            <umb-button type="button"
+                        button-style="success"
+                        label-key="general_submit"
+                        action="model.submit(model)">
+            </umb-button>
+        </umb-editor-footer-content-right>
+    </umb-editor-footer>
+
+</umb-editor-view>

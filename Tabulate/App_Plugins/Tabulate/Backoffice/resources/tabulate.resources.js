@@ -109,19 +109,19 @@
                 }
 
                 const loadMapsApi = () => {
-                    if (window.google.maps === undefined) {
+                    if (!window.google.maps) {
                         window.google.load('maps', '3', {
                                 other_params: `key=${apiKey}`,
                                 callback: () => {
                                     deferred.resolve(true);
                                 }
                             });
-                    } else if (window.google.maps !== undefined) {
+                    } else if (window.google.maps) {
                         deferred.resolve(true);
                     }
                 };
 
-                if (window.google === undefined) {
+                if (!window.google) {
                     assetsService.loadJs('//www.google.com/jsapi')
                         .then(() => {
                             loadMapsApi();
@@ -139,16 +139,12 @@
                 if (window.google.maps !== undefined) {
 
                     const keys = Object.keys(d);
-                    const geocoder = new google.maps.Geocoder();
-
-                    let p = '';
-
-                    if (keys.indexOf('Address') !== -1) {
-                        p = 'Address';
-                    }
+                    const p = keys.indexOf('Address') !== -1 ? 'Address' : '';
 
                     if (p !== '' && confirm('Found location data - geocode it?')) {
-                        var geoStr = `_${p}`;
+
+                        const geoStr = `_${p}`;
+                        const geocoder = new google.maps.Geocoder();
                         const address = d[p];
 
                         geocoder.geocode({ 'address': address }, (results, status) => {
@@ -268,6 +264,6 @@
         };
     }
 
-    angular.module('umbraco.resources').factory('tabulateResource', ['notificationsService', 'assetsService', '$q', 'editorState', tabulateResource]);
+    angular.module('tabulate.resources').factory('tabulateResource', ['notificationsService', 'assetsService', '$q', 'editorState', tabulateResource]);
 
 })();

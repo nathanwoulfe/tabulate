@@ -1,42 +1,34 @@
 ﻿<div class="tabulate" ng-controller="Tabulate.Controller as vm" ng-class="{'no-settings': vm.noConfig, 'wide' : model.config.wide}">
     
-    <umb-editor-sub-header>
-        <umb-editor-sub-header-content-left>
-            <umb-editor-sub-header-section>
-                <div class="form-search" ng-show="model.value.data.length > model.value.settings.numPerPage">
-                    <div class="inner-addon left-addon">
-                        <i class="icon icon-search" ng-click="vm.setPaging()"></i>
-                        <input type="text" 
-                               class="form-control search-input"
-                               ng-model="vm.pagination.search" 
-                               ng-disabled="vm.noConfig" 
-                               ng-change="vm.setPaging()" 
-                               placeholder="Type to search..." 
-                               no-dirty-check />
-                    </div>
+    <umb-editor-sub-header appearance="white">
+        <umb-editor-sub-header-content-left ng-show="model.value.data.length > model.value.settings.numPerPage">
+            <div class="form-search">
+                <div class="inner-addon left-addon">
+                    <i class="icon icon-search" ng-click="vm.setPaging()"></i>
+                    <input type="text" 
+                           class="form-control search-input"
+                           ng-model="vm.pagination.search" 
+                           ng-disabled="vm.noConfig" 
+                           ng-change="vm.setPaging()" 
+                           placeholder="Type to search..." 
+                           no-dirty-check />
                 </div>
-            </umb-editor-sub-header-section>
+            </div>
         </umb-editor-sub-header-content-left>
         <umb-editor-sub-header-content-right>
-            <umb-editor-sub-header-section>
-                <button class="settings-btn btn btn-default" ng-click="vm.openSettings()" ng-hide="vm.mapsLoaded === 'show' || vm.hideSettings" prevent-default>
-                    <span class="icon icon-settings"></span>
-                </button>
-                <button class="clear-btn btn btn-danger" ng-click="vm.noConfig || vm.clearModel()" prevent-default>
-                    <span class="icon icon-trash"></span>
-                </button>
-            </umb-editor-sub-header-section>
+            <button class="settings-btn btn btn-default" ng-click="vm.openSettings()" ng-hide="vm.mapsLoaded === 'show' || vm.hideSettings" prevent-default>
+                <span class="icon icon-settings"></span>
+            </button>
+            <button class="clear-btn btn btn-danger" ng-click="vm.noConfig || vm.clearModel()" prevent-default>
+                <span class="icon icon-trash"></span>
+            </button>
         </umb-editor-sub-header-content-right>
     </umb-editor-sub-header>
 
-    <span class="no-result" ng-if="vm.noResults">No results found for search term '{{vm.pagination.search}}'</span>
-
-    <div class="umb-table" ng-if="vm.pagination.items" ng-class="{'manual-sort': vm.manualSort, 'list-view' : model.value.settings.isListView}">
+    <div class="umb-table" ng-class="{'manual-sort': vm.manualSort, 'list-view' : model.value.settings.isListView}">
         <div class="umb-table-head" ng-if="model.value.settings.isListView">
             <div class="umb-table-row">
-                <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns">
-                    {{ c.displayName }}
-                </div>
+                <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns" ng-bind="::c.displayName"></div>
                 <div class="umb-table-cell umb-table-cell__actions">Actions</div>
             </div>
         </div>
@@ -44,7 +36,7 @@
             <div class="umb-table-row" ng-class="{'disabled' : o.disabled}" ng-repeat="o in vm.pagination.items track by $index">
                 <div class="umb-table-cell" ng-class="{'umb-table__name' : $first}" ng-repeat="c in model.value.settings.columns" ng-show="model.value.settings.isListView">
                     <a ng-if="$first" class="umb-table-body__link" title="Edit" href="" ng-click="vm.editRow(o._id)" ng-bind="o._label" ng-model="o._label"></a>
-                    <span ng-if="!$first" ng-bind="o[c.displayName]"></span>
+                    <span ng-if="!$first" ng-bind-html="o[c.displayName] | bindHtml | umbWordLimit"></span>
                 </div>
 
                 <div class="umb-table-cell umb-table__name f-1" ng-show="!model.value.settings.isListView">
@@ -62,7 +54,7 @@
                             <span ng-if="!model.value.settings.isListView" ng-bind="o.disabled ? 'Enable' : 'Disable'"></span>
                         </a>
                         <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeRow(o._id)">
-                            <i class="icon icon-delete" ng-if="model.value.settings.isListView"></i>
+                            <i class="icon icon-trash" ng-if="model.value.settings.isListView"></i>
                             <localize key="general_remove" ng-if="!model.value.settings.isListView">Remove</localize>
                         </a>
                     </div>
@@ -76,6 +68,15 @@
             <localize key="general_add">Add</localize>
         </a>
     </div>
+    
+    <umb-empty-state ng-if="vm.noConfig">
+        <!--<localize key="tabulate_noConfig"></localize>-->
+        No config
+    </umb-empty-state>
+    
+    <umb-empty-state ng-if="vm.noResults">
+        No results found for search term '{{vm.pagination.search}}'
+    </umb-empty-state>
 
     <umb-pagination ng-if="vm.pagination.totalPages > 1"
                     page-number="vm.pagination.pageNumber"
@@ -86,11 +87,4 @@
 
     </umb-pagination>
 
-    <umb-overlay ng-if="vm.overlay.show"
-                 model="vm.overlay"
-                 view="vm.overlay.view"
-                 position="right">
-    </umb-overlay>
-
 </div>
-

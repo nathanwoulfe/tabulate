@@ -8,6 +8,8 @@
                 view: "~/App_Plugins/tabulate/backoffice/views/tabulate.html",
 				valueType: 'JSON'
             },
+			icon: "icon-list",
+			group: "Lists",
 			prevalues: {
 				fields: [
 					{
@@ -44,11 +46,13 @@
     ],
     //array of files we want to inject into the application on app_start
     javascript: [
+		'~/App_Plugins/tabulate/backoffice/app.js',
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.controller.js',
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.dialog.controller.js',
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.mapdialog.controller.js',		
 		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.settings.controller.js',
 		'~/App_Plugins/tabulate/backoffice/resources/tabulate.resources.js',
-		'~/App_Plugins/tabulate/backoffice/resources/tabulatepaging.service.js'
+		'~/App_Plugins/tabulate/backoffice/resources/tabulatepaging.service.js',
+		'~/App_Plugins/tabulate/backoffice/filters/bindhtml.filter.js'
     ]
 }
