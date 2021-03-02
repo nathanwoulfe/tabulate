@@ -58,9 +58,7 @@
         concat: {
             dist: {
                 src: [
-                  '<%= basePath %>/backoffice/app.js',  
-                  '<%= basePath %>/backoffice/controllers/**/*.js',
-                  '<%= basePath %>/backoffice/resources/*.js'
+                  '<%= basePath %>/backoffice/**/*.js',
                 ],
                 dest: '<%= basePath %>/backoffice/tabulate.es6',
                 nonull: true,
