@@ -22,8 +22,8 @@
     "grunt-contrib-copy": "*",
     "grunt-contrib-cssmin": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-sass": "*",
     "grunt-contrib-watch": "^1.1.0",
+    "grunt-dart-sass": "^1.1.3",
     "grunt-karma": "*",
     "grunt-mkdir": "*",
     "grunt-nuget": "*",
@@ -34,5 +34,6 @@
     "karma-phantomjs-launcher": "*",
     "load-grunt-tasks": "*",
     "time-grunt": "*"
-  }
+  },
+  "dependencies": {}
 }

@@ -4,7 +4,7 @@
     require('grunt-karma')(grunt);
 
     //cant load this with require
-    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-dart-sass');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-banner');
@@ -71,8 +71,8 @@
         },
 
         //Compile the less file into a CSS file
-        sass: {
-            dist: {
+        'dart-sass': {
+            target: {
                 files: {
                     '<%= basePath %>/backoffice/style.min.css': ['<%= basePath %>/backoffice/style.scss']
                 },
@@ -101,7 +101,7 @@
             // dev watches everything, copies everything
             dev: {
                 files: ['<%= basePath %>/**/*'],
-                tasks: ['sass:dist', 'copy:dev'],
+                tasks: ['dart-sass', 'copy:dev'],
                 options: {
                     livereload: true
                 }
@@ -109,7 +109,7 @@
 
             css: {
                 files: ['<%= basePath %>/**/*.scss'],
-                tasks: ['sass:dist']
+                tasks: ['dart-sass']
             },
 
             js: {
@@ -145,11 +145,6 @@
             config: {
                 src: '<%= basePath %>/dist.manifest', // dist.manifest only references the compiled, prod-ready css/js
                 dest: '<%= dest %>/<%= basePath %>/package.manifest',
-            },
-
-            css: {
-                src: '<%= basePath %>/backoffice/style.css',
-                dest: '<%= dest %>/<%= basePath %>/backoffice/style.min.css', // yes, it's not minified, but the build task will overwrite it later
             },
 
             js: {
@@ -281,7 +276,7 @@
         }
     });
 
-    grunt.registerTask('default', ['jshint', 'concat', 'browserify', 'sass', 'cssmin', 'copy:config', 'copy:html', 'copy:lang']);
+    grunt.registerTask('default', ['jshint', 'concat', 'browserify', 'dart-sass', 'cssmin', 'copy:config', 'copy:html', 'copy:lang']);
     grunt.registerTask('nuget', ['clean', 'default', 'copy:nuget', 'template:nuspec', 'mkdir:pkg', 'nugetpack']);
     grunt.registerTask('package', ['clean', 'default', 'copy:umbraco', 'mkdir:pkg', 'umbracoPackage']);
 
