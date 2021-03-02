@@ -58,6 +58,7 @@
         concat: {
             dist: {
                 src: [
+                  '<%= basePath %>/backoffice/app.js',  
                   '<%= basePath %>/backoffice/controllers/**/*.js',
                   '<%= basePath %>/backoffice/resources/*.js'
                 ],
