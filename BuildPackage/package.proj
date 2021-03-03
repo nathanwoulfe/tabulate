@@ -2,17 +2,17 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Package">
 
 	<!-- IMPORTS -->
-	<PropertyGroup>
-		<MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\Tools\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
-		<MSBuildUmbracoTasksPath>$(MSBuildProjectDirectory)\Tools\MSBuildUmbracoTasks</MSBuildUmbracoTasksPath>
-		<MSBuildNugetTasksPath>$(MSBuildProjectDirectory)\Tools\MSBuildNugetTasks</MSBuildNugetTasksPath>
-		<AppVeyorUmbracoPath>$(MSBuildProjectDirectory)\Tools\AppVeyorUmbraco</AppVeyorUmbracoPath>
-	</PropertyGroup>
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\Tools\MSBuildCommunityTasks</MSBuildCommunityTasksPath>
+    <MSBuildUmbracoTasksPath>$(MSBuildProjectDirectory)\Tools\MSBuildUmbracoTasks</MSBuildUmbracoTasksPath>
+    <MSBuildNugetTasksPath>$(MSBuildProjectDirectory)\Tools\MSBuildNugetTasks</MSBuildNugetTasksPath>
+    <DevOpsTargetsPath>$(MSBuildProjectDirectory)\Tools\DevOpsTargets</DevOpsTargetsPath>
+  </PropertyGroup>
 
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
-	<Import Project="$(MSBuildUmbracoTasksPath)\MSBuild.Umbraco.Tasks.Targets" />
-	<Import Project="$(MSBuildNugetTasksPath)\MSBuild.NuGet.Tasks.Targets" />
-	<Import Project="$(AppVeyorUmbracoPath)\AppVeyorUmbraco.Targets" />
+  <Import Project="$(MSBuildUmbracoTasksPath)\MSBuild.Umbraco.Tasks.Targets" />
+  <Import Project="$(MSBuildNugetTasksPath)\MSBuild.NuGet.Tasks.Targets" />
+  <Import Project="$(DevOpsTargetsPath)\DevOps.Targets" />
 
 	<!-- SHARED PROPERTIES -->
 	<PropertyGroup>
@@ -38,12 +38,11 @@
 		<RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 	</PropertyGroup>
 
-  <!-- APPVEYOR PROPERTIES -->
   <PropertyGroup>
-    <FileVersion>$(APPVEYOR_BUILD_VERSION)</FileVersion>
+    <FileVersion>$(BUILD_VERSION)</FileVersion>
   </PropertyGroup>
   <Choose>
-    <When Condition="$(APPVEYOR_BUILD_NUMBER) != '' And $(APPVEYOR_REPO_TAG) != 'true' ">
+    <When Condition="$(BUILD_NUMBER) != '' And $(REPO_TAG) != 'true' ">
       <PropertyGroup>
         <Release>false</Release>
       </PropertyGroup>
@@ -66,9 +65,7 @@
         <AbortBuild>false</AbortBuild>
       </PropertyGroup>
     </Otherwise>
-  </Choose>
-
- 
+  </Choose> 
 
   <!-- PATHS -->
   <PropertyGroup>
@@ -83,8 +80,8 @@
 
   <!-- TARGETS -->
   <Target Name="GetProductVersion">
-    <Error Condition="$(AbortBuild) == 'true'" Text="Aborting the build as the UMBRACO_PACKAGE_PRERELEASE_SUFFIX suffix is set 'rtm' but APPVEYOR_REPO_TAG is not 'true'" />
-    <GetProductVersion BuildVersion="$(APPVEYOR_BUILD_VERSION)" BuildSuffix="$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)" Release="$(Release)">
+    <Error Condition="$(AbortBuild) == 'true'" Text="Aborting the build as the UMBRACO_PACKAGE_PRERELEASE_SUFFIX suffix is set 'rtm' but REPO_TAG is not 'true'" />
+    <GetProductVersion BuildVersion="$(BUILD_VERSION)" BuildSuffix="$(UMBRACO_PACKAGE_PRERELEASE_SUFFIX)" Release="$(Release)">
       <Output TaskParameter="ProductVersion" PropertyName="ProductVersion"/>
     </GetProductVersion>
   </Target>

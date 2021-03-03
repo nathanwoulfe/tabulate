@@ -1,0 +1,64 @@
+trigger:
+  - refs/tags/v*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/Tabulate.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  buildVersion: '3.1.0'
+  buildBranch: 'master'
+  packageSuffix: 'rtm'
+  repoTag: 'true'
+
+steps:
+
+# Install npm bits
+- script: npm ci
+  workingDirectory: 'Tabulate'
+
+- task: Bash@3
+  displayName: 'Set environment variables'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "##vso[task.setvariable variable=UMBRACO_PACKAGE_MIN_VERSION]$(System.UmbracoPackageMinVersion)"
+      echo "##vso[task.setvariable variable=BUILD_VERSION]$(buildVersion).$(Build.BuildId)"
+      echo "##vso[task.setvariable variable=REPO_TAG]$(repoTag)"      
+      echo "##vso[task.setvariable variable=UMBRACO_PACKAGE_PRERELEASE_SUFFIX]$(packageSuffix)"
+      echo "##vso[task.setvariable variable=BUILD_NUMBER]$(Build.BuildId)"  
+
+- script: npm run build
+  workingDirectory: 'Tabulate'
+
+# install nuget tooling
+- task: NuGetToolInstaller@1
+
+# restore nuget packages for solution
+- task: NuGetCommand@2
+  displayName: 'Restore nuget packages for solution'
+  inputs:
+    restoreSolution: '$(solution)'
+
+# build it
+- task: MSBuild@1
+  displayName: 'Build the sucker'
+  inputs:
+    solution: 'BuildPackage/package.proj'
+
+- task: CopyFiles@2
+  displayName: 'Copy package files from BuildPackage/artifacts to staging directory'
+  inputs:     
+    SourceFolder: 'BuildPackage/artifacts'
+    Contents: '*.*'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    CleanTargetFolder: true
+    OverWrite: true
+
+- task: PublishPipelineArtifact@0
+  displayName: 'Publish zip and nuget from staging directory'
+  inputs:
+    artifactName: 'drop'
+    targetPath: '$(Build.ArtifactStagingDirectory)'

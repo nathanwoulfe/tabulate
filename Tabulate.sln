@@ -9,8 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
+		azure-pipelines_dev.yml = azure-pipelines_dev.yml
+		azure-pipelines_rtm.yml = azure-pipelines_rtm.yml
 		BuildPackage\Build.bat = BuildPackage\Build.bat
+		BuildPackage\LocalBuild.bat = BuildPackage\LocalBuild.bat
+		BuildPackage\package.nuspec = BuildPackage\package.nuspec
 		BuildPackage\package.proj = BuildPackage\package.proj
+		BuildPackage\Package.xml = BuildPackage\Package.xml
 		README.md = README.md
 	EndProjectSection
 EndProject
