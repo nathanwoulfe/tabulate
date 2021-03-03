@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import sass from 'gulp-dart-sass';
 import concat from 'gulp-concat';
 import autoprefixer from 'gulp-autoprefixer';
+import cleanCSS from 'gulp-clean-css';
 
 import { paths, config } from './config';
 import { noop } from 'gulp-util';
