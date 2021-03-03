@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A8130851-5E56-4AEE-94D1-C64C12EE40E6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		azure-pipelines_dev.yml = azure-pipelines_dev.yml
 		azure-pipelines_rtm.yml = azure-pipelines_rtm.yml
 		BuildPackage\Build.bat = BuildPackage\Build.bat
