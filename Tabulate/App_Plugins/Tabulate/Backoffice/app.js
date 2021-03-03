@@ -1,17 +1,11 @@
-﻿(() => {
+﻿import { ControllersModule } from './controllers/_controllersModule';
+import { ResourcesModule } from './resources/_resourcesModule';
 
-    angular.module('tabulate.directives', []);
-    angular.module('tabulate.resources', []);
-    angular.module('tabulate.services', []);
-    angular.module('tabulate.components', []);
+const name = 'tabulate';
 
-    angular.module('tabulate', [
-        'tabulate.directives', 
-        'tabulate.services', 
-        'tabulate.components',
-        'tabulate.resources',
-    ]);
+angular.module(name, [
+    ControllersModule,
+    ResourcesModule
+]);
 
-    angular.module('umbraco').requires.push('tabulate');
-
-})();
+angular.module('umbraco').requires.push(name);

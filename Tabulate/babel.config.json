@@ -1,0 +1,19 @@
+﻿{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "chrome": 60,
+          "edge": 13,
+          "firefox": 50
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "angularjs-annotate",
+    "@babel/plugin-transform-object-assign"
+  ]
+}

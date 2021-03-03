@@ -1,16 +1,16 @@
 ﻿<div class="tabulate" ng-controller="Tabulate.Controller as vm" ng-class="{'no-settings': vm.noConfig, 'wide' : model.config.wide}">
-    
+
     <umb-editor-sub-header appearance="white">
         <umb-editor-sub-header-content-left ng-show="model.value.data.length > model.value.settings.numPerPage">
             <div class="form-search">
                 <div class="inner-addon left-addon">
                     <i class="icon icon-search" ng-click="vm.setPaging()"></i>
-                    <input type="text" 
+                    <input type="text"
                            class="form-control search-input"
-                           ng-model="vm.pagination.search" 
-                           ng-disabled="vm.noConfig" 
-                           ng-change="vm.setPaging()" 
-                           placeholder="Type to search..." 
+                           ng-model="vm.pagination.search"
+                           ng-disabled="vm.noConfig"
+                           ng-change="vm.setPaging()"
+                           placeholder="Type to search..."
                            no-dirty-check />
                 </div>
             </div>
@@ -28,7 +28,7 @@
     <div class="umb-table" ng-class="{'manual-sort': vm.manualSort, 'list-view' : model.value.settings.isListView}">
         <div class="umb-table-head" ng-if="model.value.settings.isListView">
             <div class="umb-table-row">
-                <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns" ng-bind="::c.displayName"></div>
+                <div class="umb-table-cell" ng-repeat="c in model.value.settings.columns" ng-bind="c.displayName"></div>
                 <div class="umb-table-cell umb-table-cell__actions">Actions</div>
             </div>
         </div>
@@ -45,18 +45,18 @@
 
                 <div class="umb-table-cell umb-table-cell__actions">
                     <div class="umb-node-preview__actions">
-                        <a class="umb-node-preview__action sort-handle" ng-show="vm.manualSort" title="Sort" href="">
+                        <button type="button" class="umb-node-preview__action sort-handle" ng-show="vm.manualSort" title="Sort">
                             <i class="icon icon-navigation-vertical" ng-if="model.value.settings.isListView"></i>
                             <localize key="general_sort" ng-if="!model.value.settings.isListView">Sort</localize>
-                        </a>
-                        <a class="umb-node-preview__action" title="Disable" href="" ng-click="vm.disableRow(o._id)">
+                        </button>
+                        <button type="button" class="umb-node-preview__action" title="Disable" ng-click="vm.disableRow(o._id)">
                             <i class="icon icon-power" ng-if="model.value.settings.isListView"></i>
                             <span ng-if="!model.value.settings.isListView" ng-bind="o.disabled ? 'Enable' : 'Disable'"></span>
-                        </a>
-                        <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeRow(o._id)">
+                        </button>
+                        <button type="button" class="umb-node-preview__action umb-node-preview__action--red" title="Remove" ng-click="vm.removeRow(o._id)">
                             <i class="icon icon-trash" ng-if="model.value.settings.isListView"></i>
                             <localize key="general_remove" ng-if="!model.value.settings.isListView">Remove</localize>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -64,16 +64,15 @@
     </div>
 
     <div class="add-row" ng-show="!vm.noConfig">
-        <a class="umb-node-preview-add" ng-click="vm.addRow()" title="Add">
+        <button type="button" class="umb-node-preview-add" ng-click="vm.addRow()" title="Add">
             <localize key="general_add">Add</localize>
-        </a>
+        </button>
     </div>
-    
+
     <umb-empty-state ng-if="vm.noConfig">
-        <!--<localize key="tabulate_noConfig"></localize>-->
-        No config
+        <localize key="tabulate_noConfig"></localize>
     </umb-empty-state>
-    
+
     <umb-empty-state ng-if="vm.noResults">
         No results found for search term '{{vm.pagination.search}}'
     </umb-empty-state>
@@ -86,5 +85,7 @@
                     on-go-to-page="vm.goToPage">
 
     </umb-pagination>
+
+    <umb-load-indicator ng-if="vm.loading"></umb-load-indicator>
 
 </div>

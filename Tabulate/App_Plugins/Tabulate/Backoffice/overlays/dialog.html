@@ -7,7 +7,7 @@
     </umb-editor-header>
     <umb-editor-container>
         <umb-box>
-            <form novalidate val-form-manager class="umb-box-content tabulate edit-row form-horizontal" ng-controller="Tabulate.DialogController as vm">
+            <form novalidate val-form-manager class="umb-box-content tabulate edit-row form-horizontal" ng-controller="Tabulate.Dialog.Controller as vm">
                 <umb-control-group label="{{ c.displayName }}" ng-repeat="c in model.config.columns track by $index" ng-class="{ 'block-form' : c.type === 'rte' }">
                     <textarea ng-model="model.data[c.displayName]" ng-if="c.type === 'textarea'"></textarea>
 

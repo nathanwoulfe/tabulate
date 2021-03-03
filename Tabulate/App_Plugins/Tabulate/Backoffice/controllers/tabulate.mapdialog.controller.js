@@ -1,7 +1,8 @@
-﻿(() => {
+﻿export class TabulateMapDialogController {
 
-    function tabulateMapDialogController($scope) {
+    static name = "Tabulate.MapDialog.Controller";
 
+    constructor($scope) {
         const map = new google.maps.Map(document.getElementById('map'),
             {
                 zoom: 14,
@@ -25,7 +26,4 @@
             dragend(event);
         });
     }
-     
-    angular.module('tabulate').controller('Tabulate.MapDialogController', ['$scope', tabulateMapDialogController]);
-
-})();
+}

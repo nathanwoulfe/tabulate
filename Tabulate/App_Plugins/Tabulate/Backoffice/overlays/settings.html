@@ -7,11 +7,11 @@
     </umb-editor-header>
 
     <umb-editor-container>
-        <div class="tabulate settings" ng-controller="Tabulate.SettingsController as vm">
+        <div class="tabulate settings" ng-controller="Tabulate.Settings.Controller as vm">
 
             <umb-box>
                 <umb-box-header title="Add column" description="For geocoded data use 'Address' as a column name"></umb-box-header>
-                <umb-box-content class="form-horizontal umb-grid">
+                <umb-box-content class="form-horizontal">
                     <umb-control-group label="Column display name">
                         <input type="text" name="new-column-name" ng-model="vm.newColumnName" />
                     </umb-control-group>
@@ -21,9 +21,10 @@
                     </umb-control-group>
                     
                     <div class="umb-add-row">
-                        <a href="" class="iconBox ng-scope" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
-                            <i class=" icon icon-add" title="Add" localize="title"></i>
-                        </a>
+                        <button type="button" class="iconBox ng-scope" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
+                            <localize class="sr-only" key="general_add">Add</localize>
+                            <i class=" icon icon-add" title="Add"></i>
+                        </button>
                     </div>
                 </umb-box-content>
             </umb-box>
@@ -42,12 +43,15 @@
                             </thead>
                             <tbody>
                                 <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
-                                    <td><input type="text" ng-model="c.displayName" ng-change="changedColumn($index)" /></td>
+                                    <td><input type="text" ng-model="c.displayName" ng-change="vm.changedColumn($index)" /></td>
                                     <td>
                                         <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in vm.types" ng-change="vm.changedColumn($index)"></select>
                                     </td>
                                     <td>
-                                        <a class="umb-node-preview__action umb-node-preview__action--red" title="Remove" href="" ng-click="vm.removeColumn($index)"><localize key="general_remove">Remove</localize></a>
+                                        <button type="button" class="umb-node-preview__action umb-node-preview__action--red" title="Remove" ng-click="vm.removeColumn($index)">
+                                            <localize class="sr-only" key="general_remove">Remove</localize>
+                                            <i class="icon icon-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -82,16 +86,16 @@
                 <umb-box-content class="form-horizontal">
                     <div class="export-type m-b-10">
                         Show:
-                        <button ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}" prevent-default>JSON</button>
-                        <button ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}" prevent-default>CSV</button>
+                        <button type="button" ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}">JSON</button>
+                        <button type="button" ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}">CSV</button>
                     </div>
 
                     <textarea ng-model="vm.importExport" class="m-b-10" style="width:100%" rows="10"></textarea>
 
                     <!-- download as -->
                     <div class="download-wrapper d-flex">
-                        <button class="btn btn-default" ng-hide="!model.data" ng-click="vm.download()" prevent-default>Download</button>
-                        <button class="btn btn-default" ng-disabled="vm.importDisabled" ng-click="vm.import()" type="button" prevent-default>Import</button>
+                        <button type="button" class="btn btn-default" ng-hide="!model.data" ng-click="vm.download()">Download</button>
+                        <button type="button" class="btn btn-default" ng-disabled="vm.importDisabled" ng-click="vm.import()">Import</button>
                     </div>
                 </umb-box-content>
             </umb-box>
@@ -120,18 +124,20 @@
                                     <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
                                 </td>
                                 <td>
-                                    <a prevent-default href="" title="Remove mapping" ng-click="vm.removeMapping($index)">
-                                        <i class="icon icon-remove"></i>
-                                    </a>
+                                    <button type="button" class="btn btn-reset" title="Remove mapping" ng-click="vm.removeMapping($index)">
+                                        <localize class="sr-only" key="general_remove">Remove</localize>
+                                        <i class="icon icon-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <a prevent-default href="" title="Add"
-                   ng-click="vm.addEmptyItem()">
+                <button type="button" title="Add" class="btn btn-reset"
+                        ng-click="vm.addEmptyItem()">
+                    <localize class="sr-only" key="general_add">Add</localize>
                     <i class="icon icon-add"></i>
-                </a>
+                </button>
             </div>
         </div>
 

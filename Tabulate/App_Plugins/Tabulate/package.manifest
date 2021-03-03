@@ -8,8 +8,6 @@
                 view: "~/App_Plugins/tabulate/backoffice/views/tabulate.html",
 				valueType: 'JSON'
             },
-			icon: "icon-list",
-			group: "Lists",
 			prevalues: {
 				fields: [
 					{
@@ -18,14 +16,21 @@
 						view: "boolean"
 					},
 					{
-						label: "Admin-only settings",
-						key: "adminOnly",
-						view: "boolean"
+						label: "Can access settings",
+						key: "canAccessSettings",
+						description: "Comma-separated list of group aliases to have access to Tabulate settings",
+						view: 'textstring'
 					},
 					{
 						label: "Custom view",
 						key: "customView",
 						description: "Path to a custom view for rendering add/edit dialogs",
+						view: 'textstring'
+					},
+					{
+						label: "Custom view size",
+						key: "customViewSize",
+						description: "Overlay size for the custom ('small', 'medium', 'large')",
 						view: 'textstring'
 					},
 					{
@@ -46,13 +51,9 @@
     ],
     //array of files we want to inject into the application on app_start
     javascript: [
-		'~/App_Plugins/tabulate/backoffice/app.js',
-		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.controller.js',
-		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.dialog.controller.js',
-		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.mapdialog.controller.js',		
-		'~/App_Plugins/tabulate/backoffice/controllers/tabulate.settings.controller.js',
-		'~/App_Plugins/tabulate/backoffice/resources/tabulate.resources.js',
-		'~/App_Plugins/tabulate/backoffice/resources/tabulatepaging.service.js',
-		'~/App_Plugins/tabulate/backoffice/filters/bindhtml.filter.js'
+		'~/App_Plugins/tabulate/backoffice/js/tabulate.js'
+	],
+	css: [
+		'~/App_Plugins/tabulate/backoffice/styles.css'
     ]
 }

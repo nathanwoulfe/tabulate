@@ -48,12 +48,13 @@
     <Content Include="App_Plugins\Tabulate\Backoffice\controllers\tabulate.dialog.controller.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\controllers\tabulate.mapdialog.controller.js" />
     <Content Include="App_Plugins\Tabulate\Backoffice\controllers\tabulate.settings.controller.js" />
-    <Content Include="App_Plugins\Tabulate\Backoffice\filters\bindhtml.filter.js" />
-    <Content Include="App_Plugins\Tabulate\Backoffice\resources\tabulate.resources.js" />
-    <Content Include="App_Plugins\Tabulate\Backoffice\resources\tabulatepaging.service.js" />
-    <Content Include="App_Plugins\Tabulate\Backoffice\views\dialog.html" />
-    <Content Include="App_Plugins\Tabulate\Backoffice\views\mapDialog.html" />
-    <Content Include="App_Plugins\Tabulate\Backoffice\views\settings.html" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\controllers\_controllersModule.js" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\resources\tabulate.resource.js" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\resources\tabulate.paging.service.js" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\resources\_resourcesModule.js" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\overlays\dialog.html" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\overlays\mapDialog.html" />
+    <Content Include="App_Plugins\Tabulate\Backoffice\overlays\settings.html" />
     <Content Include="App_Plugins\Tabulate\Backoffice\views\tabulate.html" />
     <Content Include="App_Plugins\Tabulate\Backoffice\style.css.map" />
     <Content Include="App_Plugins\Tabulate\Backoffice\style.scss" />
@@ -66,20 +67,25 @@
     <Compile Include="Models\TabulateModel.cs" />
     <Compile Include="TabulateValueConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TabulateComponent.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gulpfile.babel.js" />
+    <Content Include="gulp\clean.js" />
+    <Content Include="gulp\config.js" />
+    <Content Include="gulp\js.js" />
+    <Content Include="gulp\scss.js" />
+    <Content Include="gulp\views.js" />
     <Content Include="package.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Plugins\Tabulate\Lang\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\Tabulate\dist.manifest" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="App_Plugins\Tabulate\package.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="babel.config.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -111,6 +117,9 @@
     </Reference>
     <Reference Include="Umbraco.Core, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.8.3.1\lib\net472\Umbraco.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Web">
+      <HintPath>..\packages\UmbracoCms.Web.8.8.0\lib\net472\Umbraco.Web.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup>
