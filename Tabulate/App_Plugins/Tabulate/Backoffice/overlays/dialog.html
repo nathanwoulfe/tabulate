@@ -21,7 +21,7 @@
                     <div ng-if="c.displayName === 'Address' && vm.hasGeocodedAddress" class="geocoded-property">
                         <label><strong>Latitude:</strong> {{ model.data.lat }}</label>
                         <label><strong>Longitude:</strong> {{ model.data.lng }}</label>
-                        <button class="btn btn-default" ng-click="vm.viewLocation()" prevent-default><i class="icon icon-map"></i> Update address coordinates</button>
+                        <button class="btn btn-default" ng-click="vm.viewLocation()" type="button"><i class="icon icon-map"></i> Update address coordinates</button>
                     </div>
                 </umb-control-group>
             </form>

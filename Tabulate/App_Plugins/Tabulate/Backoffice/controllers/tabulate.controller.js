@@ -105,7 +105,7 @@
     };
 
     // iterate the model data, assign each object an id
-    setIds = () => this.data.forEach((o, i) => o._id = i);
+    setIds = () => this.data.forEach((o, i) => o ? o._id = i : {});
 
     // get/set the sort order for the model, apply sort filter if necessary
     // if sorting is manual, the order is unchanged
@@ -218,7 +218,7 @@
                 this.setRteFields(model);
 
                 // geocode the model and add it to the model
-                let newItem = this.mapsLoaded ? this.tabulateResource.geocode(model.data) : model.data;
+                let newItem = this.mapsLoaded ? this.tabulateResource.geocode(model) : model;
                 newItem = this.tabulateResource.setLabels(newItem, true, this.settings.label);
 
                 this.data.push(newItem);
@@ -255,8 +255,8 @@
 
                 // if the model has a new address, geocode it
                 // then store the model in the model
-                model.data = this.tabulateResource.setLabels(model.data, true, this.settings.label);
-                this.data[$index] = model.recode === true && this.mapsLoaded ? this.tabulateResource.geocode(model.data) : model.data;
+                model = this.tabulateResource.setLabels(model, true, this.settings.label);
+                this.data[$index] = model.recode === true && this.mapsLoaded ? this.tabulateResource.geocode(model) : model;
 
                 if (model.remap !== undefined &&
                     model.remap.length > 0 &&

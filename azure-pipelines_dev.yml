@@ -29,12 +29,13 @@ steps:
     path: packages 
   displayName: Cache NuGet packages
 
-- task: RestoreAndSaveCache@1
+- task: Cache@2
   inputs:
-    keyfile: '**/package-lock.json, !**/node_modules/**/package-lock.json, !**/.*/**/package-lock.json'
-    targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-    vstsFeed: '3624e741-8a14-4ebc-b8cc-6421d00734ad'
-    platformIndependent: true
+    key: 'npm | "$(Agent.OS)" | package-lock.json'
+    restoreKeys: |
+       npm | "$(Agent.OS)"
+    path: $(npm_config_cache)
+  displayName: Cache npm
 
 - script: npm ci
   workingDirectory: 'Tabulate'
