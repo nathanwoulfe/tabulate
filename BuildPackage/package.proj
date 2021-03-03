@@ -189,7 +189,7 @@
           BasePath="$(BuildNuGetDir)"
           Version="$(ProductVersion)"
           OutputDirectory="$(ArtifactsDir)"
-          Symbols="true" />
+          Symbols="false" />
 
     <RemoveDir Directories="$(BuildUmbDir)" Condition="Exists('$(BuildUmbDir)')" />
     <RemoveDir Directories="$(BuildNuGetDir)" Condition="Exists('$(BuildNuGetDir)')" />
