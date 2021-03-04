@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="babel.config.json" />
+    <Content Include="package-lock.json" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
