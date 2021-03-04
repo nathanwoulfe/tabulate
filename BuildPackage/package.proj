@@ -75,7 +75,7 @@
     <BuildUmbDir>$(MSBuildProjectDirectory)\_umbraco</BuildUmbDir>
     <BuildNuGetDir>$(MSBuildProjectDirectory)\_nuget</BuildNuGetDir>
     <ArtifactsDir>$(MSBuildProjectDirectory)\artifacts</ArtifactsDir>
-    <GruntProjectDir>$(RootDir)\dist</GruntProjectDir>
+    <GruntProjectDir>$(RootDir)\tabulate\dist</GruntProjectDir>
   </PropertyGroup>
 
   <!-- TARGETS -->
