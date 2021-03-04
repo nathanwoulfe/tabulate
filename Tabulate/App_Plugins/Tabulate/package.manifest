@@ -54,6 +54,6 @@
 		'~/App_Plugins/tabulate/backoffice/js/tabulate.js'
 	],
 	css: [
-		'~/App_Plugins/tabulate/backoffice/styles.css'
+		'~/App_Plugins/tabulate/backoffice/style.min.css'
     ]
 }
