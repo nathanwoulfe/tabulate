@@ -8,7 +8,7 @@ variables:
   solution: '**/Tabulate.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  buildVersion: '3.1.0'
+  buildVersion: '3.2.0'
   buildBranch: 'master'
   packageSuffix: 'rtm'
   repoTag: 'true'

@@ -19,7 +19,7 @@
                     <umb-control-group label="Column input type">
                         <select name="new-column-type" ng-model="vm.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
                     </umb-control-group>
-                    
+
                     <div class="umb-add-row">
                         <button type="button" class="iconBox ng-scope" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
                             <localize class="sr-only" key="general_add">Add</localize>
@@ -82,7 +82,7 @@
                 </umb-box-content>
             </umb-box>
             <umb-box>
-                <umb-box-header title="Data" description="Importing will overwrite all existing data and reset the column config (column type will default to string)"></umb-box-header>
+                <umb-box-header title="Data" description="Importing will overwrite all existing data"></umb-box-header>
                 <umb-box-content class="form-horizontal">
                     <div class="export-type m-b-10">
                         Show:
@@ -94,8 +94,12 @@
 
                     <!-- download as -->
                     <div class="download-wrapper d-flex">
-                        <button type="button" class="btn btn-default" ng-hide="!model.data" ng-click="vm.download()">Download</button>
-                        <button type="button" class="btn btn-default" ng-disabled="vm.importDisabled" ng-click="vm.import()">Import</button>
+                        <button type="button" class="btn btn-info" ng-hide="!model.data" ng-click="vm.download()">Download</button>
+                        <button type="button" class="btn btn-warning" ng-disabled="vm.importDisabled" ng-click="vm.import()">Import</button>
+                    </div>
+
+                    <div class="m-t-10 alert alert-{{ vm.importAlert.state }}" ng-if="vm.importAlert">
+                        {{ vm.importAlert.message }}
                     </div>
                 </umb-box-content>
             </umb-box>

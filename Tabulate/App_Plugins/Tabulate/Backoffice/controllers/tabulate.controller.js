@@ -14,6 +14,7 @@
 
         this.basePath = Umbraco.Sys.ServerVariables.Tabulate.pluginPath;
         this.dialogPath = $scope.model.config.customView || `${this.basePath}/overlays/dialog.html`;
+        this.viewSize = $scope.model.config.customView ? $scope.model.config.overlaySize : 'small';
 
         // hide the umbraco label if the view is set to wide
         this.$scope.model.hideLabel = $scope.model.config.wide;
@@ -199,22 +200,30 @@
 
 
     /**
+     * Get the generic base object for the add/edit overlay
+     * Data and handlers are set later
+     * @param {any} title
+     * @param {any} type
+     */
+    getOverlayBase = (title, type) => {
+        return {
+            view: this.dialogPath,
+            title,
+            type,
+            size: this.viewSize,
+            config: this.settings,
+            rteConfig: this.rteConfig,
+        }
+    }
+
+    /**
      * Open the overlay to add a new row
      */
     addRow = () => {
-
-        const addOverlay = {
-            view: this.dialogPath,
-            title: 'Add row',
-            type: 'add',
-            size: 'small',
+        const addOverlay = { ...this.getOverlayBase('Add row', 'add'),
             data: this.emptyModel(),
-            config: this.settings,
-            rteConfig: this.rteConfig,
             submit: model => {
-
                 this.editorService.close();
-
                 this.setRteFields(model);
 
                 // geocode the model and add it to the model
@@ -223,11 +232,7 @@
 
                 this.data.push(newItem);
 
-                this.updateUmbracoModel();
-
-                this.setSorting();
-                this.setIds();
-                this.setPaging();
+                this.afterAddEditRow();
             },
             close: () => this.editorService.close()            
         };
@@ -240,17 +245,10 @@
      * @param {any} $index
      */
     editRow = $index => {
-        const editOverlay = {
-            view: this.dialogPath,
-            title: 'Edit row',
-            type: 'edit',
-            size: 'small',
+        const editOverlay = { ...this.getOverlayBase('Edit row', 'edit'),
             data: this.data[$index],
-            config: this.settings,
-            rteConfig: this.rteConfig,
             submit: model => {
                 this.editorService.close();
-
                 this.setRteFields(model);
 
                 // if the model has a new address, geocode it
@@ -265,17 +263,20 @@
                     this.tabulateResource.updateMappedEditor(model, undefined, this.settings.mappings);
                 }
 
-                this.updateUmbracoModel();
-
-                this.setSorting();
-                this.setIds();
-                this.setPaging();
+                this.afterAddEditRow();
             },
             close: () => this.editorService.close()
         };
 
         this.editorService.open(editOverlay);
     };
+
+    afterAddEditRow = () => {
+        this.updateUmbracoModel();
+        this.setSorting();
+        this.setIds();
+        this.setPaging();
+    }
 
     /**
      * Remove an existing row from the collection
@@ -345,7 +346,7 @@
         const settingsOverlay = {
             view: `${this.basePath}/overlays/settings.html`,
             title: 'Settings',
-            size: 'small',
+            size: 'medium',
             data: this.data,
             config: this.settings,
             submit: model => {

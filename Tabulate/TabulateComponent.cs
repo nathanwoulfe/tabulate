@@ -28,6 +28,7 @@ namespace Tabulate
 
         public void Terminate()
         {
+            ServerVariablesParser.Parsing -= ServerVariablesParser_Parsing;
         }
 
         private void ServerVariablesParser_Parsing(object sender, IDictionary<string, object> e)

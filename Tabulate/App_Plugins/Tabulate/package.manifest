@@ -28,9 +28,9 @@
 						view: 'textstring'
 					},
 					{
-						label: "Custom view size",
+						label: "Overlay size",
 						key: "customViewSize",
-						description: "Overlay size for the custom ('small', 'medium', 'large')",
+						description: "Overlay size for edit and custom views ('small', 'medium', 'large')",
 						view: 'textstring'
 					},
 					{

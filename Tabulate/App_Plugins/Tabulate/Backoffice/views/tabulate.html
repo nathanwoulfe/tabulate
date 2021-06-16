@@ -49,7 +49,7 @@
                             <i class="icon icon-navigation-vertical" ng-if="model.value.settings.isListView"></i>
                             <localize key="general_sort" ng-if="!model.value.settings.isListView">Sort</localize>
                         </button>
-                        <button type="button" class="umb-node-preview__action" title="Disable" ng-click="vm.disableRow(o._id)">
+                        <button type="button" class="umb-node-preview__action" title="{{ o.disabled ? 'Enable' : 'Disable' }}" ng-click="vm.disableRow(o._id)">
                             <i class="icon icon-power" ng-if="model.value.settings.isListView"></i>
                             <span ng-if="!model.value.settings.isListView" ng-bind="o.disabled ? 'Enable' : 'Disable'"></span>
                         </button>

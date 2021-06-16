@@ -2,11 +2,10 @@
 
     static name = 'Tabulate.Settings.Controller';
 
-    constructor($scope, $filter, tabulateResource, notificationsService, overlayService) {
+    constructor($scope, $filter, tabulateResource, overlayService) {
         this.$scope = $scope;
         this.$filter = $filter;
         this.tabulateResource = tabulateResource;
-        this.noticationsService = notificationsService;
         this.overlayService = overlayService;
 
         this.importKeys = []; // array of header text from imported csv
@@ -14,6 +13,7 @@
 
         this.types = tabulateResource.fieldTypes();
         this.importDisabled = true;
+        this.importAlert = null;
         this.showing = 'json';
 
         this.$scope.model.columnsToRemove = []; // remove an existing column - need to handle data removal
@@ -41,16 +41,16 @@
 
         /* by default, disable the import button, if there is data, display in the view */
         if (this.$scope.model.data) {
-            this.importExport = JSON.stringify(this.$scope.model);
-        }
+            this.jsonSource = JSON.stringify(this.$scope.model.data);
+            this.csvSource = this.tabulateResource.JSONtoCSV(this.$scope.model.data, this.$scope.model.config.columns);
 
-        /**
-         * if the importexport value changes, through a direct edit or pasting in a new csv display the import button
-         */
-        this.watchImportExport = this.$scope.$watch(() => this.importExport, (newVal, oldVal) => {
-            if (newVal !== oldVal && newVal.length === 0) {
-                this.importDisabled = false;
-            }
+            this.show('json');
+        }        
+
+        // when the importExport value changes, only allow importing if that value
+        // is different to the original data for that type
+        this.watchImportExport = $scope.$watch(() => this.importExport, newVal => {
+            this.importDisabled = newVal === (this.showing === 'json' ? this.jsonSource : this.csvSource);            
         });
     }
 
@@ -109,15 +109,12 @@
 
     /**
      * display csv or json in the export textarea
+     * this triggers the watch to determine if the import button is enabled
      * @param {string} type => json or csv
      */
     show = type => {
-        this.importExport = type === 'csv'
-            ? this.tabulateResource.JSONtoCSV(this.$scope.model.data, this.$scope.model.config.columns)
-            : JSON.stringify(this.$scope.model);
-
-        this.importDisabled = true;
         this.showing = type;
+        this.importExport = this.showing === 'json' ? this.jsonSource : this.csvSource;
     }
 
     /**
@@ -202,7 +199,7 @@
             return json.replace(/\},/g, '},\r\n');
         }
         catch (e) {
-            this.noticationsService.error('Import error', e);
+            this.setImportAlert('danger', 'Unable to convert CSV to JSON: ' + e);
             return '';
         }
     }
@@ -224,42 +221,21 @@
                 address[geoStr] = results[0].geometry.location;
             } else {
                 address[geoStr] = undefined;
-                this.notificationsService.error('Error', `Geocoding failed for address: ${address[p]}`);
+                this.setImportAlert('danger', `Geocoding failed for address: ${address[p]}`);
             }
 
             /* recurse through the data object */
             if (index + 1 < l) {
                 this.geocodeAddresses(index + 1, geoStr, p);
-            } else {
-                this.notificationsService.success('Success', 'Geocoding completed successfully');
             }
         });
     }
 
 
     /**
-     * imports new data from csv
-     */
-    importCsv = () => {
-
-        /* import will clear the existing model value */
-        if (this.importExport.length) {
-            this.overlayService.confirm({
-                confirmMessage: 'Importing will overwrite all existing data. Continue?',
-                hideHeader: true,
-                submit: _ => {
-                    this.doImportCsv();
-                    this.overlayService.close();
-                },
-                close: () => this.overlayService.close()
-            });
-        }
-    }
-
-    /**
      * 
      * */
-    doImportCsv = () => {
+    importCsv = () => {
         /* parse the csv and push into the data object, provided it is no longer than 250 records */
         const csvToJson = JSON.parse(this.convertCsvToJson(this.importExport));
         if (csvToJson.length > 0 && csvToJson.length < 2510) {
@@ -275,7 +251,7 @@
                     this.geocoder = new google.maps.Geocoder();
                     this.geocodeAddresses(0, '_Address', 'Address');
                 } else {
-                    this.notificationsService.error('Error', 'Google maps API not available - geocoding failed');
+                    this.setImportAlert('danger', 'Google maps API not available - geocoding failed');
                 }
             }
 
@@ -288,12 +264,22 @@
                 });
             }
 
-            /* disable importing, set a flag for config changes and new data */
-            this.importExportDisabled = true;
-            this.$scope.model.configChanged = true;
+            this.afterImport();
+
         }
         else {
-            this.notificationsService.error('Error', 'Import failed - dataset must be between 1 and 250 records');
+            this.setImportAlert('danger', 'Import failed - dataset must be between 1 and 250 records');
+        }
+    }
+
+    /**
+     * */
+    importJson = () => {
+        try {
+            this.$scope.model.data = JSON.parse(this.importExport);
+            this.afterImport();
+        } catch (e) {
+            this.setImportAlert('danger', 'Import failed - unable to parse JSON input');
         }
     }
 
@@ -301,16 +287,34 @@
      * Import the pasted data into the current model
      */
     import = () => {
-        if (this.importExport[0] === '{') {
-            try {
-                this.$scope.model = JSON.parse(this.importExport);
-            } catch (e) {
-                alert('Invalid JSON input');
-            }
-        } else {
-            this.importCsv();
-        }
+        this.importAlert = null;
+
+        if (this.importExport.length) {
+            this.overlayService.confirm({
+                confirmMessage: 'Importing will overwrite all existing data. Continue?',
+                hideHeader: true,
+                submit: _ => {
+                    if (this.showing === 'json') {
+                        this.importJson();
+                    } else {
+                        this.importCsv();
+                    }
+
+                    this.overlayService.close();
+                },
+                close: () => this.overlayService.close()
+            });
+        }        
     }
+
+    afterImport = () => {
+        /* disable importing, set a flag for config changes and new data */
+        this.importDisabled = true;
+        this.$scope.model.configChanged = true;
+        this.setImportAlert('success', 'Import complete - submit to confirm');
+    }
+
+    setImportAlert = (state, message) => this.importAlert = { state, message };    
 
     /**
      *
