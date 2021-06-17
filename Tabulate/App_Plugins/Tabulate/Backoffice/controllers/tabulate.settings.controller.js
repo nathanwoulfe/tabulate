@@ -2,11 +2,12 @@
 
     static name = 'Tabulate.Settings.Controller';
 
-    constructor($scope, $filter, tabulateResource, overlayService) {
+    constructor($scope, $filter, tabulateResource, overlayService, editorState) {
         this.$scope = $scope;
         this.$filter = $filter;
         this.tabulateResource = tabulateResource;
         this.overlayService = overlayService;
+        this.editorState = editorState;
 
         this.importKeys = []; // array of header text from imported csv
         this.geocoder;
@@ -18,6 +19,9 @@
 
         this.$scope.model.columnsToRemove = []; // remove an existing column - need to handle data removal
         this.$scope.model.changes = []; // store a copy of the config object for comparison when the modal is submitted
+
+        // for mapping
+        this.getEditors();
 
         if (this.$scope.model.config.columns && this.$scope.model.config.columns.length) {
             for (let i = 0; i < this.$scope.model.config.columns.length; i += 1) {
@@ -67,45 +71,47 @@
         this.$scope.model.changes[columnIndex].newType = this.$scope.model.config.columns[columnIndex].type;
     }
 
-    // todo => how would this be managed with variants?
-    /* set values for the mappings - can map to any other tabulate instance on the node */
-    //this.tabulateEditors = [];
-    //editorState.current.tabs.forEach(v => {
-    //    v.properties.forEach(vv => {
-    //        if ($scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
-    //            this.tabulateEditors.push(vv);
-    //        }
-    //    });
-    //});
 
-    //this.setTargetEditorColumns = alias => {
-    //    if (alias !== undefined) {
-    //        this.tabulateEditors.forEach(v => {
-    //            if (v.alias === alias) {
-    //                this.targetEditorColumns = v.value.settings.columns;
-    //            }
-    //        });
-    //    }
-    //};
+    /**
+     * */
+    getEditors = () => {
+        // stores refs to other editors for mapping
+        this.tabulateEditors = [];
+        const activeVariant = this.editorState.current.variants.find(v => v.active);
+
+        /* set values for the mappings - can map to any other tabulate instance on the node */
+        activeVariant.tabs.forEach(v => {
+            v.properties.forEach(vv => {
+                if (this.$scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
+                    this.tabulateEditors.push(vv);
+                }
+            });
+        });
+    }
+
+    setTargetEditorColumns = alias => {
+        if (!alias) return;
+
+        const target = this.tabulateEditors.find(v => v.alias === alias);
+        if (target) {
+            this.targetEditorColumns = target.value.settings.columns;
+        }        
+    };
 
     /* add object to model */
-    //this.addEmptyItem = () => {
-    //    if ($scope.model.config.mappings === undefined) {
-    //        $scope.model.config.mappings = [];
-    //    }
+    addEmptyItem = () => {
+        if (!this.$scope.model.config.mappings) {
+            this.$scope.model.config.mappings = [];
+        }
 
-    //    $scope.model.config.mappings.push({});
-    //};
+        this.$scope.model.config.mappings.push({});
+    };
 
-    //*  remove object from the model */
-    //this.removeMapping = index => {
-    //    $scope.model.config.mappings.splice(index, 1);
-    //};
+    /*  remove object from the model */
+    removeMapping = index => this.$scope.model.config.mappings.splice(index, 1);    
 
-    //this.populateItem = (index, mapping) => {
-    //    $scope.model.config.mappings[index] = mapping;
-    //};
-
+    //populateItem = (index, mapping) => this.$scope.model.config.mappings[index] = mapping;
+    
 
     /**
      * display csv or json in the export textarea

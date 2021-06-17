@@ -21,9 +21,8 @@
                     </umb-control-group>
 
                     <div class="umb-add-row">
-                        <button type="button" class="iconBox ng-scope" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
-                            <localize class="sr-only" key="general_add">Add</localize>
-                            <i class=" icon icon-add" title="Add"></i>
+                        <button type="button" class="umb-node-preview-add" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
+                            <localize key="general_add">Add</localize>
                         </button>
                     </div>
                 </umb-box-content>
@@ -104,45 +103,46 @@
                 </umb-box-content>
             </umb-box>
 
-            <div class="umb-tab-pane tab-pane mappings-pane" id="tabulate-tab-3" ng-show="vm.tabulateEditors.length">
-                <p>Set references to other properties on this node - typically used as a typeahead source in a custom dialog</p>
-                <div class="control-group">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Target property</th>
-                                <th>Target object</th>
-                                <th>Source property</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="m in model.config.mappings track by $index" ng-init="vm.setTargetEditorColumns(m.targetEditor.alias)">
-                                <td>
-                                    <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
-                                </td>
-                                <td>
-                                    <select ng-show="m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
-                                </td>
-                                <td>
-                                    <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-reset" title="Remove mapping" ng-click="vm.removeMapping($index)">
-                                        <localize class="sr-only" key="general_remove">Remove</localize>
-                                        <i class="icon icon-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button type="button" title="Add" class="btn btn-reset"
-                        ng-click="vm.addEmptyItem()">
-                    <localize class="sr-only" key="general_add">Add</localize>
-                    <i class="icon icon-add"></i>
-                </button>
-            </div>
+            <umb-box ng-show="vm.tabulateEditors.length">
+                <umb-box-header title="Mappings" description="Set references to other properties on this node - typically used as a typeahead source in a custom dialog"></umb-box-header>
+                <umb-box-content>
+
+                    <div class="control-group" ng-if="model.config.mappings && model.config.mappings.length">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Target property</th>
+                                    <th>Target object</th>
+                                    <th>Source property</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="m in model.config.mappings track by $index" ng-init="vm.setTargetEditorColumns(m.targetEditor.alias)">
+                                    <td>
+                                        <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
+                                    </td>
+                                    <td>
+                                        <select ng-show="m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
+                                    </td>
+                                    <td>
+                                        <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-reset" title="Remove mapping" ng-click="vm.removeMapping($index)">
+                                            <localize class="sr-only" key="general_remove">Remove</localize>
+                                            <i class="icon icon-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" title="Add" class="umb-node-preview-add" ng-click="vm.addEmptyItem()">
+                        <localize key="general_add">Add</localize>
+                    </button>
+                </umb-box-content>
+            </umb-box>
         </div>
 
     </umb-editor-container>

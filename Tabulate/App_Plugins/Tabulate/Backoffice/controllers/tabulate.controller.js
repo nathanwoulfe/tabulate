@@ -45,7 +45,8 @@
         };
 
         const promises = [
-            tabulateResource.loadGoogleMaps($scope.model.config.mapsApiKey), authResource.getCurrentUser()
+            tabulateResource.loadGoogleMaps($scope.model.config.mapsApiKey),
+            authResource.getCurrentUser()
         ];
 
         this.loading = true;
@@ -96,7 +97,7 @@
                     pageIndex: 0
                 };
 
-                this.$scope.model.value = null;
+                this.$scope.model.value = [];
                 this.init();
 
                 this.overlayService.close();
@@ -222,12 +223,11 @@
     addRow = () => {
         const addOverlay = { ...this.getOverlayBase('Add row', 'add'),
             data: this.emptyModel(),
-            submit: model => {
-                this.editorService.close();
-                this.setRteFields(model);
+            submit: result => {
+                this.setRteFields(result);
 
                 // geocode the model and add it to the model
-                let newItem = this.mapsLoaded ? this.tabulateResource.geocode(model) : model;
+                let newItem = this.mapsLoaded ? this.tabulateResource.geocode(result) : result;
                 newItem = this.tabulateResource.setLabels(newItem, true, this.settings.label);
 
                 this.data.push(newItem);
@@ -248,9 +248,8 @@
         const editOverlay = { ...this.getOverlayBase('Edit row', 'edit'),
             data: this.data[$index],
             submit: model => {
-                this.editorService.close();
                 this.setRteFields(model);
-
+                console.log(model);
                 // if the model has a new address, geocode it
                 // then store the model in the model
                 model = this.tabulateResource.setLabels(model, true, this.settings.label);
@@ -272,6 +271,8 @@
     };
 
     afterAddEditRow = () => {
+        this.editorService.close();
+
         this.updateUmbracoModel();
         this.setSorting();
         this.setIds();
@@ -347,6 +348,7 @@
             view: `${this.basePath}/overlays/settings.html`,
             title: 'Settings',
             size: 'medium',
+            alias: this.$scope.model.alias,
             data: this.data,
             config: this.settings,
             submit: model => {
