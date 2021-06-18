@@ -8,7 +8,7 @@ variables:
   solution: '**/Tabulate.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Debug'
-  buildVersion: '3.2.0'
+  buildVersion: '4.0.0'
   buildBranch: 'master'
   packageSuffix: 'beta'
   npm_config_cache: $(Pipeline.Workspace)/.npm  

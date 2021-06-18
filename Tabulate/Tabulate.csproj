@@ -58,6 +58,7 @@
     <Content Include="App_Plugins\Tabulate\Backoffice\views\tabulate.html" />
     <Content Include="App_Plugins\Tabulate\Backoffice\style.css.map" />
     <Content Include="App_Plugins\Tabulate\Backoffice\style.scss" />
+    <Content Include="App_Plugins\Tabulate\Lang\en-US.xml" />
     <Content Include="Gruntfile.js" />
   </ItemGroup>
   <ItemGroup>
@@ -78,9 +79,7 @@
     <Content Include="gulp\views.js" />
     <Content Include="package.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Plugins\Tabulate\Lang\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="App_Plugins\Tabulate\package.manifest" />
   </ItemGroup>

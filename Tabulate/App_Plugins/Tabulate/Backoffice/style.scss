@@ -146,4 +146,19 @@
             display:block;
         }
     }
+
+    .linked-column-wrapper {
+        .twitter-typeahead {
+            display:block !important;
+        }
+
+        .tt-menu {
+            left:auto!important;
+            right:0!important;
+        }
+
+        .tt-hint {
+            width:100%!important;
+        }
+    }
 }

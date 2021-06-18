@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="en" intName="English (US)" localName="English (US)" lcid="" culture="en-US">
+  <area alias="tabulate">
+    <key alias="addColumn">Add column</key>    
+    <key alias="columnDisplayName">Column display name</key>
+    <key alias="columnInputType">Column input type</key>
+    <key alias="currentColumns">Current columns</key>
+    <key alias="targetProperty">Target property</key>
+    <key alias="targetColumn">Target column</key>
+    <key alias="sourceColumn">Source column</key>
+    <key alias="perPage">Per page</key>
+    <key alias="data">Data</key>
+    <key alias="mappings">Mappings</key>
+    <key alias="noConfig">Tabulate has not been configured</key>
+    <key alias="updateAddressCoords">Update address coordinates</key>
+    <key alias="latitude">Latitude</key>
+    <key alias="longitude">Longitude</key>
+    
+    <key alias="addColumnDescription">For geocoded data use 'Address' as a column name</key>
+    <key alias="labelDescription">Label is case-sensitive. Reference column names using {} notation. Will default to the first column display name</key>
+    <key alias="listViewDescription">Display data as a list view. This overrides any label value defined above</key>
+    <key alias="dataDescription">Importing will overwrite all existing data</key>
+    <key alias="mappingsDescription">Set references to other properties on this node - changes to the source column in this Tabulate instance will update the target column</key>
+    <key alias="repositionMarkerDescription">Repositioning the marker will update the stored lat/lng pair, but will not modify the address text</key>
+  </area>
+</language>

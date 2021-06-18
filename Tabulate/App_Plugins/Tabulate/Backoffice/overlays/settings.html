@@ -10,13 +10,13 @@
         <div class="tabulate settings" ng-controller="Tabulate.Settings.Controller as vm">
 
             <umb-box>
-                <umb-box-header title="Add column" description="For geocoded data use 'Address' as a column name"></umb-box-header>
+                <umb-box-header title-key="tabulate_addColumn" description-key="tabulate_addColumnDescription"></umb-box-header>
                 <umb-box-content class="form-horizontal">
-                    <umb-control-group label="Column display name">
+                    <umb-control-group label="@tabulate_columnDisplayName">
                         <input type="text" name="new-column-name" ng-model="vm.newColumnName" />
                     </umb-control-group>
 
-                    <umb-control-group label="Column input type">
+                    <umb-control-group label="@tabulate_columnInputType">
                         <select name="new-column-type" ng-model="vm.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
                     </umb-control-group>
 
@@ -29,14 +29,14 @@
             </umb-box>
 
             <umb-box>
-                <umb-box-header title="Current columns"></umb-box-header>
+                <umb-box-header title-key="tabulate_currentColumns"></umb-box-header>
                 <umb-box-content class="form-horizontal">
                     <umb-control-group hide-label="true">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Type</th>
+                                    <th><localize key="general_name"></localize></th>
+                                    <th><localize key="general_type"></localize></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -47,27 +47,30 @@
                                         <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in vm.types" ng-change="vm.changedColumn($index)"></select>
                                     </td>
                                     <td>
-                                        <button type="button" class="umb-node-preview__action umb-node-preview__action--red" title="Remove" ng-click="vm.removeColumn($index)">
+                                        <button type="button" class="umb-node-preview__action umb-node-preview__action--red" ng-click="vm.removeColumn($index)">
                                             <localize class="sr-only" key="general_remove">Remove</localize>
                                             <i class="icon icon-trash"></i>
                                         </button>
+                                    </td>
+                                    <td ng-if="c.type === 'linked'">
+                                        <textarea ng-model="c.source"></textarea>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </umb-control-group>
 
-                    <umb-control-group label="Label" description="Label is case-sensitive. Reference column names using {} notation. Will default to {{ '{' + model.config.columns[0].displayName + '}' }}">
+                    <umb-control-group label="@general_label" description="@tabulate_labelDescription">
                         <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
                     </umb-control-group>
 
-                    <umb-control-group label="List view" description="Display data as a list view. This overrides any label value defined above.">
+                    <umb-control-group label="@general_listView" description="@tabulate_listViewDescription">
                         <umb-toggle checked="model.config.isListView"
                                     on-click="model.config.isListView = !model.config.isListView"
                                     show-labels="{{'false'}}"></umb-toggle>
                     </umb-control-group>
 
-                    <umb-control-group label="Order by">
+                    <umb-control-group label="@general_orderBy">
                         <select name="sort-order" ng-model="model.config.sortOrder" ng-change="vm.sort()">
                             <option value="A">Ascending</option>
                             <option value="D">Descending</option>
@@ -75,16 +78,16 @@
                         </select>
                     </umb-control-group>
 
-                    <umb-control-group label="Per page">
+                    <umb-control-group label="@tabulate_perPage">
                         <input type="number" name="per-page" ng-model="model.config.numPerPage" />
                     </umb-control-group>
                 </umb-box-content>
             </umb-box>
             <umb-box>
-                <umb-box-header title="Data" description="Importing will overwrite all existing data"></umb-box-header>
+                <umb-box-header title-key="tabulate_data" description-key="tabulate_dataDescription"></umb-box-header>
                 <umb-box-content class="form-horizontal">
                     <div class="export-type m-b-10">
-                        Show:
+                        <localize key="general_show"></localize>:
                         <button type="button" ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}">JSON</button>
                         <button type="button" ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}">CSV</button>
                     </div>
@@ -93,8 +96,12 @@
 
                     <!-- download as -->
                     <div class="download-wrapper d-flex">
-                        <button type="button" class="btn btn-info" ng-hide="!model.data" ng-click="vm.download()">Download</button>
-                        <button type="button" class="btn btn-warning" ng-disabled="vm.importDisabled" ng-click="vm.import()">Import</button>
+                        <button type="button" class="btn btn-info" ng-hide="!model.data" ng-click="vm.download()">
+                            <localize key="general_download"></localize>
+                        </button>
+                        <button type="button" class="btn btn-warning" ng-disabled="vm.importDisabled" ng-click="vm.import()">
+                            <localize key="general_import"></localize>
+                        </button>
                     </div>
 
                     <div class="m-t-10 alert alert-{{ vm.importAlert.state }}" ng-if="vm.importAlert">
@@ -104,16 +111,16 @@
             </umb-box>
 
             <umb-box ng-show="vm.tabulateEditors.length">
-                <umb-box-header title="Mappings" description="Set references to other properties on this node - typically used as a typeahead source in a custom dialog"></umb-box-header>
+                <umb-box-header title-key="tabulate_mappings" description-key="tabulate_mappingsDescription"></umb-box-header>
                 <umb-box-content>
 
                     <div class="control-group" ng-if="model.config.mappings && model.config.mappings.length">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Target property</th>
-                                    <th>Target object</th>
-                                    <th>Source property</th>
+                                    <th><localize key="tabulate_targetProperty"></localize></th>
+                                    <th><localize key="tabulate_targetColumn"></localize></th>
+                                    <th><localize key="tabulate_sourceColumn"></localize></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -123,13 +130,13 @@
                                         <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
                                     </td>
                                     <td>
-                                        <select ng-show="m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
+                                        <select ng-disabled="!m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
                                     </td>
                                     <td>
-                                        <select ng-show="m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
+                                        <select ng-disabled="!m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-reset" title="Remove mapping" ng-click="vm.removeMapping($index)">
+                                        <button type="button" class="btn btn-reset" ng-click="vm.removeMapping($index)">
                                             <localize class="sr-only" key="general_remove">Remove</localize>
                                             <i class="icon icon-trash"></i>
                                         </button>

@@ -21,7 +21,9 @@
         this.$scope.model.changes = []; // store a copy of the config object for comparison when the modal is submitted
 
         // for mapping
-        this.getEditors();
+        this.tabulateEditors = tabulateResource.getTabulateEditors(
+            this.$scope.model.alias,
+            this.editorState.current.variants.find(v => v.active));
 
         if (this.$scope.model.config.columns && this.$scope.model.config.columns.length) {
             for (let i = 0; i < this.$scope.model.config.columns.length; i += 1) {
@@ -71,24 +73,6 @@
         this.$scope.model.changes[columnIndex].newType = this.$scope.model.config.columns[columnIndex].type;
     }
 
-
-    /**
-     * */
-    getEditors = () => {
-        // stores refs to other editors for mapping
-        this.tabulateEditors = [];
-        const activeVariant = this.editorState.current.variants.find(v => v.active);
-
-        /* set values for the mappings - can map to any other tabulate instance on the node */
-        activeVariant.tabs.forEach(v => {
-            v.properties.forEach(vv => {
-                if (this.$scope.model.alias !== vv.alias && vv.editor === 'NW.Tabulate') {
-                    this.tabulateEditors.push(vv);
-                }
-            });
-        });
-    }
-
     setTargetEditorColumns = alias => {
         if (!alias) return;
 
@@ -108,10 +92,7 @@
     };
 
     /*  remove object from the model */
-    removeMapping = index => this.$scope.model.config.mappings.splice(index, 1);    
-
-    //populateItem = (index, mapping) => this.$scope.model.config.mappings[index] = mapping;
-    
+    removeMapping = index => this.$scope.model.config.mappings.splice(index, 1);        
 
     /**
      * display csv or json in the export textarea

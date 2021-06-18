@@ -1,10 +1,13 @@
-﻿export class TabulateController {
+﻿import { v4 as uuidv4 } from 'uuid';
+
+export class TabulateController {
 
     static name = 'Tabulate.Controller';
 
-    constructor($scope, $q, $filter, authResource, notificationsService, editorService, overlayService, tabulateResource, tabulatePagingService) {
+    constructor($scope, $q, $filter, editorState, authResource, notificationsService, editorService, overlayService, tabulateResource, tabulatePagingService) {
         this.$scope = $scope;
         this.$filter = $filter;
+        this.editorState = editorState;
         this.authResource = authResource;
         this.notificationsService = notificationsService;
         this.editorService = editorService;
@@ -40,7 +43,6 @@
             handle: '.sort-handle',
             stop: () => {
                 this.$scope.model.value.data = this.data = this.pagination.items;
-                this.setIds();
             }
         };
 
@@ -60,8 +62,6 @@
             });
     }
 
-
-
     // this is simply for convenience - update data/settings rather than $scope.model.value.data
     // need to remember though to call it whenever the data or settings objects are modified
     updateUmbracoModel = () => {
@@ -71,11 +71,13 @@
 
     // helper function to generate a model based on config values
     emptyModel = () => {
-        let newModel = {};
+        let newModel = {
+            _guid: uuidv4()
+        };
+
         this.settings.columns.forEach(c => {
             newModel[c.displayName] = '';
         });
-        newModel._id = this.data.length;
 
         return newModel;
     };
@@ -106,8 +108,6 @@
         });
     };
 
-    // iterate the model data, assign each object an id
-    setIds = () => this.data.forEach((o, i) => o ? o._id = i : {});
 
     // get/set the sort order for the model, apply sort filter if necessary
     // if sorting is manual, the order is unchanged
@@ -228,7 +228,7 @@
 
                 // geocode the model and add it to the model
                 let newItem = this.mapsLoaded ? this.tabulateResource.geocode(result) : result;
-                newItem = this.tabulateResource.setLabels(newItem, true, this.settings.label);
+                this.tabulateResource.setLabels(newItem, true, this.settings.label);
 
                 this.data.push(newItem);
 
@@ -242,25 +242,25 @@
 
     /**
      * Open the overlay to edit an existing row
-     * @param {any} $index
+     * @param {any} guid
      */
-    editRow = $index => {
+    editRow = guid => {
+        const idx = this.data.findIndex(d => d._guid === guid);
+        const originalValue = { ...this.data[idx] };
+
         const editOverlay = { ...this.getOverlayBase('Edit row', 'edit'),
-            data: this.data[$index],
+            data: this.data[idx],
             submit: model => {
+                // model is a reference to this.data[idx]
                 this.setRteFields(model);
-                console.log(model);
+
                 // if the model has a new address, geocode it
                 // then store the model in the model
-                model = this.tabulateResource.setLabels(model, true, this.settings.label);
-                this.data[$index] = model.recode === true && this.mapsLoaded ? this.tabulateResource.geocode(model) : model;
+                this.tabulateResource.setLabels(model, true, this.settings.label);
+                model.recode && this.mapsLoaded ? this.tabulateResource.geocode(model) : {};      
 
-                if (model.remap !== undefined &&
-                    model.remap.length > 0 &&
-                    this.settings.mappings &&
-                    this.settings.mappings.length) {
-                    this.tabulateResource.updateMappedEditor(model, undefined, this.settings.mappings);
-                }
+                // send new, old and mappings
+                this.tabulateResource.updateMappedEditor(model, originalValue, this.settings.mappings, this.$scope.model.alias, this.getCurrentVariant());         
 
                 this.afterAddEditRow();
             },
@@ -275,24 +275,28 @@
 
         this.updateUmbracoModel();
         this.setSorting();
-        this.setIds();
         this.setPaging();
     }
 
+    getCurrentVariant = () => 
+        this.editorState.current.variants.find(v => v.active);
+    
+
     /**
      * Remove an existing row from the collection
-     * @param {any} $index
+     * @param {any} guid
      */
-    removeRow = $index => {
+    removeRow = guid => {
+        const idx = this.data.findIndex(d => d._guid === guid);
+
         if (this.data.length) {
             this.overlayService.confirm({
                 confirmMessage: 'Are you sure you want to remove this item?',
                 hideHeader: true,
                 submit: () => {
-                    this.data.splice($index, 1);
+                    this.data.splice(idx, 1);
 
                     this.updateUmbracoModel();
-                    this.setIds();
                     this.setPaging();
 
                     this.overlayService.close();
@@ -305,16 +309,15 @@
 
     /**
      * Set the disabled state for the selected row
-     * @param {any} $index
+     * @param {any} guid
      */
-    disableRow = $index => {
-        const v = this.data[$index];
-        v.disabled = v.disabled === undefined || v.disabled === false ? true : false;
+    disableRow = guid => {
+        const row = this.data.find(d => d._guid === guid);
+        const previousValue = { ...row };
 
-        if (this.settings.mappings && this.settings.mappings.length) {
-            this.tabulateResource.updateMappedEditor(undefined, v, this.settings.mappings);
-        }
+        row.disabled = !!row.disabled ? false : true;
 
+        this.tabulateResource.updateMappedEditor(row, previousValue, this.settings.mappings, this.$scope.model.alias, this.getCurrentVariant());
         this.updateUmbracoModel();
     };
 
@@ -357,7 +360,6 @@
                 this.data = model.data;
 
                 this.setSorting();
-                this.setIds();
                 this.setPaging();
 
                 // if the columnsToRemove array exists, remove each config row
@@ -379,7 +381,7 @@
                 }
 
                 // better force the labels to be reset - not always apparent from checking config changes
-                this.data = this.tabulateResource.setLabels(this.data, true, this.settings.label);
+                this.tabulateResource.setLabels(this.data, true, this.settings.label);
 
                 // finally, if there's nothing left in the config, set the noConfig state
                 this.noConfig = this.settings === undefined ? true : false;
@@ -392,6 +394,7 @@
 
         this.editorService.open(settingsOverlay);
     };
+
 
     /**
      * 
@@ -415,6 +418,17 @@
         this.noResults = this.pagination.items.length === 0 && this.data.length ? true : false;
     };
 
+    /** */
+    setDataGuids = () => {
+        if (this.data[0]._guid)
+            return;
+
+        this.data.forEach(d => {
+            d._guid = uuidv4(); 
+        });
+
+        this.notificationsService.info('Tabulate data updated - please save and reload');
+    }
 
     /////////////////////////////////
     // kick the whole thing off... //
@@ -438,8 +452,8 @@
             this.settings = this.$scope.model.value.settings;
 
             if (this.data) {
+                this.setDataGuids();
                 this.setSorting();
-                this.setIds();
                 this.setPaging();
             }
         }

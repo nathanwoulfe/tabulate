@@ -19,7 +19,8 @@ export class TabulateResource {
             { label: 'Telephone', value: 'tel' },
             { label: 'Date', value: 'date' },
             { label: 'Url', value: 'url' },
-            { label: 'Color', value: 'color' }
+            { label: 'Color', value: 'color' },
+            { label: 'Linked', value: 'linked' },
         ]
 
     // another helper - goes the opposite way, converting JSON back to CSV for exporting
@@ -138,49 +139,46 @@ export class TabulateResource {
     // geocodes a single address string
     geocode = d => {
 
-        if (window.google.maps !== undefined) {
+        if (!window.google.maps)
+            return d;
 
-            const keys = Object.keys(d);
-            const p = keys.indexOf('Address') !== -1 ? 'Address' : '';
+        const keys = Object.keys(d);
+        const p = keys.indexOf('Address') !== -1 ? 'Address' : '';
 
-            if (p !== '' && confirm('Found location data - geocode it?')) {
+        if (p !== '' && confirm('Found location data - geocode it?')) {
 
-                const geoStr = `_${p}`;
-                const geocoder = new google.maps.Geocoder();
-                const address = d[p];
+            const geoStr = `_${p}`;
+            const geocoder = new google.maps.Geocoder();
+            const address = d[p];
 
-                geocoder.geocode({ 'address': address }, (results, status) => {
+            geocoder.geocode({ 'address': address }, (results, status) => {
 
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        d[geoStr] = results[0].geometry.location;
-                        d.lat = results[0].geometry.location.lat();
-                        d.lng = results[0].geometry.location.lng();
-                        this.notificationsService.success('Success', 'Geocode successful');
-                    } else {
-                        d[geoStr] = undefined;
-                        this.notificationsService.error('Error', `Geocode failed: ${status}`);
-                    }
-                });
-            }
-        }
+                if (status === google.maps.GeocoderStatus.OK) {
+                    d[geoStr] = results[0].geometry.location;
+                    d.lat = results[0].geometry.location.lat();
+                    d.lng = results[0].geometry.location.lng();
+                    this.notificationsService.success('Success', 'Geocode successful');
+                } else {
+                    d[geoStr] = undefined;
+                    this.notificationsService.error('Error', `Geocode failed: ${status}`);
+                }
+            });
+        }        
 
         return d;
     }
 
     setLabels = (items, force, format) => {
 
-        if (items) {
-            if (Array.isArray(items)) {
-                items.forEach(item => {
-                    parseLabel(item);
-                });
-            }
-            else {
-                parseLabel(items);
-            }
-        }
+        if (!items)
+            return;
 
-        return items;
+        if (Array.isArray(items)) {
+            items.forEach(item => parseLabel(item));            
+        }
+        else {
+            parseLabel(items);
+        }        
 
         // construct the label for the item/s, based on the pattern defined in settings
         // labels can refer to object properties - defined by parent|child in the label
@@ -197,7 +195,11 @@ export class TabulateResource {
                     if (m) {
 
                         const labelKeys = m[1].split('|');
-                        const replacementText = labelKeys.length === 1 ? o[labelKeys[0]] : o[labelKeys[0]][labelKeys[1]];
+
+                        let replacementText = '';
+                        if (labelKeys[0]) {
+                            replacementText = labelKeys.length === 1 ? o[labelKeys[0]] : o[labelKeys[0]][labelKeys[1]];
+                        }
 
                         label = label.length ? label.replace(m[0], replacementText) : format.replace(m[0], replacementText);
                     }
@@ -208,60 +210,64 @@ export class TabulateResource {
         }
     }
 
-    // modifies a mapped tabulate editor - either update content or toggle enabled/disabled state
-    updateMappedEditor = (resp, v, mappings) => {
+    /**
+    */
+    getTabulateEditors = (currentAlias, variant) => {
+        // stores refs to other editors for mapping
+        const tabulateEditors = [];
 
-        var setLabels = this.setLabels,
-            getMappingScope = this.getMappingScope;
-
-        mappings.forEach(m => {
-
-            var mappingElement = getMappingScope(m.targetEditor.alias),
-                i = 0;
-
-            if (mappingElement) {
-
-                var key = m.sourceProperty.displayName;
-                var mappingKey = m.targetProperty.displayName;
-
-                // loop handles editor or state - based on presence of resp or v
-                mappingElement.value.data.forEach(mapping => {
-                    if (resp !== undefined && resp.remap === mapping[mappingKey]) {
-                        mapping[mappingKey] = resp.data[key];
-                        setLabels(mapping, true, mappingElement.value.settings.label);
-                        i++;
-                    } else if (v !== undefined && v[key] === mapping[mappingKey]) {
-                        mapping.disabled = v.disabled;
-                        i++;
-                    }
-                });
-
-                if (i > 0) {
-                    const str = resp === undefined ? (v.disabled ? 'deactivated' : 'activated') : 'updated';
-                    this.notificationsService.warning(i + ' row' + (i > 1 ? 's' : '') + ' in ' + m.targetEditor.label + (i > 1 ? ' have' : ' has') + ' been ' + str);
+        /* set values for the mappings - can map to any other tabulate instance on the node */
+        variant.tabs.forEach(v => {
+            v.properties.forEach(vv => {
+                if (currentAlias !== vv.alias && vv.editor === 'NW.Tabulate') {
+                    tabulateEditors.push(vv);
                 }
-            }
+            });
         });
+
+        return tabulateEditors;
     }
 
-    // finding mapping element scope using the existing scope
-    // need this for updating other editors when relationships are defined
-    getMappingScope = alias => {
-        var found = false,
-            resp;
+    /*
+     * Updates a linked editor by finding all records where the value matches
+     * the previous value on the source object 
+     */
+    updateMappedEditor = (source, previous, mappings, alias, variant) => {
+        if (!mappings || !mappings.length)
+            return;
 
-        let activeVariant = this.editorState.current.variants.find(x => x.active);
-        activeVariant.tabs.forEach(v => {
-            if (!found) {
-                v.properties.forEach(vv => {
-                    if (vv.alias === alias) {
-                        resp = vv;
-                        found = true;
-                    }
-                });
+        const tabulateEditors = this.getTabulateEditors(alias, variant);
+
+        mappings.forEach(m => {
+            let mappingElement = tabulateEditors.find(x => x.alias === m.targetEditor.alias);
+            if (!mappingElement)
+                return;
+
+            let updatedCount = 0;
+
+            let fromKey = m.sourceProperty.displayName;
+            let toKey = m.targetProperty.displayName;
+
+            // if the mapped field is also defined as a linked property, use the toKey_label field
+            // since linked fields store the label
+            if (mappingElement.value.data[0].hasOwnProperty(toKey + '_link')) {
+                fromKey = '_label';
             }
-        });
 
-        return resp;
+            const rowsToUpdate = mappingElement.value.data.filter(d => d[toKey] === previous[fromKey]);
+            rowsToUpdate.forEach(row => {
+                row[toKey] = source[fromKey];
+                row.disabled = !!source.disabled;
+
+                this.setLabels(row, true, mappingElement.value.settings.label);
+
+                updatedCount += 1;
+            });
+
+            if (updatedCount === 0)
+                return;
+
+            this.notificationsService.warning(`${updatedCount} linked row${(updatedCount > 1 ? 's' : '')} modified in ${m.targetEditor.label}`);
+        });
     }
 }

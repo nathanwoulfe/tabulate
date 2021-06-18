@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace Tabulate.Models
@@ -13,7 +14,7 @@ namespace Tabulate.Models
 
         public string Label { get; }
 
-        public int? Id { get; }
+        public Guid Guid { get; }
 
         public bool? Disabled { get; }
 
@@ -30,7 +31,7 @@ namespace Tabulate.Models
 
             Label = row["_label"]?.ToObject<string>();
 
-            Id = row["_id"]?.ToObject<int>();
+            Guid = row["_guid"].ToObject<Guid>();
 
             Disabled = row["disabled"]?.ToObject<bool>() ?? false;
 

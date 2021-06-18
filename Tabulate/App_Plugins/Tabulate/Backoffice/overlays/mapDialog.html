@@ -10,10 +10,10 @@
         <umb-box>
             <div class="tabulate umb-box-content" ng-controller="Tabulate.MapDialog.Controller as vm">
                 <div id="map"></div>
-                <p>Repositioning the marker will update the stored lat/lng pair, but will not modify the address text.</p>
+                <p><localize key="tabulate_repositionMarkerDescription"></localize></p>
                 <div class="geocoded-property">
-                    <label><strong>Latitude:</strong> {{ model.lat }}</label>
-                    <label><strong>Longitude:</strong> {{ model.lng }}</label>
+                    <label><strong><localize key="tabulate_latitude"></localize>:</strong> {{ model.lat }}</label>
+                    <label><strong><localize key="tabulate_longitude"></localize>:</strong> {{ model.lng }}</label>
                 </div>
             </div>
         </umb-box>

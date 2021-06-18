@@ -2,20 +2,30 @@
 
     static name = "Tabulate.Dialog.Controller";
 
-    constructor($scope, editorService) {
+    constructor($scope, editorService, editorState, tabulateResource, assetsService, $timeout) {
         this.$scope = $scope;
         this.editorService = editorService;
+        this.editorState = editorState;
+        this.tabulateResource = tabulateResource;
 
         this.inputType = type => type === 'string' ? 'text' : type;
 
         // view loops through the properties array to build the rte - o will have a value added if the data model contains rte fields
         this.$scope.model.rteConfig = {};
 
-        const rtes = this.$scope.model.config.columns.filter(x => x.type === 'rte');
-        if (rtes) {
-            for (let rte of rtes) {
-                this.$scope.model.rteConfig[rte.displayName] = this.getRteConfig(rte.displayName);
-            }
+        const rteKeys = this.$scope.model.config.columns
+            .filter(x => x.type === 'rte')
+            .map(x => x.displayName);
+
+        rteKeys.forEach(displayName => this.$scope.model.rteConfig[displayName] = this.getRteConfig(displayName));
+
+        // check for, and link, linked columns
+        const linkedColumns = this.$scope.model.config.columns
+            .filter(x => x.type === 'linked');
+
+        if (linkedColumns.length) {
+            assetsService.loadJs('lib/typeahead.js/typeahead.bundle.min.js')
+                .then(() => $timeout(() => linkedColumns.forEach(l => this.bindLinkedColumn(l))));
         }
 
         // specific to edit //
@@ -38,6 +48,58 @@
     $onDestroy = () => {
         this.addressWatch ? this.addressWatch() : {};
     }
+
+    /**
+     * For a linked column type, lookup the corresponding data from the current page
+     * and determine if it's a simple repeated string, a tabulate instance, or an iterable string
+     * @param {any} column
+     */
+    bindLinkedColumn = column => {
+        const tabulateEditors = this.tabulateResource.getTabulateEditors(
+            this.$scope.model.alias,
+            this.editorState.current.variants.find(v => v.active));
+
+        const linkedEditor = tabulateEditors.find(t => t.alias == column.source);
+        const linkedTabulateEditor = linkedEditor.editor === 'NW.Tabulate';
+
+        // get the data from the linked editor, depending on alias
+        const data = linkedTabulateEditor ? linkedEditor.value.data : linkedEditor.value;
+
+        // configure typeahead using linked data
+        const options = {
+            highlight: true,
+            minLength: 1
+        };
+
+        const sources = {
+            name: 'sources',
+            source: new Bloodhound({
+                datumTokenizer: linkedTabulateEditor ? Bloodhound.tokenizers.obj.whitespace('_label') : Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                local: data
+            }),
+        }
+
+        if (linkedTabulateEditor) {
+            sources.displayKey = '_label';
+        }
+
+        const typeaheadElement = angular.element('#typeahead_' + this.safeName(column.displayName));
+        typeaheadElement.typeahead(options, sources)
+            .bind("typeahead:selected", (obj, datum, name) => {
+                this.$scope.model.data[column.displayName] = datum._label;
+                this.$scope.model.data[column.displayName + '_link'] = datum._guid;
+            }).bind("typeahead:autocompleted", (obj, datum, name) => {
+                this.$scope.model.data[column.displayName] = datum._label;
+                this.$scope.model.data[column.displayName + '_link'] = datum._guid;
+            });
+    }
+
+    /**
+     * Replace spaces with underscores
+     * @param {any} str
+     */
+    safeName = str => str.replace(/ /gi, '_');
 
     viewLocation = () => {
 

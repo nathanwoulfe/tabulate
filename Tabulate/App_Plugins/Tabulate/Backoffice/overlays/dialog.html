@@ -16,13 +16,27 @@
                         <div ng-style="{ visibility :  isLoading ? 'hidden' : 'visible'}" id="{{textAreaHtmlId}}" class="umb-rte-editor"></div>
                     </div>
 
-                    <input class="umb-property-editor" type="{{ vm.inputType(c.type) }}" ng-model="model.data[c.displayName]" ng-if="c.type !== 'textarea' && c.type !== 'rte'" ng-model-options="{ debounce: 400 }" />
+                    <input class="umb-property-editor"
+                           type="{{ vm.inputType(c.type) }}"
+                           ng-model="model.data[c.displayName]"
+                           ng-if="c.type !== 'textarea' && c.type !== 'rte' && c.type !== 'linked'"
+                           ng-model-options="{ debounce: 400 }" />
 
                     <div ng-if="c.displayName === 'Address' && vm.hasGeocodedAddress" class="geocoded-property">
-                        <label><strong>Latitude:</strong> {{ model.data.lat }}</label>
-                        <label><strong>Longitude:</strong> {{ model.data.lng }}</label>
-                        <button class="btn btn-default" ng-click="vm.viewLocation()" type="button"><i class="icon icon-map"></i> Update address coordinates</button>
+                        <label><strong><localize key="tabulate_latitude"></localize>:</strong> {{ model.data.lat }}</label>
+                        <label><strong><localize key="tabulate_longitude"></localize>:</strong> {{ model.data.lng }}</label>
+                        <button class="btn btn-default" ng-click="vm.viewLocation()" type="button"><i class="icon icon-map"></i> 
+                            <localize key="tabulate_updateAddressCoords"></localize>
+                        </button>
                     </div>
+
+                    <div ng-if="c.type === 'linked'" class="linked-column-wrapper">
+                        <input type="text"
+                               id="typeahead_{{ vm.safeName(c.displayName) }}"
+                               class="umb-property-editor"
+                               ng-model="model.data[c.displayName]" />
+                    </div>
+
                 </umb-control-group>
             </form>
         </umb-box>
