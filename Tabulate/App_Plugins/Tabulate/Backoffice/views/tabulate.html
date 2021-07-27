@@ -1,4 +1,4 @@
-﻿<div class="tabulate" ng-controller="Tabulate.Controller as vm" ng-class="{'no-settings': vm.noConfig, 'wide' : model.config.wide}">
+﻿<div class="tabulate" ng-controller="Tabulate.Controller as vm" ng-class="{'no-settings': vm.noConfig, 'wide' : model.config.wide == true}">
     
     <umb-editor-sub-header appearance="white">
         <umb-editor-sub-header-content-left ng-show="model.value.data.length > model.value.settings.numPerPage">

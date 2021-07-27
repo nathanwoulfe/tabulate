@@ -9,7 +9,7 @@
         assetsService.loadCss(`${basePath}style.min.css`);
 
         // hide the umbraco label if the view is set to wide
-        $scope.model.hideLabel = $scope.model.config.wide;
+        $scope.model.hideLabel = $scope.model.config.wide == true;
         const rteConfig = $scope.model.config.rte;
 
         // these don't need to be scoped
@@ -413,7 +413,7 @@
         $q.all(promises) 
             .then(resp => {
                 this.mapsLoaded = resp[0];
-                this.hideSettings = resp[1].userGroups.indexOf('admin') === -1 && $scope.model.config.adminOnly;
+                this.hideSettings = resp[1].userGroups.indexOf('admin') === -1 && $scope.model.config.adminOnly == true;
 
                 init();
             });
