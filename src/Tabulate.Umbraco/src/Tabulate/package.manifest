@@ -1,0 +1,59 @@
+﻿{   
+    //you can define multiple editors   
+    propertyEditors: [      
+        {
+            alias: "Tabulate.Umbraco",
+            name: "Tabulate",
+            editor: {
+                view: "~/App_Plugins/Tabulate/Backoffice/views/tabulate.html",
+				valueType: 'JSON'
+            },
+			prevalues: {
+				fields: [
+					{
+						label: "Wide",
+						key: "wide",
+						view: "boolean"
+					},
+					{
+						label: "Can access settings",
+						key: "canAccessSettings",
+						description: "Comma-separated list of group aliases to have access to Tabulate settings",
+						view: 'textstring'
+					},
+					{
+						label: "Custom view",
+						key: "customView",
+						description: "Path to a custom view for rendering add/edit dialogs",
+						view: 'textstring'
+					},
+					{
+						label: "Overlay size",
+						key: "customViewSize",
+						description: "Overlay size for edit and custom views ('small', 'medium', 'large')",
+						view: 'textstring'
+					},
+					{
+						label: "Google Maps API key",
+						key: "mapsApiKey",
+						description: "API key for Google Maps in address dialogs",
+						view: 'textstring'
+					},					
+					{
+						label: "Rich text editor",
+						key: "rte",
+						description: "Rich text editor configuration",
+						view: 'views/propertyeditors/rte/rte.prevalues.html'
+					}
+				]
+			}			
+        }
+    ],
+    //array of files we want to inject into the application on app_start
+    javascript: [
+		'~/App_Plugins/Tabulate/Backoffice/tabulate.js'
+	],
+	css: [
+		'~/App_Plugins/Tabulate/Backoffice/styles.css'
+    ]
+}

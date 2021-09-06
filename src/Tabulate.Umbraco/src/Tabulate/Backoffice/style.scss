@@ -1,0 +1,152 @@
+﻿.tabulate {
+
+    .umb-node-preview {
+        max-width: none;
+
+        &-add {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }    
+
+    .umb-editor-sub-header {
+        margin-top:0;
+    }
+
+    .m-t-10 {
+        margin-top:10px;
+    }
+
+    .m-b-10 {
+        margin-bottom: 10px;
+    }
+
+    .umb-table-cell {
+        &:first-child, &.f-1 {
+            flex: 1;
+            min-width: 200px;
+            max-width: none;
+        }
+
+        &.row-actions {
+            flex: 0 1 auto;
+        }
+
+        &__actions {
+            justify-content: flex-end;
+            flex:0 1 auto;
+        }
+    }
+
+    .add-row {
+        margin: 20px;
+    }
+
+    .umb-table-row {
+        &.disabled {
+            background: #f3f3f5;
+
+            a {
+                color: #999;
+            }
+        }
+
+        &:first-child {
+            border-top: 0;
+        }
+
+        p:last-child {
+            margin: 0;
+        }
+    }
+
+    .sort-handle {
+        cursor: ns-resize;
+    }
+
+    .settings-btn {
+        margin-right: 8px;
+    }
+
+    .settings {
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 8px 0;
+        }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+    }
+
+    table {
+        select {
+            width: 150px;
+        }
+    }
+
+    .list-view .umb-table-cell__actions {
+        min-width: 50px;
+        max-width: 50px;
+    }
+
+    .manual-sort .umb-table-cell__actions {
+        min-width: 70px;
+        max-width: 70px;
+    }
+
+    #map {
+        padding-top: 55%;
+        margin-bottom: 15px;
+    }
+
+    .geocoded-property {
+        margin-top: 15px;
+
+        label {
+            width: 66%;
+            margin-right: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: default;
+        }
+
+        button {
+            clear: both;
+        }
+    }
+
+    input[type].ng-invalid {
+        border-color: red;
+    }
+
+    .dropdown-wrapper {
+        position: relative;
+    }
+
+    .d-flex {
+        display: flex;
+
+        > * {
+            margin-right: 10px;
+        }
+    }
+
+    .linked-column-wrapper {
+        .twitter-typeahead {
+            display:block !important;
+        }
+
+        .tt-menu {
+            left:auto!important;
+            right:0!important;
+        }
+
+        .tt-hint {
+            width:100%!important;
+        }
+    }
+}

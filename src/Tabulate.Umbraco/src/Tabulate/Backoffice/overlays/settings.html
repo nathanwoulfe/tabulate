@@ -1,0 +1,171 @@
+<umb-editor-view>
+    <umb-editor-header name="model.title"
+                       name-locked="true"
+                       hide-alias="true"
+                       hide-icon="true"
+                       hide-description="true">
+    </umb-editor-header>
+
+    <umb-editor-container>
+        <div class="tabulate settings" ng-controller="Tabulate.Settings.Controller as vm">
+
+            <umb-box>
+                <umb-box-header title-key="tabulate_addColumn" description-key="tabulate_addColumnDescription"></umb-box-header>
+                <umb-box-content class="form-horizontal">
+                    <umb-control-group label="@tabulate_columnDisplayName">
+                        <input type="text" name="new-column-name" ng-model="vm.newColumnName" />
+                    </umb-control-group>
+
+                    <umb-control-group label="@tabulate_columnInputType">
+                        <select name="new-column-type" ng-model="vm.newColumnType" ng-options="t.value as t.label for t in vm.types"></select>
+                    </umb-control-group>
+
+                    <div class="umb-add-row">
+                        <button type="button" class="umb-node-preview-add" ng-click="vm.addColumn()" ng-if="vm.newColumnType && vm.newColumnName">
+                            <localize key="general_add">Add</localize>
+                        </button>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+
+            <umb-box>
+                <umb-box-header title-key="tabulate_currentColumns"></umb-box-header>
+                <umb-box-content class="form-horizontal">
+                    <umb-control-group hide-label="true">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><localize key="general_name"></localize></th>
+                                    <th><localize key="general_type"></localize></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="c in model.config.columns track by $index" ng-class="{'disabled': model.columnsToRemove.indexOf($index) !== -1}">
+                                    <td><input type="text" ng-model="c.displayName" ng-change="vm.changedColumn($index)" /></td>
+                                    <td>
+                                        <select name="column-type" ng-model="c.type" ng-options="t.value as t.label for t in vm.types" ng-change="vm.changedColumn($index)"></select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="umb-node-preview__action umb-node-preview__action--red" ng-click="vm.removeColumn($index)">
+                                            <localize class="sr-only" key="general_delete">Delete</localize>
+                                            <umb-icon icon="icon-trash"></umb-icon>
+                                        </button>
+                                    </td>
+                                    <td ng-if="c.type === 'linked'">
+                                        <textarea ng-model="c.source"></textarea>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </umb-control-group>
+
+                    <umb-control-group label="@general_label" description="@tabulate_labelDescription">
+                        <input name="label" type="text" ng-model="model.config.label" ng-change="model.config.labelChanged = true" />
+                    </umb-control-group>
+
+                    <umb-control-group label="@general_listView" description="@tabulate_listViewDescription">
+                        <umb-toggle checked="model.config.isListView"
+                                    on-click="model.config.isListView = !model.config.isListView"
+                                    show-labels="{{'false'}}"></umb-toggle>
+                    </umb-control-group>
+
+                    <umb-control-group label="@general_orderBy">
+                        <select name="sort-order" ng-model="model.config.sortOrder" ng-change="vm.sort()">
+                            <option value="A">Ascending</option>
+                            <option value="D">Descending</option>
+                            <option value="M">Manual</option>
+                        </select>
+                    </umb-control-group>
+
+                    <umb-control-group label="@tabulate_perPage">
+                        <input type="number" name="per-page" ng-model="model.config.numPerPage" />
+                    </umb-control-group>
+                </umb-box-content>
+            </umb-box>
+            <umb-box>
+                <umb-box-header title-key="tabulate_data" description-key="tabulate_dataDescription"></umb-box-header>
+                <umb-box-content class="form-horizontal">
+                    <div class="export-type m-b-10">
+                        <localize key="general_show"></localize>:
+                        <button type="button" ng-click="vm.show('json')" class="btn btn-default" ng-class="{'active' : vm.showing === 'json'}">JSON</button>
+                        <button type="button" ng-click="vm.show('csv')" class="btn btn-default" ng-class="{'active' : vm.showing === 'csv'}">CSV</button>
+                    </div>
+
+                    <textarea ng-model="vm.importExport" class="m-b-10" style="width:100%" rows="10"></textarea>
+
+                    <!-- download as -->
+                    <div class="download-wrapper d-flex">
+                        <button type="button" class="btn btn-info" ng-hide="!model.data" ng-click="vm.download()">
+                            <localize key="general_download"></localize>
+                        </button>
+                        <button type="button" class="btn btn-warning" ng-disabled="vm.importDisabled" ng-click="vm.import()">
+                            <localize key="general_import"></localize>
+                        </button>
+                    </div>
+
+                    <div class="m-t-10 alert alert-{{ vm.importAlert.state }}" ng-if="vm.importAlert">
+                        {{ vm.importAlert.message }}
+                    </div>
+                </umb-box-content>
+            </umb-box>
+
+            <umb-box ng-show="vm.tabulateEditors.length">
+                <umb-box-header title-key="tabulate_mappings" description-key="tabulate_mappingsDescription"></umb-box-header>
+                <umb-box-content>
+
+                    <div class="control-group" ng-if="model.config.mappings && model.config.mappings.length">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><localize key="tabulate_targetProperty"></localize></th>
+                                    <th><localize key="tabulate_targetColumn"></localize></th>
+                                    <th><localize key="tabulate_sourceColumn"></localize></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="m in model.config.mappings track by $index" ng-init="vm.setTargetEditorColumns(m.targetEditor.alias)">
+                                    <td>
+                                        <select ng-model="m.targetEditor" ng-change="vm.setTargetEditorColumns(m.targetEditor.alias)" ng-options="t.alias for t in vm.tabulateEditors track by t.alias"></select>
+                                    </td>
+                                    <td>
+                                        <select ng-disabled="!m.targetEditor" ng-model="m.targetProperty" ng-options="c.displayName for c in vm.targetEditorColumns track by c.displayName"></select>
+                                    </td>
+                                    <td>
+                                        <select ng-disabled="!m.targetProperty" ng-model="m.sourceProperty" ng-options="c.displayName for c in model.config.columns track by c.displayName"></select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-reset" ng-click="vm.removeMapping($index)">
+                                            <localize class="sr-only" key="general_remove">Remove</localize>
+                                            <umb-icon icon="icon-trash"></umb-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" title="Add" class="umb-node-preview-add" ng-click="vm.addEmptyItem()">
+                        <localize key="general_add">Add</localize>
+                    </button>
+                </umb-box-content>
+            </umb-box>
+        </div>
+
+    </umb-editor-container>
+    <umb-editor-footer>
+        <umb-editor-footer-content-right>
+            <umb-button type="button"
+                        button-style="link"
+                        label-key="general_close"
+                        action="model.close()">
+            </umb-button>
+            <umb-button type="button"
+                        button-style="success"
+                        label-key="general_submit"
+                        action="model.submit(model)">
+            </umb-button>
+        </umb-editor-footer-content-right>
+    </umb-editor-footer>
+
+</umb-editor-view>

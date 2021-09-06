@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net472;net5.0</TargetFrameworks>
+    <Id>Tabulate.Umbraco.ValueConverters</Id>
+    <Title>Tabulate.ValueConverters</Title>
+  </PropertyGroup>
+  <ItemGroup Condition="$(TargetFramework) == 'net472'">
+    <PackageReference Include="UmbracoCms.Core" Version="8.7.0" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework) == 'net5.0'">
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-rc002" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-rc002" />
+  </ItemGroup>
+  <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+    </ItemGroup>
+  </Target> 
+</Project>
