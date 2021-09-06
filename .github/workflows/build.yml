@@ -38,7 +38,7 @@ jobs:
       run: |
         cd ./src/Tabulate.Umbraco
         npm install
-        npm run prod
+        npm run build
     - name: Pack
       run: dotnet pack -c Release -o __out --no-restore
     - name: Push
