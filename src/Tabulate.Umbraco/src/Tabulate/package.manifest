@@ -2,7 +2,7 @@
     //you can define multiple editors   
     propertyEditors: [      
         {
-            alias: "Tabulate.Umbraco",
+            alias: "NW.Tabulate",
             name: "Tabulate",
             editor: {
                 view: "~/App_Plugins/Tabulate/Backoffice/views/tabulate.html",
