@@ -3,6 +3,8 @@
     <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <Id>Tabulate.Umbraco</Id>
     <Title>Tabulate</Title>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSymbols>false</IncludeSymbols>
   </PropertyGroup>
   <ItemGroup Condition="$(TargetFramework) == 'net472'">
 		<PackageReference Include="UmbracoCms.Web" Version="8.7.0" />
@@ -32,13 +34,7 @@
     <Compile Remove="node_modules\**" />
     <EmbeddedResource Remove="node_modules\**" />
     <None Remove="node_modules\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="src\Tabulate\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Plugins\" />
-  </ItemGroup>
+  </ItemGroup> 
   <ItemGroup>
     <ProjectReference Include="..\Tabulate.Umbraco.ValueConverters\Tabulate.Umbraco.ValueConverters.csproj" />
   </ItemGroup>

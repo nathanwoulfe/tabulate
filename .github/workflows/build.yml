@@ -33,22 +33,24 @@ jobs:
         }
         Copy-Item -Path $src\*.dll -Destination $dest
     - name: Create output dir
-      run: mkdir __out
+      run: mkdir nupkgs
     - name: NPM install
       run: |
         cd ./src/Tabulate.Umbraco
         npm install
         npm run build
     - name: Pack
-      run: dotnet pack -c Release -o __out --no-restore
+      run: |
+        dotnet pack ./src/Tabulate.Umbraco.ValueConverters/Tabulate.Umbraco.ValueConverters.csproj -c Release -o nupkgs
+        dotnet pack ./src/Tabulate.Umbraco/Tabulate.Umbraco.csproj -c Release -o nupkgs
     - name: Push
       if: ${{ github.ref == 'refs/tags/v4.*' }}
       run: |
-        dotnet nuget push "**/__out/*.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate -k ${{secrets.NUGET_TOKEN}}
+        dotnet nuget push "**/nupkgs/*.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate -k ${{secrets.NUGET_TOKEN}}
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
-        path: __out
+        path: nupkgs
     - name: Clean up
-      run: rm -r -force __out
+      run: rm -r -force nupkgs
         
