@@ -3,12 +3,12 @@ name: Build
 on:
   push:
     tags: 
-      - v5.*
+      - v4.*
     branches: 
-      - v5/dev
+      - v4/dev
   pull_request:
     branches: 
-      - v5/dev   
+      - v4/dev   
 
 jobs:
   build:
@@ -36,27 +36,16 @@ jobs:
       run: mkdir __out
     - name: NPM install
       run: |
-        cd ./Tabulate.Umbraco
+        cd ./src/Tabulate.Umbraco
         npm install
-    - name: Build - DEBUG
-      if: ${{ github.ref != 'refs/tags/v5.*' }}
+        npm run prod
+    - name: Pack
+      run: dotnet pack -c Release -o __out --no-restore
+    - name: Push
+      if: ${{ github.ref == 'refs/tags/v4.*' }}
       run: |
-        cd ./NestingContently.Umbraco
-        npm run build
-    - name: Build - RELEASE
-      if: ${{ github.ref == 'refs/tags/v5.*' }}
-      run: |
-       cd ./Tabulate.Umbraco
-       npm run prod
-    - name: Pack - DEBUG
-      if: ${{ github.ref != 'refs/tags/v5.*' }}
-      run: dotnet pack -c Debug -o __out --no-restore
-    - name: Pack and push - RELEASE
-      if: ${{ github.ref == 'refs/tags/v5.*' }}
-      run: |
-        dotnet pack -c Release -o __out --no-restore
         dotnet nuget push "**/__out/*.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate -k ${{secrets.NUGET_TOKEN}}
-    - name: Upload artifact
+    - name: Upload
       uses: actions/upload-artifact@v2
       with:
         path: __out
