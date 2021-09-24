@@ -2393,8 +2393,8 @@
       "tabulate.umbraco.valueconverters": {
         "type": "Project",
         "dependencies": {
-          "Umbraco.Cms.Web.BackOffice": "9.0.0-rc002",
-          "Umbraco.Cms.Web.Website": "9.0.0-rc002"
+          "Umbraco.Cms.Web.BackOffice": "9.0.0-rc004",
+          "Umbraco.Cms.Web.Website": "9.0.0-rc004"
         }
       }
     }

@@ -55,11 +55,11 @@ export class TabulateController {
         $q.all(promises)
             .then(resp => {
                 this.mapsLoaded = resp[0];
+                this.hideSettings = false;
+
                 if ($scope.model.config.canAccessSettings) {
                     const canAccessSettings = $scope.model.config.canAccessSettings.split(',');
                     this.hideSettings = !resp[1].userGroups.some(x => canAccessSettings.includes(x));
-                } else {
-                    this.hideSettings = false;
                 }
 
                 this.init();

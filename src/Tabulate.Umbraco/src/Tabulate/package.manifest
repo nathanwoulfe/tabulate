@@ -4,6 +4,8 @@
         {
             alias: "NW.Tabulate",
             name: "Tabulate",
+			icon: "icon-grid",
+			group: "lists",
             editor: {
                 view: "~/App_Plugins/Tabulate/Backoffice/views/tabulate.html",
 				valueType: 'JSON'

@@ -1,8 +1,7 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.ContentPage>
+﻿@using Tabulate.Umbraco.ValueConveters.Models
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<Umbraco.Web.PublishedModels.ContentPage>
 @using ContentModels = Umbraco.Web.PublishedModels;
-@{
-    Layout = "master.cshtml";
-}
+@{ Layout = "master.cshtml"; }
 
 @Html.Partial("~/Views/Partials/SectionHeader.cshtml")
 
@@ -23,4 +22,20 @@
         </div>
     </div>
 
-</section>
+    <table>
+        <tr>
+            @foreach (HeaderModel header in Model.Tabulate.Headers)
+            {
+                <th>@header.Name @header.Type</th>            
+            }
+        </tr>
+        @foreach (RowModel row in Model.Tabulate.Rows)
+        {
+            <tr>
+                @foreach (object cell in row.Cells)
+                {
+                    <td>@cell</td>
+                }
+            </tr>
+        }
+    </table>
