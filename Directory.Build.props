@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <VersionPrefix>4.0.0</VersionPrefix>
-    <VersionSuffix>rc-004</VersionSuffix>
+    <VersionSuffix></VersionSuffix>
     <Description>Manage large datasets in Umbraco CMS</Description>
     <Authors>Nathan Woulfe</Authors>
     <Copyright>Nathan Woulfe 2019</Copyright>
