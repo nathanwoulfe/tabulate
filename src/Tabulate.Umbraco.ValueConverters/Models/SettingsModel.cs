@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Tabulate.Umbraco.ValueConveters.Models
+namespace Tabulate.Umbraco.ValueConverters.Models
 {
     public class SettingsModel
     {

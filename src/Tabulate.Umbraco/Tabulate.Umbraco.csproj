@@ -19,9 +19,10 @@
     </ItemGroup>
   </Target>
   <ItemGroup>
-    <Content Include="App_Plugins\**\*.*">
+    <Content Include="App_Plugins\Tabulate\**\*.*">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  <PackagePath>content\App_Plugins\Tabulate</PackagePath>
     </Content>
     <None Include="build\**\*.*">
       <Pack>True</Pack>
@@ -29,8 +30,6 @@
     </None>
     <None Include="package.json" />
     <None Include="src\*.*" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Remove="node_modules\**" />
     <EmbeddedResource Remove="node_modules\**" />
     <None Remove="node_modules\**" />

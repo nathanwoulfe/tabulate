@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using Tabulate.Umbraco.ValueConveters.Models;
 using System.ComponentModel.DataAnnotations;
+using Tabulate.Umbraco.ValueConverters.Models;
 #if NETCOREAPP
 using Microsoft.AspNetCore.Html;
 using Umbraco.Cms.Core;

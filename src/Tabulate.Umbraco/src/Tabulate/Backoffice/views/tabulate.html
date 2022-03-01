@@ -2,17 +2,15 @@
 
     <umb-editor-sub-header appearance="white">
         <umb-editor-sub-header-content-left ng-show="model.value.data.length > model.value.settings.numPerPage">
-            <div class="form-search">
-                <div class="inner-addon left-addon">
-                    <umb-icon icon="icon-search" ng-click="vm.setPaging()"></umb-icon>
-                    <input type="text"
-                           class="form-control search-input"
-                           ng-model="vm.pagination.search"
-                           ng-disabled="vm.noConfig"
-                           ng-change="vm.setPaging()"
-                           placeholder="Type to search..."
-                           no-dirty-check />
-                </div>
+            <div class="umb-mini-search">
+                <umb-icon icon="icon-search" class="icon umb-icon" ng-click="vm.setPaging()"></umb-icon>
+                <input type="text"
+                        class="form-control search-input"
+                        ng-model="vm.pagination.search"
+                        ng-disabled="vm.noConfig"
+                        ng-change="vm.setPaging()"
+                        placeholder="Type to search..."
+                        no-dirty-check />
             </div>
         </umb-editor-sub-header-content-left>
         <umb-editor-sub-header-content-right>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Tabulate.Umbraco.ValueConveters.Models
+namespace Tabulate.Umbraco.ValueConverters.Models
 {
     public class TabulateModel
     {

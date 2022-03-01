@@ -1,21 +1,22 @@
 <Project>
-  <PropertyGroup>
-    <VersionPrefix>4.0.1</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
-    <Description>Manage large datasets in Umbraco CMS</Description>
-    <Authors>Nathan Woulfe</Authors>
-    <Copyright>Nathan Woulfe 2019</Copyright>
-    <PackageIconUrl></PackageIconUrl>
+	<PropertyGroup>
+		<VersionPrefix>4.1.0</VersionPrefix>
+		<VersionSuffix></VersionSuffix>
+		<Description>Manage large datasets in Umbraco CMS</Description>
+		<Authors>Nathan Woulfe</Authors>
+		<Copyright>Nathan Woulfe 2019</Copyright>
+		<PackageIconUrl></PackageIconUrl>
 
-    <PackageProjectUrl>https://thisredwolf.com/tabulate</PackageProjectUrl>
-    <PackageTags>Umbraco;UmbracoCms;</PackageTags>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://thisredwolf.com/tabulate</PackageProjectUrl>
+		<PackageTags>Umbraco;UmbracoCms;</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 
-    <RepositoryUrl>https://github.com/nathanwoulfe/tabulate</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/nathanwoulfe/tabulate</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <RestoreLockedMode>false</RestoreLockedMode>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-  </PropertyGroup>
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<RestoreLockedMode>false</RestoreLockedMode>
+		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+		<NoWarn>$(NoWarn);NU5128;NU5125</NoWarn>
+	</PropertyGroup>
 </Project>
