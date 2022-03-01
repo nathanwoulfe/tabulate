@@ -231,7 +231,7 @@ export class TabulateController {
                 this.setRteFields(result);
 
                 // geocode the model and add it to the model
-                let newItem = this.mapsLoaded ? this.tabulateResource.geocode(result) : result;
+                let newItem = this.mapsLoaded ? this.tabulateResource.geocode(result.data) : result.data;
                 this.tabulateResource.setLabels(newItem, true, this.settings.label);
 
                 this.data.push(newItem);
@@ -255,16 +255,17 @@ export class TabulateController {
         const editOverlay = { ...this.getOverlayBase('Edit row', 'edit'),
             data: this.data[idx],
             submit: model => {
-                // model is a reference to this.data[idx]
                 this.setRteFields(model);
+
+                const item = model.data;
 
                 // if the model has a new address, geocode it
                 // then store the model in the model
-                this.tabulateResource.setLabels(model, true, this.settings.label);
-                model.recode && this.mapsLoaded ? this.tabulateResource.geocode(model) : {};      
+                this.tabulateResource.setLabels(item, true, this.settings.label);
+                model.recode && this.mapsLoaded ? this.tabulateResource.geocode(item) : {};      
 
                 // send new, old and mappings
-                this.tabulateResource.updateMappedEditor(model, originalValue, this.settings.mappings, this.$scope.model.alias, this.getCurrentVariant());         
+                this.tabulateResource.updateMappedEditor(item, originalValue, this.settings.mappings, this.$scope.model.alias, this.getCurrentVariant());         
 
                 this.afterAddEditRow();
             },
