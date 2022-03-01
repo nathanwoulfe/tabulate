@@ -198,7 +198,7 @@ export class TabulateResource {
 
                         let replacementText = '';
                         if (labelKeys[0]) {
-                            replacementText = labelKeys.length === 1 ? o[labelKeys[0]] : o[labelKeys[0]][labelKeys[1]];
+                            replacementText = labelKeys.length === 1 ? o.data[labelKeys[0]] : o.data[labelKeys[0]][labelKeys[1]];
                         }
 
                         label = label.length ? label.replace(m[0], replacementText) : format.replace(m[0], replacementText);
