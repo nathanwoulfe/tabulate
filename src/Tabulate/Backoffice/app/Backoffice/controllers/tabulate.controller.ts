@@ -37,11 +37,11 @@ export class TabulateController {
   };
 
   constructor(
+    $q,
+    authResource,
     private $scope,
-    private $q,
     private $filter,
     private editorState,
-    private authResource,
     private notificationsService,
     private editorService,
     private overlayService,
@@ -438,7 +438,7 @@ export class TabulateController {
 
   /** */
   setDataGuids = () => {
-    if (this.data[0]._guid)
+    if (!this.data[0] || this.data[0]._guid)
       return;
 
     this.data.forEach(d => {

@@ -14,9 +14,22 @@
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0, 11)" />
     <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0, 11)" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.113" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.Code" Version="2.0.0" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.GitVersioning.Extensions" Version="0.2.0" PrivateAssets="all" IsImplicitlyDefined="true" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+  </PropertyGroup>
+
   <Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+  
   <Target Name="ClientAssetsBuildOutputPath" AfterTargets="ClientAssetsBuild">
     <WriteLinesToFile File="Backoffice\gulp\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
   </Target>  

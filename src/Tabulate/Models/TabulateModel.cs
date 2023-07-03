@@ -14,16 +14,16 @@ public class TabulateModel
 
         Settings = new(data.SelectToken("settings"));
 
-        IEnumerable<JToken>? columns = data.SelectTokens("settings.columns");
+        JToken? columns = data.SelectToken("settings.columns");
         if (columns is not null)
         {
-            Headers = (from JObject col in columns select new HeaderModel(col)).ToList();
+            Headers = (from JObject col in columns.Children() select new HeaderModel(col)).ToList();
         }
 
-        IEnumerable<JToken>? rows = data.SelectTokens("data");
+        JToken? rows = data.SelectToken("data");
         if (rows is not null)
         {
-            Rows = (from JObject row in rows select new RowModel(row)).ToList();
+            Rows = (from JObject row in rows.Children() select new RowModel(row)).ToList();
         }
     }
 

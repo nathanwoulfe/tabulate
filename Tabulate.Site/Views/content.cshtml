@@ -2,7 +2,8 @@
 
 @using Clean.Core.Models.ViewModels
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels
-
+@using Umbraco.Cms.Core.Models.Blocks;
+@using Tabulate.Models;
 
 @{
     Layout = "master.cshtml";
@@ -11,5 +12,30 @@
 @await Html.PartialAsync("~/Views/Partials/pageHeader.cshtml", new PageHeaderViewModel(Model.Name, Model.Title, Model.Subtitle, Model.MainImage))
 
 <article>
-    @Html.GetGridHtml(Model, "mainContent", "Clean")
+    @{
+        var blocks = Model.Blocklist.Select(x => x.Content).OfType<TabulateBlock>();
+        
+        foreach (var block in blocks)
+        {
+
+         <table>
+            <tr>
+                @foreach(var h in block.Table.Headers) {
+                    <th>
+                        @h.Name (@h.Type)
+                    </th>
+                }   
+            </tr>
+            
+            @foreach(var row in block.Table.Rows) {
+                <tr>
+                    @foreach (var cell in row.Cells) {
+                        <td>@cell</td>    
+                    }
+                </tr>
+            }
+        </table>
+        }
+    }
+
 </article>

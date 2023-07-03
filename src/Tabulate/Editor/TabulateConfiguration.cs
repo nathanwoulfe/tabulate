@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Core.PropertyEditors;
 
 namespace Tabulate.Editor;
@@ -19,6 +20,6 @@ public class TabulateConfiguration
     [ConfigurationField("mapsApiKey", "Google Maps API key", "textstring", Description = "API key for Google Maps in address dialog")]
     public string? MapsApiKey { get; set; }
 
-    //[ConfigurationField("rte", "Rich text editor", "views/propertyeditors/rte/rte.prevalues.html", Description = "Rich text editor configuration")]
-    //public string? RTE { get; set; }
+    [ConfigurationField("rte", "Rich text editor", "views/propertyeditors/rte/rte.prevalues.html", Description = "Rich text editor configuration")]
+    public JObject? Rte { get; set; }
 }
