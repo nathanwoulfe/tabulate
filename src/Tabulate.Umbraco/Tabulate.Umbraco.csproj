@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net472;net5.0</TargetFrameworks>
     <Id>Tabulate.Umbraco</Id>
@@ -11,7 +11,7 @@
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework) == 'net5.0'">
         <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0" />
-        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0" />
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.6.1" />
     </ItemGroup>
 	 <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
     <ItemGroup>
