@@ -3,27 +3,23 @@
     static name = "Tabulate.MapDialog.Controller";
 
     constructor($scope) {
+        const position = { lat: $scope.model.lat ?? -25.363, lng: $scope.model.lng ?? 131.044 };
+
         const map = new google.maps.Map(document.getElementById('map'),
             {
                 zoom: 14,
-                center: new google.maps.LatLng($scope.model.lat, $scope.model.lng)
+                center: position,
             });
 
         const marker = new google.maps.Marker({
-            map: map,
-            position: new google.maps.LatLng($scope.model.lat, $scope.model.lng),
+            map,
+            position,
             draggable: true
         });
 
-        const dragend = e => {
-            if ($scope.model.lat !== e.latLng.lat() || $scope.model.lng !== e.latLng.lng()) {
-                $scope.model.lat = e.latLng.lat();
-                $scope.model.lng = e.latLng.lng();
-            }
-        };
-
-        google.maps.event.addListener(marker, 'dragend', event => {
-            dragend(event);
+        google.maps.event.addListener(marker, 'dragend', e => {
+            $scope.model.lat = e.latLng.lat();
+            $scope.model.lng = e.latLng.lng();
         });
     }
 }

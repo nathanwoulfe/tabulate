@@ -1,4 +1,4 @@
-﻿@using Tabulate.Umbraco.ValueConveters.Models
+﻿@using Tabulate.Umbraco.ValueConverters.Models
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<Umbraco.Web.PublishedModels.ContentPage>
 @using ContentModels = Umbraco.Web.PublishedModels;
 @{ Layout = "master.cshtml"; }
@@ -22,6 +22,34 @@
         </div>
     </div>
 
+<h1>From blocklist</h1>
+@{
+        var blocks = Model.Blocklist.Select(x => x.Content).OfType<TabulateBlock>();
+        
+        foreach (var block in blocks)
+        {
+
+         <table>
+            <tr>
+                @foreach(var h in block.Table.Headers) {
+                    <th>
+                        @h.Name (@h.Type)
+                    </th>
+                }   
+            </tr>
+            
+            @foreach(var row in block.Table.Rows) {
+                <tr>
+                    @foreach (var cell in row.Cells) {
+                        <td>@cell</td>    
+                    }
+                </tr>
+            }
+        </table>
+        }
+    }
+
+<h1>From standalone property</h1>
     <table>
         <tr>
             @foreach (HeaderModel header in Model.Tabulate.Headers)

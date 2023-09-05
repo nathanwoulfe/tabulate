@@ -255,7 +255,10 @@ export class TabulateController {
         const editOverlay = { ...this.getOverlayBase('Edit row', 'edit'),
             data: this.data[idx],
             submit: model => {
-                this.setRteFields(model);
+                // maps values back from render model to item for saving
+                model.renderModel.forEach(r => {
+                    model.data[r.label] = r.value;
+                });
 
                 const item = model.data;
 
@@ -284,7 +287,7 @@ export class TabulateController {
     }
 
     getCurrentVariant = () => 
-        this.editorState.current.variants.find(v => v.active);
+        this.editorState.getCurrent().variants.find(v => v.active);
     
 
     /**
@@ -324,25 +327,6 @@ export class TabulateController {
 
         this.tabulateResource.updateMappedEditor(row, previousValue, this.settings.mappings, this.$scope.model.alias, this.getCurrentVariant());
         this.updateUmbracoModel();
-    };
-
-    /**
-     * 
-     * 
-     * @param {any} model
-     */
-    setRteFields = model => {
-        // get the value from rte fields, if any exist
-        if (!model.rteConfig)
-            return;
-
-        const rteKeys = Object.keys(model.rteConfig);
-
-        if (rteKeys.length) {
-            for (let key of rteKeys) {
-                model.data[key] = model.rteConfig[key].value;
-            }
-        }
     };
 
     /**

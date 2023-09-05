@@ -11,15 +11,15 @@ export class TabulateResource {
 
     fieldTypes = () =>
         [
-            { label: 'Text string', value: 'string' },
-            { label: 'Textarea', value: 'textarea' },
-            { label: 'Rich text', value: 'rte' },
-            { label: 'Number', value: 'number' },
-            { label: 'Email', value: 'email' },
-            { label: 'Telephone', value: 'tel' },
-            { label: 'Date', value: 'date' },
-            { label: 'Url', value: 'url' },
-            { label: 'Color', value: 'color' },
+            { label: 'Text string', value: 'string', view: 'textbox' },
+            { label: 'Textarea', value: 'textarea', view: 'textarea' },
+            { label: 'Rich text', value: 'rte', view: 'rte' },
+            { label: 'Number', value: 'number', view: 'integer' },
+            { label: 'Email', value: 'email', view: 'email' },
+            { label: 'Telephone', value: 'tel', view: 'textbox' },
+            { label: 'Date', value: 'date', view: 'datepicker' },
+            { label: 'Url', value: 'url', view: 'textbox', validation: { pattern: 'https?://[a-zA-Z0-9-.]+.[a-zA-Z]{2,}' } },
+            { label: 'Color', value: 'color', view: 'colorpicker', validation: { mandatory: false } },
             { label: 'Linked', value: 'linked' },
         ]
 
@@ -108,7 +108,6 @@ export class TabulateResource {
     }
 
     loadGoogleMaps = apiKey => {
-
         const deferred = this.$q.defer();
 
         if (!apiKey) {

@@ -6,20 +6,40 @@ using Tabulate.Umbraco.ValueConverters.Models;
 #if NETCOREAPP
 using Microsoft.AspNetCore.Html;
 using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Templates;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 #else
 using System.Web;
 using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
+using Umbraco.Web;
+using Umbraco.Web.Templates;
 #endif
 
 namespace Tabulate.Umbraco.ValueConverters
 {
     public class TabulateValueConverter : IPropertyValueConverter
     {
+        private readonly IUmbracoContextAccessor _umbracoContextAccessor;
+#if NETCOREAPP
+        private readonly IPublishedUrlProvider _publishedUrlProvider;
+
+        public TabulateValueConverter(IUmbracoContextAccessor umbracoContextAccessor, IPublishedUrlProvider publishedUrlProvider)
+        {
+            _umbracoContextAccessor = umbracoContextAccessor;
+            _publishedUrlProvider = publishedUrlProvider;
+        }
+#else
+        public TabulateValueConverter(IUmbracoContextAccessor umbracoContextAccessor)
+        {
+            _umbracoContextAccessor = umbracoContextAccessor;
+        }
+#endif
 
         /// <summary>
         /// 
@@ -116,7 +136,13 @@ namespace Tabulate.Umbraco.ValueConverters
                             row.Cells.Add(cellValue.ToObject<int>());
                             break;
                         case ColumnType.RichText:
-                            row.Cells.Add(new HtmlString(cellValueString));
+#if NETCOREAPP
+                            var parser = new HtmlLocalLinkParser(_umbracoContextAccessor, _publishedUrlProvider);
+#else
+                            var parser = new HtmlLocalLinkParser(_umbracoContextAccessor);
+#endif
+                            var parsedString = parser.EnsureInternalLinks(cellValueString, preview);
+                            row.Cells.Add(new HtmlString(parsedString));
                             break;
                         case ColumnType.Url:
                             if (Uri.TryCreate(cellValueString, UriKind.RelativeOrAbsolute, out Uri uri))

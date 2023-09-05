@@ -5,11 +5,12 @@
     <Title>Tabulate.ValueConverters</Title>
   </PropertyGroup>
   <ItemGroup Condition="$(TargetFramework) == 'net472'">
-    <PackageReference Include="UmbracoCms.Core" Version="8.7.0" />
+    <PackageReference Include="UmbracoCms.Core" Version="8.*" />
+    <PackageReference Include="UmbracoCms.Web" Version="8.*" />
   </ItemGroup>
   <ItemGroup Condition="$(TargetFramework) == 'net5.0'">
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.*" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.*" />
   </ItemGroup>
   <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
     <ItemGroup>
