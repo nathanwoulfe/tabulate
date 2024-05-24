@@ -1,40 +1,24 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
-    <TargetFrameworks>net472;net5.0</TargetFrameworks>
-    <Id>Tabulate.Umbraco</Id>
     <Title>Tabulate</Title>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-    <IncludeSymbols>false</IncludeSymbols>
+    <Description>Manage large datasets in Umbraco CMS.</Description>
+    <PackageTags>umbraco umbraco-cms umbraco-marketplace</PackageTags>
+    <StaticWebAssetBasePath>App_Plugins/Tabulate</StaticWebAssetBasePath>
   </PropertyGroup>
-  <ItemGroup Condition="$(TargetFramework) == 'net472'">
-		<PackageReference Include="UmbracoCms.Web" Version="8.7.0" />
-	</ItemGroup>
-	<ItemGroup Condition="$(TargetFramework) == 'net5.0'">
-        <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.*" />
-        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.*" />
-    </ItemGroup>
-	 <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
-    </ItemGroup>
+  <ItemGroup>
+  <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.*, 14)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ClientApp\types\" />
+  </ItemGroup>
+
+    <!-- Build client assets using NPM -->
+  <Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+  <Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
+    <WriteLinesToFile File="ClientApp\gulp\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" WriteOnlyWhenDifferent="true" />
   </Target>
   <ItemGroup>
-    <Content Include="App_Plugins\Tabulate\**\*.*">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-	  <PackagePath>content\App_Plugins\Tabulate</PackagePath>
-    </Content>
-    <None Include="build\**\*.*">
-      <Pack>True</Pack>
-      <PackagePath>buildTransitive</PackagePath>
-    </None>
-    <None Include="package.json" />
-    <None Include="src\*.*" />
-    <Compile Remove="node_modules\**" />
-    <EmbeddedResource Remove="node_modules\**" />
-    <None Remove="node_modules\**" />
-  </ItemGroup> 
-  <ItemGroup>
-    <ProjectReference Include="..\Tabulate.Umbraco.ValueConverters\Tabulate.Umbraco.ValueConverters.csproj" />
+    <ClientAssetsInputs Remove="ClientApp\tsconfig.json" />
+    <ClientAssetsInputs Remove="clientapp\types\types.d.ts" />
   </ItemGroup>
 </Project>

@@ -1,22 +1,29 @@
 <Project>
-	<PropertyGroup>
-		<VersionPrefix>4.2.0</VersionPrefix>
-		<VersionSuffix></VersionSuffix>
-		<Description>Manage large datasets in Umbraco CMS</Description>
-		<Authors>Nathan Woulfe</Authors>
-		<Copyright>Nathan Woulfe 2019</Copyright>
-		<PackageIconUrl></PackageIconUrl>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Authors>Nathan Woulfe</Authors>
+    <Copyright>Copyright © Nathan Woulfe $([System.DateTime]::Today.ToString('yyyy'))</Copyright>
+    <Product>Tabulate</Product>
+    <PackageProjectUrl>https://github.com/nathanwoulfe/tabulate</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.507" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.Code" Version="2.1.0" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.GitVersioning.Extensions" Version="0.2.0" PrivateAssets="all" IsImplicitlyDefined="true" />
+  </ItemGroup>
 
-		<PackageProjectUrl>https://thisredwolf.com/tabulate</PackageProjectUrl>
-		<PackageTags>Umbraco;UmbracoCms;</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
 
-		<RepositoryUrl>https://github.com/nathanwoulfe/tabulate</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-
-		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-		<RestoreLockedMode>false</RestoreLockedMode>
-		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-		<NoWarn>$(NoWarn);NU5128;NU5125</NoWarn>
-	</PropertyGroup>
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+  </PropertyGroup>
 </Project>

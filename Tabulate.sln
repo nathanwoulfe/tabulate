@@ -1,30 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30002.166
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34607.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A8130851-5E56-4AEE-94D1-C64C12EE40E6}"
 	ProjectSection(SolutionItems) = preProject
+		.artifactignore = .artifactignore
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
-		.github\workflows\build.yml = .github\workflows\build.yml
+		.globalconfig = .globalconfig
+		azure-pipelines.yml = azure-pipelines.yml
 		Directory.Build.props = Directory.Build.props
-		localbuild.ps1 = localbuild.ps1
+		global.json = global.json
+		NuGet.config = NuGet.config
 		README.md = README.md
+		version.json = version.json
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tabulate.Umbraco", "src\Tabulate.Umbraco\Tabulate.Umbraco.csproj", "{951BD154-B525-4093-816B-7129677E9F1E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tabulate.Umbraco.ValueConverters", "src\Tabulate.Umbraco.ValueConverters\Tabulate.Umbraco.ValueConverters.csproj", "{44F4608C-BA05-485C-B3F2-A63EF9F5435E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tabulate.Site.V8", "Tabulate.Site.V8\Tabulate.Site.V8.csproj", "{FE780466-2548-4BDB-92BA-FFF2E49DF182}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tabulate.TestSite", "examples\Tabulate.TestSite\Tabulate.TestSite.csproj", "{D230B8B9-5B73-41FA-9A96-90CCA2E9C382}"
 	ProjectSection(ProjectDependencies) = postProject
-		{44F4608C-BA05-485C-B3F2-A63EF9F5435E} = {44F4608C-BA05-485C-B3F2-A63EF9F5435E}
+		{48D8D460-C03E-4850-B4DE-B1189D2283FF} = {48D8D460-C03E-4850-B4DE-B1189D2283FF}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tabulate.Site.V9", "Tabulate.Site.V9\Tabulate.Site.V9.csproj", "{D4172294-10B6-4FB5-8863-95A04C677C69}"
-	ProjectSection(ProjectDependencies) = postProject
-		{44F4608C-BA05-485C-B3F2-A63EF9F5435E} = {44F4608C-BA05-485C-B3F2-A63EF9F5435E}
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{EDC2D9C8-F6A2-4454-B6F1-B664AA66922F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tabulate.Umbraco", "src\Tabulate.Umbraco\Tabulate.Umbraco.csproj", "{48D8D460-C03E-4850-B4DE-B1189D2283FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,25 +32,20 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{951BD154-B525-4093-816B-7129677E9F1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{951BD154-B525-4093-816B-7129677E9F1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{951BD154-B525-4093-816B-7129677E9F1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{951BD154-B525-4093-816B-7129677E9F1E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44F4608C-BA05-485C-B3F2-A63EF9F5435E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44F4608C-BA05-485C-B3F2-A63EF9F5435E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44F4608C-BA05-485C-B3F2-A63EF9F5435E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44F4608C-BA05-485C-B3F2-A63EF9F5435E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE780466-2548-4BDB-92BA-FFF2E49DF182}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE780466-2548-4BDB-92BA-FFF2E49DF182}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE780466-2548-4BDB-92BA-FFF2E49DF182}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE780466-2548-4BDB-92BA-FFF2E49DF182}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4172294-10B6-4FB5-8863-95A04C677C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4172294-10B6-4FB5-8863-95A04C677C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4172294-10B6-4FB5-8863-95A04C677C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4172294-10B6-4FB5-8863-95A04C677C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D230B8B9-5B73-41FA-9A96-90CCA2E9C382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D230B8B9-5B73-41FA-9A96-90CCA2E9C382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D230B8B9-5B73-41FA-9A96-90CCA2E9C382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D230B8B9-5B73-41FA-9A96-90CCA2E9C382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D8D460-C03E-4850-B4DE-B1189D2283FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D8D460-C03E-4850-B4DE-B1189D2283FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D8D460-C03E-4850-B4DE-B1189D2283FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D8D460-C03E-4850-B4DE-B1189D2283FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D230B8B9-5B73-41FA-9A96-90CCA2E9C382} = {EDC2D9C8-F6A2-4454-B6F1-B664AA66922F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28C985D2-9965-4355-BDB7-CE6FB566353D}
