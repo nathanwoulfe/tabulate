@@ -1,0 +1,10 @@
+<svg width="239.99999999999997" height="239.99999999999997" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw">
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <path fill="#f5c1bc" stroke="#1b264f" stroke-width="6" opacity="undefined" d="m120.79839,229.66365c-60.77348,0 -110,-49.22652 -110,-110c0,-60.77348 49.22652,-110 110,-110c60.77348,0 110,49.22652 110,110c0,60.77348 -49.22652,110 -110,110z" id="svg_1"/>
+  <g stroke-width="5" stroke="null">
+   <path fill="#f5c1bc" stroke="#1b264f" d="m102.2526,66.7578l-23.6632,0a11.8316,11.8316 0 0 0 -11.8316,11.8316l0,23.6632m35.49479,-35.49479l59.15799,0a11.8316,11.8316 0 0 1 11.8316,11.8316l0,23.6632m-70.98959,-35.49479l0,106.48438m0,0l59.15799,0a11.8316,11.8316 0 0 0 11.8316,-11.8316l0,-59.15799m-70.98959,70.98959l-23.6632,0a11.8316,11.8316 0 0 1 -11.8316,-11.8316l0,-59.15799m0,0l106.48438,0"/>
+  </g>
+ </g>
+
+</svg>
