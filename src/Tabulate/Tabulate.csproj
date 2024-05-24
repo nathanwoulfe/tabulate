@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <Title>Tabulate</Title>
     <PackageId>Tabulate.Umbraco</PackageId>
     <Description>Manage large datasets in Umbraco CMS</Description>
@@ -12,12 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0, 11)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0, 11)" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.5.113" PrivateAssets="all" IsImplicitlyDefined="true" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all" IsImplicitlyDefined="true" />
-    <PackageReference Include="Umbraco.Code" Version="2.0.0" PrivateAssets="all" IsImplicitlyDefined="true" />
-    <PackageReference Include="Umbraco.GitVersioning.Extensions" Version="0.2.0" PrivateAssets="all" IsImplicitlyDefined="true" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0, 14)" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0, 14)" />
   </ItemGroup>
 
   <ItemGroup>
