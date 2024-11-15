@@ -13,7 +13,6 @@
 
     $onInit() {
         this.columnTypes = this.tabulateResource.fieldTypes();
-        console.log(this.$scope.model);
 
         this.$scope.model.renderModel = this.$scope.model.config.columns.map(c => {
             const columnTypeData = this.columnTypes.find(x => x.value === c.type);

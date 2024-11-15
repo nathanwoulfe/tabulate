@@ -228,7 +228,11 @@ export class TabulateController {
         const addOverlay = { ...this.getOverlayBase('Add row', 'add'),
             data: this.emptyModel(),
             submit: result => {
-                this.setRteFields(result);
+
+                // map data
+                result.renderModel.forEach(r => {
+                    result.data[r.label] = r.value;
+                });
 
                 // geocode the model and add it to the model
                 let newItem = this.mapsLoaded ? this.tabulateResource.geocode(result.data) : result.data;
@@ -289,7 +293,6 @@ export class TabulateController {
     getCurrentVariant = () => 
         this.editorState.getCurrent().variants.find(v => v.active);
     
-
     /**
      * Remove an existing row from the collection
      * @param {any} guid
@@ -409,7 +412,7 @@ export class TabulateController {
 
     /** */
     setDataGuids = () => {
-        if (this.data[0]._guid)
+        if (!this.data.length || this.data[0]._guid)
             return;
 
         this.data.forEach(d => {

@@ -2,6 +2,16 @@
   "version": 1,
   "dependencies": {
     ".NETCoreApp,Version=v5.0": {
+      "Our.Umbraco.DocTypeGridEditor": {
+        "type": "Direct",
+        "requested": "[9.*, )",
+        "resolved": "9.0.2",
+        "contentHash": "t3auhOhwEgd2hXFawOoLkjG9vl0WyPMc+o1QhOzHKFi6mXjtGo62N6FXJ0nmpKohAfpTB57IKZumFbL2OyjZYg==",
+        "dependencies": {
+          "Umbraco.Cms.Web.BackOffice": "9.0.0",
+          "Umbraco.Cms.Web.Website": "9.0.0"
+        }
+      },
       "Umbraco.Cms": {
         "type": "Direct",
         "requested": "[9.*, )",
@@ -28,6 +38,25 @@
         "requested": "[4.0.0.1, )",
         "resolved": "4.0.0.1",
         "contentHash": "ApeeERIumXC8inaXMF+v0IMikazEp6N6axPqdAVDF6mQoY6K4tlyB3/H9iTIInlUus1ixLtPFHBa+EDzsDF8ng=="
+      },
+      "Umbraco.TheStarterKit": {
+        "type": "Direct",
+        "requested": "[9.*, )",
+        "resolved": "9.0.0",
+        "contentHash": "oXW0d7zAPTl+wqxIS4mwQIng4SNkOQeLnRK8XIs+73dAOPwR8roe0i/Y2+B0q6B1jSnej39nN3Y1ixHnkbyKNw==",
+        "dependencies": {
+          "Bergmania.OpenStreetMap": "1.0.0",
+          "Umbraco.Cms.Web.BackOffice": "9.0.0"
+        }
+      },
+      "Bergmania.OpenStreetMap": {
+        "type": "Transitive",
+        "resolved": "1.0.0",
+        "contentHash": "zV8LdRL41XkIWjLsWkYPPgz645XVHEiXtYij0bzTHJ5/81aFQ7ydygdPLOe87H/DIVxgSMJ7Hi3aO7ngZeOoQQ==",
+        "dependencies": {
+          "Umbraco.Cms.Web.BackOffice": "9.0.0-beta004",
+          "Umbraco.Cms.Web.Website": "9.0.0-beta004"
+        }
       },
       "CSharpTest.Net.Collections-NetStd2": {
         "type": "Transitive",

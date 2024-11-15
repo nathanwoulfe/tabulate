@@ -5,8 +5,8 @@
       "UmbracoCms.Core": {
         "type": "Direct",
         "requested": "[8.*, )",
-        "resolved": "8.18.9",
-        "contentHash": "9LysmpyF74Oi4ph26qlWYEBDMLZapIUVQZcg3/tQFKDh0w77PXy/DVvnyXzs6pMP1PSnSOgMsCPzNHqRrGYiqQ==",
+        "resolved": "8.18.15",
+        "contentHash": "pmofSmGk8NuJv8wxeXboA7OveybyRdNcRHZVaREJvtpF72V/TpHjxb6FXM+5XolSa7S8AQfFQvy24JLSWDW/0Q==",
         "dependencies": {
           "LightInject": "[5.4.0, 5.999999.0)",
           "LightInject.Annotation": "[1.1.0, 1.999999.0)",
@@ -34,8 +34,8 @@
       "UmbracoCms.Web": {
         "type": "Direct",
         "requested": "[8.*, )",
-        "resolved": "8.18.9",
-        "contentHash": "xfrqqP9eKKsjykhLr7v1fNuzbXuO4OHyyLv0O/L/XksqqZ8XfdrdYNTf1FPu+ySGxTdpPnP1wFhWO8gxSQdLwg==",
+        "resolved": "8.18.15",
+        "contentHash": "EwuaXjIR8JQxSQ9OYwVeLL1E+rWCiy1G5rPgamNKWmB8B88XR0ANvqXOxIi+RYVYb82f8yfMTeNEFxw9q05Wtg==",
         "dependencies": {
           "CSharpTest.Net.Collections": "[14.906.1403.1082, 14.999999.0)",
           "ClientDependency": "[1.9.10, 1.999999.0)",
@@ -61,7 +61,7 @@
           "System.Numerics.Vectors": "[4.5.0, 4.999999.0)",
           "System.Text.Encoding.CodePages": "[4.7.1, 4.999999.0)",
           "System.Threading.Tasks.Dataflow": "[4.9.0, 4.999999.0)",
-          "UmbracoCms.Core": "[8.18.9]"
+          "UmbracoCms.Core": "[8.18.15]"
         }
       },
       "ClientDependency": {
