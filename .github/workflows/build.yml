@@ -48,7 +48,7 @@ jobs:
       run: |
         dotnet nuget push "**/nupkgs/*.nupkg" -s https://api.nuget.org/v3/index.json --skip-duplicate -k ${{secrets.NUGET_TOKEN}}
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         path: nupkgs
     - name: Clean up
